@@ -33,7 +33,7 @@ export default StyleSheet.create({
     navi: {
         width: '100%',
         height: '10%',
-        backgroundColor: '#F6F6F9',
+        backgroundColor: '#FFFFFF',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -61,13 +61,28 @@ export default StyleSheet.create({
         justifyContent: 'space-around',
         alignItems:'center',
         paddingHorizontal:'5%',
-        backgroundColor: 'pink',
+        backgroundColor: '#F6F6F9',
         
     },
 
     infoView: {
         width: '43%',
         height:'40%',
+        margin: '3%',
+        padding: '5%',
+        borderRadius:10,
+        backgroundColor:"#ffffff"
+    },
+
+    infoViewText: {
+        marginVertical:'3%',
+        // fontWeight:'bold',
+        fontSize:RFPercentage(1.7),
+    },
+
+    nodeView: {
+        width: '93%',
+        height:'85%',
         margin: '3%',
         padding: '5%',
         borderRadius:10,
