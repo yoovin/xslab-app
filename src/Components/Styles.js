@@ -57,7 +57,7 @@ export default StyleSheet.create({
 
 
     /*
-    ===== MAIN COMPONENT =====
+    ===== HOME COMPONENT =====
     */
 
     infoContainer: {
@@ -74,8 +74,17 @@ export default StyleSheet.create({
     infoView: {
         width: '43%',
         height:'40%',
-        margin: '3%',
         padding: '5%',
+        margin: '3%',
+        borderRadius:10,
+        backgroundColor:"#ffffff"
+    },
+
+
+    swiper: {
+        // width: '20%',
+        height:'40%',
+        margin: '3%',
         borderRadius:10,
         backgroundColor:"#ffffff"
     },
@@ -127,4 +136,17 @@ export default StyleSheet.create({
         fontSize: RFPercentage(1),
         backgroundColor:'white'
     },
+
+    /*
+    ===== SETTING COMPONENT =====
+    */
+
+    settingView: {
+        width: '80%',
+        height: '30%',
+        margin: '5%',
+        borderRadius: 15,
+        backgroundColor: '#F7F8F9'
+    },
+
 });
