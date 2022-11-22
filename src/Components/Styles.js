@@ -47,7 +47,9 @@ export default StyleSheet.create({
     /*
     ===== BOTTOM NAVI COMPONENT =====
     */
-
+    button: {
+        padding: '7%',
+    },
 
     /*
     ===== LOGIN COMPONENT =====
@@ -79,7 +81,7 @@ export default StyleSheet.create({
     },
 
     infoViewText: {
-        marginVertical:'3%',
+        marginVertical:'1%',
         // fontWeight:'bold',
         fontSize:RFPercentage(1.7),
     },
@@ -98,9 +100,7 @@ export default StyleSheet.create({
         width: '93%',
         height:'100%',
         padding: '5%',
-        // paddingBottom:50,
         margin: '3%',
-        // marginBottom: 0,
         borderRadius:10,
         backgroundColor:"#ffffff"
     },
@@ -123,12 +123,8 @@ export default StyleSheet.create({
         color: 'white',
     },
 
-    hr: {
-        // marginTop: 10,
-        // marginBottom: 10,
-        // height:10,
-        borderBottomColor: 'black',
-        borderBottomWidth: 3,
-        // backgroundColor: '#ffffff'
-    }
+    dialog: {
+        fontSize: RFPercentage(1),
+        backgroundColor:'white'
+    },
 });
