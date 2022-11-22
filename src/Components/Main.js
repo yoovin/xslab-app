@@ -1,11 +1,13 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TouchableOpacity, Image, ScrollView, Touchable } from 'react-native'
 import React, { useState } from 'react'
+import CheckBox from '@react-native-community/checkbox'
 import Navi from './Navi'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import styles from './Styles'
+import BottomNavi from './BottomNavi'
 
 const infos = [
     {
@@ -60,6 +62,74 @@ const infos = [
     },
 ]
 
+const nodes = [
+    {
+        nodeNum: 1,
+        temp: 37.0,
+        isOn: false,
+    },
+    {
+        nodeNum: 2,
+        temp: 37.0,
+        isOn: true,
+    },
+    {
+        nodeNum: 3,
+        temp: 37.0,
+        isOn: true,
+    },
+    {
+        nodeNum: 4,
+        temp: 37.0,
+        isOn: true,
+    },
+    {
+        nodeNum: 5,
+        temp: 37.0,
+        isOn: true,
+    },
+    {
+        nodeNum: 6,
+        temp: 37.0,
+        isOn: false,
+    },
+    {
+        nodeNum: 7,
+        temp: 37.0,
+        isOn: false,
+    },
+    {
+        nodeNum: 8,
+        temp: 37.0,
+        isOn: false,
+    },
+    {
+        nodeNum: 9,
+        temp: 37.0,
+        isOn: false,
+    },
+    {
+        nodeNum: 10,
+        temp: 37.0,
+        isOn: true,
+    },
+    {
+        nodeNum: 11,
+        temp: 37.0,
+        isOn: true,
+    },
+    {
+        nodeNum: 12,
+        temp: 37.0,
+        isOn: false,
+    },
+    {
+        nodeNum: 13,
+        temp: 37.0,
+        isOn: false,
+    },
+]
+
 const Main = () => {
     const [isMulti, setIsMulti] = useState(false)
 
@@ -67,10 +137,10 @@ const Main = () => {
         <Image source={require("../../assets/image/title.png")} style={{width: 130, height: 17, resizeMode: 'contain'}}/>
     </TouchableOpacity>
 
-  return (
+    return (
     <View style={{flex:1}}>
         <Navi title={title}/>
-      <View style={styles.infoContainer}>
+        <View style={styles.infoContainer}>
         {infos.map(item => (
             <View style={styles.infoView}>
                 <Text style={{fontWeight:'bold', marginBottom:'5%'}}>{item.infoTitle}</Text>
@@ -85,17 +155,44 @@ const Main = () => {
                 </View>
             </View>
         ))}
-      </View>
-      <View style={[styles.infoContainer, {flex:5, justifyContent:'flex-start'}]}>
+        </View>
+        <View style={[styles.nodeContainer]}>
             <Text style={[styles.infoViewText, {paddingHorizontal:'5%'}]}>서버 노드 리스트</Text>
-            <View style={styles.nodeView}></View>
-      </View>
-      <View style={{flex:1, backgroundColor: 'pink'}}>
-            
-      </View>
-
+            <ScrollView style={[styles.nodeScrollView, isMulti && {marginBottom: 0, borderBottomLeftRadius:0, borderBottomRightRadius:0}]}
+            contentContainerStyle={{paddingBottom: '10%'}}>
+                {nodes.map(item => (
+                    <TouchableOpacity 
+                    style={[styles.nodeView, {backgroundColor: item.isOn ? '#A2B2FD' : '#EEA4A0'}]}
+                    
+                    onLongPress={() => {setIsMulti(true)}}>
+                        {isMulti && <CheckBox/>}
+                        <Text style={styles.nodeText}>노드 #{item.nodeNum}</Text>
+                        <Text style={styles.nodeText}>{item.temp}°C</Text>
+                    </TouchableOpacity>
+                ))}
+            </ScrollView>
+            {isMulti && 
+            [
+            ,<TouchableOpacity style={[styles.nodeScrollView, {
+                // justifyContent: 'center',
+                alignItems:'center',
+                height:'11%',
+                // paddingTop: 10,
+                marginTop:0,
+                borderTopWidth:1,
+                borderTopColor:'#D9D9D9',
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
+            }]}
+            onPress={() => setIsMulti(false)}
+            activeOpacity={0.8}>
+                <Text style={[styles.nodeText, {marginVertical: 0, color: 'black'}]}>완료</Text>
+            </TouchableOpacity>
+        ]}
+        </View>
+        <BottomNavi/>
     </View>
-  )
+    )
 }
 
 export default Main
