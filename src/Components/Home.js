@@ -15,6 +15,7 @@ import lightningIcon from '../../assets/image/lightning.svg'
 /*
     ===== TODOS =====
     1. 멀티 노드 중복으로 체크되는거 해결해야함
+    2. 노드 클릭하고 다시 체크해제했을때 그거 인식 안되게 해야,,,함,,,
 */
 
 /*
@@ -173,6 +174,10 @@ const Home = () => {
         <View style={{flex:10}}>
         <Navi title={title}/>
         <View style={styles.infoContainer}>
+
+        {/* 
+            ===== 부팅 View =====
+        */}
         <View style={styles.infoView}>
             <Text style={{fontWeight:'bold', marginBottom:'5%'}}>부팅</Text>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
@@ -189,6 +194,9 @@ const Home = () => {
             </View>
         </View>
 
+        {/* 
+            ===== 데몬 View =====
+        */}
         <View style={styles.infoView}>
             <Text style={{fontWeight:'bold', marginBottom:'5%'}}>데몬 연결</Text>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
@@ -200,6 +208,10 @@ const Home = () => {
             </View>
         </View>
 
+        {/* 
+            ===== 온,습도 View =====
+            Swiper로 스크롤링 구현
+        */}
         <Swiper containerStyle={styles.swiper} loop={false}
         dotStyle={{top: '15%'}}
         activeDotStyle={{top: '15%', backgroundColor: '#4B4F55'}}>
@@ -221,6 +233,9 @@ const Home = () => {
             </View>
         </Swiper>
 
+        {/* 
+            ===== 전력 View =====
+        */}
         <View style={styles.infoView}>
             <Text style={{fontWeight:'bold', marginBottom:'5%'}}>전력</Text>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>

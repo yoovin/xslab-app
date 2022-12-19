@@ -7,17 +7,23 @@ import BottomNavi from './BottomNavi'
 import Home from './Home';
 import Setting from './Setting'
 
-const Main = () => {
+import { swiperScrolling} from './recoil/atom'
+import { useRecoilValue } from 'recoil'
+
+const Main = ({navigation}) => {
     const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
+    const scrolling = useRecoilValue(swiperScrolling)
     return (
         <View style={{flex:1}}>
             <Swiper containerStyle={{flex:10}} loop={false} showsPagination={false}
             index={currentScreenIndex}
+            scrollEnabled={scrolling}
+            // bounces={true}
             onIndexChanged={(idx) => setCurrentScreenIndex(idx)}>
                 <Home/>
-                <Setting/>
+                <Setting navigation = {navigation}/>
             </Swiper>
-            <BottomNavi currentIdx={currentScreenIndex} setCurrentScreenIndex={setCurrentScreenIndex}/>
+            <BottomNavi currentIdx={currentScreenIndex}/>
         </View>
     )
 }

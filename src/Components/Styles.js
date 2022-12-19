@@ -141,12 +141,83 @@ export default StyleSheet.create({
     ===== SETTING COMPONENT =====
     */
 
+    settingTitleText: {
+        marginTop: '5%',
+        fontSize: RFPercentage(2.7),
+        color: 'white',
+    },
+
     settingView: {
+        flexDirection:'row',
         width: '80%',
-        height: '30%',
+        height: '25%',
         margin: '5%',
+        padding: 20,
         borderRadius: 15,
         backgroundColor: '#F7F8F9'
     },
 
+    settingViewTitleText: {
+        fontSize: RFPercentage(2),
+    },
+
+    settingViewContentText: {
+        fontSize: RFPercentage(1.5),
+    },
+
+    tempSliderCenter: {
+        // position:'absolute',
+        width:'40%',
+        height:'40%',
+        borderRadius:RFPercentage(10),
+        backgroundColor:'#D9D9D9'
+    },
+
+    tempSliderValueText: {
+        // position:'absolute'
+        bottom: 5,
+        color: 'black',
+        fontSize:RFPercentage(3),
+    },
+    
+    logoutButton: {
+        width: '35%',
+        height: '5%',
+        borderRadius: 15,
+        justifyContent:"center",
+        alignItems:"center",
+        backgroundColor: '#DCDDDD'
+    },
+
+    voraBackground: {
+        position: 'absolute',
+        top:'80%',
+        left:'14%',
+        width: '90%', 
+        height: '71%', 
+        resizeMode: 'contain', 
+        opacity: 0.5
+    },
+
+    /*
+    ===== LOGOUT COMPONENT =====
+    */
+    
+    logoutVoraBackground: {
+        // position: 'absolute',
+        // top:'80%',
+        left:'24%',
+        width: '52%', 
+        height: '62%', 
+        resizeMode: 'contain'
+    },
+
+    logoBackground: {
+        // position: 'absolute',
+        // top:'80%',
+        // left:'100%',
+        width: '70%', 
+        height: '50%', 
+        resizeMode: 'contain'
+    },
 });

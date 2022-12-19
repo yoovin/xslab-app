@@ -10,6 +10,7 @@ import { RecoilRoot } from 'recoil'
 
 import Login from './src/Components/Login'
 import Main from './src/Components/Main'
+import Logout from './src/Components/Logout'
 
 
 const Stack = createNativeStackNavigator()
@@ -22,6 +23,7 @@ const App = () => {
             <Stack.Group screenOptions={{headerShown: false}}>
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Main" component={Main}/>
+                <Stack.Screen name="Logout" component={Logout}/>
                     </Stack.Group>
                     <Stack.Group screenOptions={{headerShown: false, presentation: 'modal'}}>
                     </Stack.Group>
