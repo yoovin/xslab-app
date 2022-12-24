@@ -10,7 +10,7 @@ import { useSetRecoilState } from 'recoil';
 
 const Setting = ({navigation}) => {
     const [isLogoutButtonPress, setIsLogoutButtonPress] = useState(false)
-    const [speed, setSpeed] = useState(0)
+    const [currentGoalTemp, setCurrentGoalTemp] = useState(0)
     const setScrolling = useSetRecoilState(swiperScrolling)
 
     return (
@@ -23,11 +23,11 @@ const Setting = ({navigation}) => {
                     <Text style={styles.settingViewTitleText}>서버 목표 온도</Text>
                     <View style={{marginVertical: 30}}>
                         <Text style={styles.settingContentTitleText}>현재 온도: 00°C</Text>
-                        <Text style={styles.settingContentTitleText}>목표 온도: 00°C</Text>
+                        <Text style={styles.settingContentTitleText}>목표 온도: {currentGoalTemp}°C</Text>
                     </View>
                 </View>
-                <View style={{flex: 1}}>
-                    <RadialSlider value={speed} min={0} max={100}
+                <View style={{flex: 1, justifyContent: 'space-around', alignItems:'center'}}>
+                    <RadialSlider value={currentGoalTemp} min={0} max={100}
                     radius={70}
                     centerContentStyle={styles.tempSliderCenter}
                     valueStyle={styles.tempSliderValueText}
@@ -38,10 +38,15 @@ const Setting = ({navigation}) => {
                     linearGradient = {[ { offset: '0%', color:'#26B8C7' }, { offset: '100%', color: '#D63170' }] }
                     onChange={(num) => {
                         setScrolling(false)
-                        setSpeed(num)
+                        setCurrentGoalTemp(num)
                     }}
                     onComplete={() => {
                         setScrolling(true)
+                    }}
+                    onPress={(num) => {
+                        // setScrolling(true)
+                        console.log(num)
+                        console.log("눌러짐")
                     }}
                     isHideLines={true}
                     isHideSubtitle={true}
@@ -49,6 +54,10 @@ const Setting = ({navigation}) => {
                     unit="°"
                     sliderWidth={5}
                     />
+                    <TouchableOpacity style={styles.confirmButton}
+                    activeOpacity={0.8}>
+                        <Text style={{color:'white'}}>확인</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.settingView}>

@@ -179,6 +179,15 @@ export default StyleSheet.create({
         color: 'black',
         fontSize:RFPercentage(3),
     },
+
+    confirmButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width:'45%',
+        height: '15%',
+        borderRadius: 15,
+        backgroundColor:'#292E41'
+    },
     
     logoutButton: {
         width: '35%',
@@ -205,8 +214,8 @@ export default StyleSheet.create({
     
     logoutVoraBackground: {
         // position: 'absolute',
-        // top:'80%',
-        left:'24%',
+        top:'30%',
+        left:'38%',
         width: '52%', 
         height: '62%', 
         resizeMode: 'contain'
@@ -214,10 +223,10 @@ export default StyleSheet.create({
 
     logoBackground: {
         // position: 'absolute',
-        // top:'80%',
-        // left:'100%',
-        width: '70%', 
-        height: '50%', 
+        top:'50%',
+        left:'13%',
+        width: '55%', 
+        height: '30%', 
         resizeMode: 'contain'
     },
 });

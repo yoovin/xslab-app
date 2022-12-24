@@ -23,7 +23,7 @@ const Main = ({navigation}) => {
                 <Home/>
                 <Setting navigation = {navigation}/>
             </Swiper>
-            <BottomNavi currentIdx={currentScreenIndex}/>
+            <BottomNavi     setCurrentScreenIndex={setCurrentScreenIndex}/>
         </View>
     )
 }

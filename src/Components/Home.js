@@ -16,6 +16,7 @@ import lightningIcon from '../../assets/image/lightning.svg'
     ===== TODOS =====
     1. 멀티 노드 중복으로 체크되는거 해결해야함
     2. 노드 클릭하고 다시 체크해제했을때 그거 인식 안되게 해야,,,함,,,
+    3. 체크 아이콘 바꿔야함
 */
 
 /*
