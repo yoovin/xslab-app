@@ -11,12 +11,10 @@ import { WithLocalSvg } from 'react-native-svg';
 
 import styles from './Styles'
 import lightningIcon from '../../assets/image/lightning.svg'
+import checkIcon from '../../assets/image/xmascore.svg'
 
 /*
     ===== TODOS =====
-    1. 멀티 노드 중복으로 체크되는거 해결해야함
-    2. 노드 클릭하고 다시 체크해제했을때 그거 인식 안되게 해야,,,함,,,
-    3. 체크 아이콘 바꿔야함
 */
 
 /*
@@ -268,6 +266,38 @@ const Home = () => {
             <Text style={[styles.infoViewText, {paddingHorizontal:'5%'}]}>서버 노드 리스트</Text>
             <ScrollView style={[styles.nodeScrollView, isMulti && {marginBottom: 0, borderBottomLeftRadius:0, borderBottomRightRadius:0}]}
             contentContainerStyle={{paddingBottom: '10%'}}>
+                {isMulti &&
+                    <View style={{flexDirection: 'row-reverse'}}>
+                        <BouncyCheckbox
+                        size={20}
+                        fillColor="#EAEAEA"
+                        unfillColor="#EAEAEA"
+                        iconStyle={{borderRadius: 5, borderWidth: 0}}
+                        innerIconStyle={{borderRadius: 5, borderWidth: 0}}
+                        onPress={(isChecked) => {
+                            if(isChecked){
+                                nodes.map((item, idx) => {
+                                    if(item.ref != null){
+                                        if(selectedNode.indexOf(idx+1) == -1){
+                                            item.ref.onPress()
+                                        }
+                                    }
+                                })
+                            }else{
+                                nodes.map((item, idx) => {
+                                    if(item.ref != null){
+                                        if(selectedNode.indexOf(idx+1) > -1){
+                                            item.ref.onPress()
+                                        }
+                                    }
+                                })
+                            }
+                        }}
+                        />
+                        {/* <Text>  </Text> */}
+                        <Text style={[styles.infoViewText, {marginHorizontal: '2%'}]}>전체 선택하기</Text>
+                    </View>
+                }
                 {nodes.map(item => (
                     <TouchableOpacity 
                     style={[styles.nodeView, {backgroundColor: item.isOn ? '#A2B2FD' : '#EEA4A0'}]}
@@ -281,23 +311,35 @@ const Home = () => {
                         
                     }}
                     onLongPress={() => {setIsMulti(true)}}>
-                        {isMulti &&
-                        <BouncyCheckbox 
-                        size={20}
-                        iconStyle={{borderRadius: 5, borderWidth: 0}}
-                        fillColor="#D9D9D9"
-                        unfillColor="#FFFFFF" 
-                        innerIconStyle={{borderRadius: 5, borderWidth: 0}}
-                        onPress={() => {
-                            setSelectedNode(state => {
-                                const selectedNode = state.concat(item.nodeNum)
-                                return selectedNode
-                            })
-                        }}
-                        ref={ref => item.ref = ref}
-                        />}
                         <Text style={styles.nodeText}>노드 #{item.nodeNum}</Text>
                         <Text style={styles.nodeText}>{item.temp}°C</Text>
+                        {isMulti &&
+                        <BouncyCheckbox
+                        size={10}
+                        innerIconStyle={{size: 30}}
+                        fillColor="rgba(0,0,0,0)"
+                        // unfillColor="#FFFFFF" 
+                        // innerIconStyle={{borderRadius: 5, borderWidth: 0}}
+                        onPress={(isChecked) => {
+                            if(isChecked){ // 체크되면
+                                setSelectedNode(state => {
+                                    const selectedNode = state.concat(item.nodeNum)
+                                    return selectedNode
+                                })
+                            }else{ // 체크 풀리면
+                                setSelectedNode(state => {
+                                    const selectedNode = [...state]
+                                    selectedNode.splice(selectedNode.indexOf(item.nodeNum), 1)
+                                    return selectedNode
+                                })
+                            }
+                        }}
+                        ref={ref => item.ref = ref}
+                        // ImageComponent={<WithLocalSvg width={30} height={30} asset={checkIcon}/>}
+                        // IconComponent={<Image source={require("../../assets/image/xmascore.png")} style={{width: 50, height: 50}}/>}
+                        checkIconImageSource={require("../../assets/image/xmascore.png")}
+
+                        />}
                     </TouchableOpacity>
                 ))}
             </ScrollView>
