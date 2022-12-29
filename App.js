@@ -8,7 +8,7 @@ import { RecoilRoot } from 'recoil'
 // import SplashScreen from 'react-native-splash-screen'
 // import CodePush from 'react-native-code-push'
 
-import Login from './src/Components/Login'
+import Login from './src/Components/Server'
 import Main from './src/Components/Main'
 
 
@@ -18,7 +18,7 @@ const App = () => {
   return (
     <RecoilRoot>
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Main'>
+            <Stack.Navigator initialRouteName='Login'>
             <Stack.Group screenOptions={{headerShown: false}}>
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Main" component={Main}/>

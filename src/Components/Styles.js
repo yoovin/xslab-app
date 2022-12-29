@@ -54,7 +54,60 @@ export default StyleSheet.create({
     /*
     ===== LOGIN COMPONENT =====
     */
+    loginScreen: {
+        backgroundColor: '#2A2F42',
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+    },
 
+    loginTitle: {
+        flex: 5,
+        alignItems: 'center',
+    },
+
+    loginInput: {
+        flex: 4,
+        alignItems: 'center',
+    },
+
+    TitleIcon: {
+        width: 130,
+        height: 130,
+        resizeMode: 'contain',
+        marginTop: '30%',
+        marginBottom: '20%',
+    },
+
+    TitleText: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: "bold",
+    },
+
+    InputBox: {
+        width: 300,
+        height: 50,
+        borderRadius: 10,
+        padding: 10,
+        marginTop: '2%',
+        marginBottom: `2%`,
+    },
+
+    InputButton: {
+        backgroundColor: '#8E5099',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    corpName: {
+        width: 120,
+        height: 15,
+        resizeMode: 'contain',
+        marginBottom: '10%',
+        position: 'absolute',
+        bottom: 0,
+    },
 
     /*
     ===== MAIN COMPONENT =====
