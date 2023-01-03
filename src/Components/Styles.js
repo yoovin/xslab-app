@@ -56,19 +56,23 @@ export default StyleSheet.create({
     */
     loginScreen: {
         backgroundColor: '#2A2F42',
-        width: '100%',
-        height: '100%',
+        flex: 1,
         alignItems: 'center',
     },
 
     loginTitle: {
+        // backgroundColor: "orange",
         flex: 5,
+        width: '100%',
         alignItems: 'center',
     },
 
     loginInput: {
-        flex: 4,
+        // backgroundColor: "violet",
+        flex: 5,
+        width: '100%',
         alignItems: 'center',
+        justifyContent: 'flex-end',
     },
 
     TitleIcon: {
@@ -76,28 +80,30 @@ export default StyleSheet.create({
         height: 130,
         resizeMode: 'contain',
         marginTop: '30%',
-        marginBottom: '20%',
+        marginBottom: '10%',
     },
 
     TitleText: {
         color: 'white',
         fontSize: 20,
-        fontWeight: "bold",
+        fontWeight: 'bold',
     },
 
     InputBox: {
+        backgroundColor: "#F3F3F3",
         width: 300,
         height: 50,
         borderRadius: 10,
         padding: 10,
         marginTop: '2%',
-        marginBottom: `2%`,
+        marginBottom: '2%',
     },
 
     InputButton: {
         backgroundColor: '#8E5099',
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom: '20%',
     },
 
     corpName: {
@@ -105,8 +111,6 @@ export default StyleSheet.create({
         height: 15,
         resizeMode: 'contain',
         marginBottom: '10%',
-        position: 'absolute',
-        bottom: 0,
     },
 
     /*

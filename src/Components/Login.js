@@ -1,5 +1,6 @@
 import {
     View,
+    KeyboardAvoidingView,
     Text,
     Image,
     TextInput,
@@ -10,32 +11,12 @@ import React, { useState } from "react";
 import styles from "./Styles";
 
 const Login = () => {
-    const userList = [
-        {
-            id: "123",
-            password: "123",
-            server: "123",
-        },
-    ];
-
-    const [id, setId] = useState("");
-    const [password, setPassword] = useState("");
-    const [server, setServer] = useState("");
+    const [id, setId] = useState();
+    const [password, setPassword] = useState();
+    const [server, setServer] = useState();
 
     const OnLogin = () => {
-        if (id == "123" && password == "123") {
-            // 기기내 저장된 유저의 서버 리스트
-        } else {
-            Alert.alert(
-                "기기내 유저 정보가 없습니다.",
-                "서버주소 입력으로 유저 정보를 저장할 수 있습니다.",
-                [
-                    { text: "이동", onPress: () => {}, style: "cancel" },
-                    { text: "취소", onPress: () => {}, style: "default" },
-                ],
-                { cancelable: true, onDismiss: () => {} }
-            );
-        }
+        console.log(` id: ${id}\n password: ${password}\n server: ${server}\n`);
     };
 
     return (
@@ -48,18 +29,18 @@ const Login = () => {
                 <Text style={styles.TitleText}>XMAS CORE</Text>
             </View>
             <View style={styles.loginInput}>
-                {/* <TextInput
-                    style={[styles.InputBox, { backgroundColor: "#F3F3F3" }]}
+                <TextInput
+                    style={styles.InputBox}
                     placeholder="아이디"
                     onChangeText={(text) => setId(text)}
                 />
                 <TextInput
-                    style={[styles.InputBox, { backgroundColor: "#F3F3F3" }]}
+                    style={styles.InputBox}
                     placeholder="패스워드"
                     onChangeText={(text) => setPassword(text)}
-                /> */}
+                />
                 <TextInput
-                    style={[styles.InputBox, { backgroundColor: "#F3F3F3" }]}
+                    style={styles.InputBox}
                     placeholder="서버 주소"
                     onChangeText={(text) => setServer(text)}
                 />

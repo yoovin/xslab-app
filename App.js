@@ -8,7 +8,7 @@ import { RecoilRoot } from 'recoil'
 // import SplashScreen from 'react-native-splash-screen'
 // import CodePush from 'react-native-code-push'
 
-import Login from './src/Components/Server'
+import Login from './src/Components/Login'
 import Main from './src/Components/Main'
 
 
