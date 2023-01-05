@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
-import {RFPercentage} from "react-native-responsive-fontsize"
+import { StyleSheet } from 'react-native';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 
 // const mainColor = ''
 
@@ -9,18 +9,18 @@ export default StyleSheet.create({
     */
 
     viewContainer: {
-        flex:1.5
+        flex: 1.5,
     },
     contentContainer: {
         flex: 1,
-        flexDirection:'row'
+        flexDirection: 'row',
     },
-    leftView:{
-        flex:1
+    leftView: {
+        flex: 1,
     },
     titleView: {
         flex: 4.5,
-        alignItems:'center',
+        alignItems: 'center',
     },
     titleText: {
         // fontFamily: 'BMJUA',
@@ -28,13 +28,13 @@ export default StyleSheet.create({
         color: 'white',
     },
     rightView: {
-        flex: 1
+        flex: 1,
     },
     navi: {
         width: '100%',
         height: '10%',
         backgroundColor: '#FFFFFF',
-        shadowColor: "#000",
+        shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 5,
@@ -58,21 +58,28 @@ export default StyleSheet.create({
         backgroundColor: '#2A2F42',
         flex: 1,
         alignItems: 'center',
+        //
+        // justifyContent: 'flex-end',
     },
 
     loginTitle: {
-        // backgroundColor: "orange",
         flex: 5,
-        width: '100%',
         alignItems: 'center',
+        //
+        // backgroundColor: 'orange',
+        // justifyContent: 'flex-end',
+        // width: '100%',
+        // justifyContent: 'flex-start',
+        // top: 0,
     },
 
     loginInput: {
-        // backgroundColor: "violet",
         flex: 5,
-        width: '100%',
         alignItems: 'center',
         justifyContent: 'flex-end',
+        //
+        // backgroundColor: 'violet',
+        // width: '100%',
     },
 
     TitleIcon: {
@@ -81,16 +88,20 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         marginTop: '30%',
         marginBottom: '10%',
+        //
+        // position: 'absolute',
+        // top: 0,
     },
 
     TitleText: {
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
+        //
     },
 
     InputBox: {
-        backgroundColor: "#F3F3F3",
+        backgroundColor: '#F3F3F3',
         width: 300,
         height: 50,
         borderRadius: 10,
@@ -118,54 +129,53 @@ export default StyleSheet.create({
     */
 
     infoContainer: {
-        flex:3, 
-        flexDirection:'row',
-        flexWrap:'wrap',
+        flex: 3,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
         justifyContent: 'space-around',
-        alignItems:'center',
-        paddingHorizontal:'5%',
+        alignItems: 'center',
+        paddingHorizontal: '5%',
         backgroundColor: '#F6F6F9',
-        
     },
 
     infoView: {
         width: '43%',
-        height:'40%',
+        height: '40%',
         margin: '3%',
         padding: '5%',
-        borderRadius:10,
-        backgroundColor:"#ffffff"
+        borderRadius: 10,
+        backgroundColor: '#ffffff',
     },
 
     infoViewText: {
-        marginVertical:'1%',
+        marginVertical: '1%',
         // fontWeight:'bold',
-        fontSize:RFPercentage(1.7),
+        fontSize: RFPercentage(1.7),
     },
 
-    nodeContainer:{
-        flex:5, 
-        flexDirection:'column',
-        flexWrap:'wrap',
+    nodeContainer: {
+        flex: 5,
+        flexDirection: 'column',
+        flexWrap: 'wrap',
         // justifyContent:'flex-start',
-        alignItems:'flex-start',
-        paddingHorizontal:'5%',
+        alignItems: 'flex-start',
+        paddingHorizontal: '5%',
         backgroundColor: '#F6F6F9',
     },
 
     nodeScrollView: {
         width: '93%',
-        height:'100%',
+        height: '100%',
         padding: '5%',
         margin: '3%',
-        borderRadius:10,
-        backgroundColor:"#ffffff"
+        borderRadius: 10,
+        backgroundColor: '#ffffff',
     },
 
-    nodeView:{
-        flexDirection:'row',
+    nodeView: {
+        flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems:'center',
+        alignItems: 'center',
         width: '100%',
         // height: '10%',
         marginVertical: '2%',
@@ -176,12 +186,12 @@ export default StyleSheet.create({
         // marginVertical:'3%',
         // fontWeight:'bold',
         marginVertical: '3%',
-        fontSize:RFPercentage(1.5),
+        fontSize: RFPercentage(1.5),
         color: 'white',
     },
 
     dialog: {
         fontSize: RFPercentage(1),
-        backgroundColor:'white'
+        backgroundColor: 'white',
     },
 });
