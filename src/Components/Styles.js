@@ -58,28 +58,18 @@ export default StyleSheet.create({
         backgroundColor: '#2A2F42',
         flex: 1,
         alignItems: 'center',
-        //
-        // justifyContent: 'flex-end',
+        justifyContent: 'flex-end'
     },
 
     loginTitle: {
-        flex: 5,
         alignItems: 'center',
-        //
-        // backgroundColor: 'orange',
-        // justifyContent: 'flex-end',
-        // width: '100%',
-        // justifyContent: 'flex-start',
-        // top: 0,
+        // flex: 5,
     },
 
     loginInput: {
-        flex: 5,
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        //
-        // backgroundColor: 'violet',
-        // width: '100%',
+        // flex: 5,
+        // justifyContent: 'flex-end',
     },
 
     TitleIcon: {
@@ -88,16 +78,13 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         marginTop: '30%',
         marginBottom: '10%',
-        //
-        // position: 'absolute',
-        // top: 0,
     },
 
     TitleText: {
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
-        //
+        marginBottom: '25%'
     },
 
     InputBox: {
