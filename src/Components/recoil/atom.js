@@ -1,7 +1,11 @@
 import {atom} from 'recoil'
 
-// 예시
-// export const date = atom({
-//     key: 'date',
-//     default: ''
-// })
+export const swiperScrolling = atom({
+    key: 'swiperScrolling',
+    default: true
+})
+
+export const currentGoalTemp = atom({
+    key: 'currentGoalTemp',
+    default: 0
+})
