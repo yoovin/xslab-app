@@ -147,6 +147,11 @@ export default StyleSheet.create({
         color: 'white',
     },
 
+    settingContentText: {
+        marginVertical: 5,
+        fontSize: RFPercentage(1.5),
+    },
+
     settingView: {
         flexDirection:'row',
         width: '80%',
@@ -174,10 +179,14 @@ export default StyleSheet.create({
     },
 
     tempSliderValueText: {
-        // position:'absolute'
-        bottom: 5,
         color: 'black',
         fontSize:RFPercentage(3),
+    },
+
+    tempSliderGuideText: {
+        bottom: 30,
+        color: '#4E4D4D',
+        fontSize:RFPercentage(1),
     },
 
     confirmButton: {

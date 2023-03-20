@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, Image, ScrollView, useWindowDimensions} from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { View, Text, TouchableOpacity, Image, ScrollView, useWindowDimensions, Animated} from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import Navi from './Navi'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -159,6 +159,12 @@ const Home = () => {
     const [isNodeSelected, setIsNodeSelected] = useState(false)
     const [selectedNode, setSelectedNode] = useState([])
 
+    /* 
+    ===== Animation =====
+    */
+    // const animatedValue = useRef(new Animated.Value(1)).current
+    const [position] = useState(new Animated.ValueXY({x: 0, y: 0}))
+
     const title = 
     <TouchableOpacity>
         <Image source={require("../../assets/image/title.png")} style={{width: 130, height: 17, resizeMode: 'contain'}}/>
@@ -196,16 +202,32 @@ const Home = () => {
         {/* 
             ===== 데몬 View =====
         */}
-        <View style={styles.infoView}>
-            <Text style={{fontWeight:'bold', marginBottom:'5%'}}>데몬 연결</Text>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
-                <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                <MaterialCommunityIcons name="transit-connection-variant" size={20} color='#455053'></MaterialCommunityIcons>
-                        <Text style={styles.infoViewText}>5</Text>
-                        <Text style={styles.infoViewText}>연결</Text>
+        <Animated.View style={[styles.infoView, {
+            transform:[
+                // { perspective: 1000 },
+                // { translateX: position.x},
+                // { rotateY: position.y}
+            ]
+        }]}>
+            <TouchableOpacity style={{width: '100%', height: '100%'}}
+            onPress={() => {
+                Animated.timing(position, {
+                    toValue: { x: -200, y: 200 },
+                    friction: 1,
+                    tension: 150,
+                    useNativeDriver: true
+                }).start()
+            }}>
+                <Text style={{fontWeight:'bold', marginBottom:'5%'}}>데몬 연결</Text>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
+                    <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+                    <MaterialCommunityIcons name="transit-connection-variant" size={20} color='#455053'></MaterialCommunityIcons>
+                            <Text style={styles.infoViewText}>5</Text>
+                            <Text style={styles.infoViewText}>연결</Text>
+                    </View>
                 </View>
-            </View>
-        </View>
+            </TouchableOpacity>
+        </Animated.View>
 
         {/* 
             ===== 온,습도 View =====
