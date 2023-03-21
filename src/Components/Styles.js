@@ -56,20 +56,27 @@ export default StyleSheet.create({
     */
     loginScreen: {
         backgroundColor: '#2A2F42',
-        flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-end'
+        flexGrow: 1,
+        //
+        // flex: 1,
+        // height: '100%',
+        // justifyContent: 'flex-end'
     },
 
     loginTitle: {
         alignItems: 'center',
-        // flex: 5,
+        flex: 5,
+        //
+        // backgroundColor: 'orange'
     },
 
     loginInput: {
         alignItems: 'center',
-        // flex: 5,
+        flex: 5,
+        //
         // justifyContent: 'flex-end',
+        // backgroundColor: 'pink'
     },
 
     TitleIcon: {

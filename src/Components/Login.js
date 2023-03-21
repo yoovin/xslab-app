@@ -1,14 +1,13 @@
 import {
     View,
-    KeyboardAvoidingView,
     Text,
     Image,
     TextInput,
     TouchableOpacity,
     Alert,
-    TouchableWithoutFeedback,
     Keyboard,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import React, { useState } from "react";
 import styles from "./Styles";
 
@@ -36,49 +35,46 @@ const Login = ({ navigation }) => {
     };
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        <KeyboardAwareScrollView
             style={{ flex: 1 }}
+            contentContainerStyle={styles.loginScreen}
+            onPress={Keyboard.dismiss}
         >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={styles.loginScreen}>
-                    <View style={styles.loginTitle}>
-                        <Image
-                            source={require("../../assets/image/logo.png")}
-                            style={styles.TitleIcon}
-                        />
-                        <Text style={styles.TitleText}>XMAS CORE</Text>
-                    </View>
-                    <View style={styles.loginInput}>
-                        <TextInput
-                            style={styles.InputBox}
-                            placeholder="아이디"
-                            onChangeText={(text) => setId(text)}
-                        />
-                        <TextInput
-                            style={styles.InputBox}
-                            placeholder="패스워드"
-                            onChangeText={(text) => setPassword(text)}
-                        />
-                        <TextInput
-                            style={styles.InputBox}
-                            placeholder="서버 주소"
-                            onChangeText={(text) => setServer(text)}
-                        />
-                        <TouchableOpacity
-                            style={[styles.InputBox, styles.InputButton]}
-                            onPress={OnLogin}
-                        >
-                            <Text style={{ color: "white" }}>로그인</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <Image
-                        source={require("../../assets/image/corp.png")}
-                        style={styles.corpName}
-                    />
-                </View>
-            </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+            <View style={styles.loginTitle}>
+                <Image
+                    source={require("../../assets/image/logo.png")}
+                    style={styles.TitleIcon}
+                />
+                <Text style={styles.TitleText}>XMAS CORE</Text>
+            </View>
+            <View style={styles.loginInput}>
+                <TextInput
+                    style={styles.InputBox}
+                    placeholder="아이디"
+                    onChangeText={(text) => setId(text)}
+                />
+                <TextInput
+                    style={styles.InputBox}
+                    placeholder="패스워드"
+                    onChangeText={(text) => setPassword(text)}
+                />
+                <TextInput
+                    style={styles.InputBox}
+                    placeholder="서버 주소"
+                    onChangeText={(text) => setServer(text)}
+                />
+                <TouchableOpacity
+                    style={[styles.InputBox, styles.InputButton]}
+                    onPress={OnLogin}
+                >
+                    <Text style={{ color: "white" }}>로그인</Text>
+                </TouchableOpacity>
+            </View>
+            <Image
+                source={require("../../assets/image/corp.png")}
+                style={styles.corpName}
+            />
+        </KeyboardAwareScrollView>
     );
 };
 
