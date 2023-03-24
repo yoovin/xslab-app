@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import com.oblador.vectoricons.VectorIconsPackage;
 // @react-native-community/checkbox
 import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
+// react-native-biometrics
+import com.rnbiometrics.ReactNativeBiometricsPackage;
 // react-native-safe-area-context
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 // react-native-screens
@@ -66,6 +68,7 @@ public class PackageList {
       new MainReactPackage(mConfig),
       new VectorIconsPackage(),
       new ReactCheckBoxPackage(),
+      new ReactNativeBiometricsPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage()
     ));
