@@ -12,6 +12,9 @@ import React, { useState } from "react";
 import styles from "./Styles";
 import {
     biometricAvailable,
+    createKey,
+    checkKey,
+    deleteKey,
     bioLogin,
 } from "./Biometrics";
 
@@ -20,10 +23,21 @@ const Login = ({ navigation }) => {
     const [password, setPassword] = useState("");
     const [server, setServer] = useState("");
 
-    const onBioLogin = async () => {
+    const OnBio = async () => {
+        console.log("Biometrics");
+        const keyCreate = await createKey();
+        if (keyCreate?.result) {
+            console.log(keyCreate.key);
+        }
+
         const isBioAvailable = await biometricAvailable();
         if (isBioAvailable?.result) {
             console.log(isBioAvailable);
+        }
+
+        const bioKey = await bioLogin(id, "login");
+        if (bioKey?.result) {
+            console.log(bioKey.key);
         }
     };
 
@@ -77,7 +91,7 @@ const Login = ({ navigation }) => {
                 <TouchableOpacity
                     style={[styles.InputBox, styles.InputButton]}
                     // onPress={OnLogin}
-                    onPress={onBioLogin}
+                    onPress={OnBio}
                 >
                     <Text style={{ color: "white" }}>로그인</Text>
                 </TouchableOpacity>
