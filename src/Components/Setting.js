@@ -1,11 +1,11 @@
 import { View, Text, SafeAreaView, ImageBackground, useWindowDimensions, TouchableOpacity, TextInput, Alert} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Dialog from "react-native-dialog"
-import { RadialSlider } from 'react-native-radial-slider';
+import { RadialSlider } from 'react-native-radial-slider'
 
 import styles from './Styles'
-import { swiperScrolling } from './recoil/atom';
-import { useSetRecoilState } from 'recoil';
+import { swiperScrolling } from './recoil/atom'
+import { useSetRecoilState } from 'recoil'
 
 
 const Setting = ({navigation}) => {

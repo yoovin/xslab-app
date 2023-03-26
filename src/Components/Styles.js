@@ -61,31 +61,29 @@ export default StyleSheet.create({
     */
 
     infoContainer: {
-        flex:3, 
+        flex:3,
+        // position: 'absolute',
+        // top: '10%',
+
         flexDirection:'row',
         flexWrap:'wrap',
         justifyContent: 'space-around',
         alignItems:'center',
         paddingHorizontal:'5%',
         backgroundColor: '#F6F6F9',
-        
     },
 
     infoView: {
-        width: '43%',
-        height:'40%',
-        padding: '5%',
-        margin: '3%',
+        position: 'absolute',
+        padding: '10%',
         borderRadius:10,
         backgroundColor:"#ffffff"
     },
 
 
     swiper: {
-        // width: '20%',
-        height:'40%',
-        margin: '3%',
-        borderRadius:10,
+        // width: '100%',
+        // height:'100%',
         backgroundColor:"#ffffff"
     },
 
@@ -135,6 +133,15 @@ export default StyleSheet.create({
     dialog: {
         fontSize: RFPercentage(1),
         backgroundColor:'white'
+    },
+
+    fullscreenBackground: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        opacity: 0.5,
+        backgroundColor: 'gray',
+        zIndex: 998
     },
 
     /*

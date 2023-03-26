@@ -1,13 +1,15 @@
 import { View, Text, TouchableOpacity, Image, ScrollView, useWindowDimensions, Animated} from 'react-native'
-import React, { useState, useEffect, useRef } from 'react'
-import BouncyCheckbox from "react-native-bouncy-checkbox";
+import React, { useState, useEffect, useRef, useMemo } from 'react'
+import BouncyCheckbox from "react-native-bouncy-checkbox"
 import Navi from './Navi'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Dialog from "react-native-dialog"
 import Swiper from 'react-native-swiper'
-import { WithLocalSvg } from 'react-native-svg';
+import { WithLocalSvg } from 'react-native-svg'
+import { swiperScrolling } from './recoil/atom'
+import { useSetRecoilState } from 'recoil'
 
 import styles from './Styles'
 import lightningIcon from '../../assets/image/lightning.svg'
@@ -155,69 +157,192 @@ const nodes = [
 ]
 
 const Home = () => {
+    const [mounted, setMounted] = useState(false) // 초기 설정을 위한 state
     const [isMulti, setIsMulti] = useState(false)
+    /**
+     * Home, Setting 사이 스크롤링 가능 여부
+     */
+    const setScrolling = useSetRecoilState(swiperScrolling)
+
+    /* 
+    ===== Info =====
+    */
+    const [isInfoSelected, setIsInfoSelected] = useState(false) // info 블럭이 선택되어 풀스크린 여부
+    const [selectedInfo, setSelectedInfo] = useState(null) // 눌린 info 블럭의 index
+
+    /* 
+    ===== Node =====
+    */
     const [isNodeSelected, setIsNodeSelected] = useState(false)
     const [selectedNode, setSelectedNode] = useState([])
 
-    /* 
-    ===== Animation =====
+    /*
+    ===== Animation value =====
     */
-    // const animatedValue = useRef(new Animated.Value(1)).current
-    const [position] = useState(new Animated.ValueXY({x: 0, y: 0}))
+    const animations = [
+        useState(new Animated.Value(0))[0],
+        useState(new Animated.Value(0))[0],
+        useState(new Animated.Value(0))[0],
+        useState(new Animated.Value(0))[0],
+    ]
+
+    const [animationValues, setAnimationValues] = useState({
+        tops: [],
+        lefts: [],
+        widths: [],
+        heights: [],
+        rollings:[]
+    })
+
+    /**
+     * 
+     * @param {Number} index
+     * index에 맞는 애니메이션을 실행시킴
+     */
+    const animateIn = (index) => {
+        Animated.timing(animations[index], {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: false,
+        }).start()
+    }
+
+    /**
+     * 
+     * @param {number} index
+     * index에 맞는 실행했던 애니메이션을 되돌림
+     */
+    const animateOut = (index) => {
+        Animated.timing(animations[index], {
+            toValue: 0,
+            duration: 500,
+            useNativeDriver: false,
+        }).start()
+    }
+
+    /**
+     * 
+     * @param {number} index 
+     * info 블럭이 눌릴 시 index에 해당하는 애니메이션 실행
+     */
+    const pressInfo = (index) => {
+        animateIn(index)
+        setSelectedInfo(index)
+        setIsInfoSelected(true)
+        setScrolling(false)
+    }
+
+    /**
+     * 
+     * @param {number} index 
+     * @returns info 블럭의 animation 실행을 위한 style을 반환
+     */
+    const infoAnimationStyle = (index) => {
+        return [{
+            top: animationValues.tops[index], 
+            left: animationValues.lefts[index], 
+            width:animationValues.widths[index], 
+            height: animationValues.heights[index],
+            transform: [animationValues.rollings[index] ? {rotateY: animationValues.rollings[index]} : {rotateY: '0deg'}],
+        }, selectedInfo === index && {zIndex: 999}]
+    }
 
     const title = 
     <TouchableOpacity>
         <Image source={require("../../assets/image/title.png")} style={{width: 130, height: 17, resizeMode: 'contain'}}/>
     </TouchableOpacity>
 
+    // if(!mounted){
+    // }
+
+    useEffect(() => {
+        setMounted(true)
+        // 애니메이션 값들을 넣어줌
+        const infoTops = ['12%', '12%', '28%', '28%'] // 디자인에 맞는 값들
+        const infoLefts = ['8%', '52%', '8%', '52%']
+
+        for(let i = 0; i < 4; i++){
+            setAnimationValues(value => ({
+                ...value,
+                tops: [...value.tops, animations[i].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [infoTops[i], '25%']
+                })],
+
+                lefts: [...value.lefts, animations[i].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [infoLefts[i], '8%']
+                })],
+
+                widths: [...value.widths, animations[i].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['40%', '84%']
+                })],
+
+                heights: [...value.heights, animations[i].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['15%', '50%']
+                })],
+
+                rollings: [...value.rollings, animations[i].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['0deg', '360deg']
+                })],
+            }))
+        }
+    }, [])
+
     useEffect(() => {
         // 선택된 노드들을 초기화해줌
         setSelectedNode([])
     }, [isMulti])
 
+    useEffect(() => {
+
+    }, [selectedInfo])
+
     return (
         <View style={{flex:10}}>
         <Navi title={title}/>
-        <View style={styles.infoContainer}>
+        <View style={{flex: 3}}></View>
+        {isInfoSelected && <TouchableOpacity style={styles.fullscreenBackground}
+        onPress={() => {
+            animateOut(selectedInfo)
+            setIsInfoSelected(false)
+            setSelectedInfo(null)
+            setScrolling(true)
+        }}
+        activeOpacity={0}
+        ></TouchableOpacity>}
 
         {/* 
             ===== 부팅 View =====
         */}
-        <View style={styles.infoView}>
-            <Text style={{fontWeight:'bold', marginBottom:'5%'}}>부팅</Text>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
-                <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                    <Ionicons name="power" size={20} color='blue'></Ionicons>
-                        <Text style={styles.infoViewText}>6</Text>
-                        <Text style={styles.infoViewText}>ON</Text>
+        <Animated.View style={[styles.infoView, infoAnimationStyle(0)]}>
+            <TouchableOpacity style={{width: '100%', height: '100%'}}
+            onPress={() => {pressInfo(0)}}>
+                <Text style={{fontWeight:'bold', marginBottom:'5%'}}>부팅</Text>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
+                    <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+                        <Ionicons name="power" size={20} color='blue'></Ionicons>
+                            <Text style={styles.infoViewText}>6</Text>
+                            <Text style={styles.infoViewText}>ON</Text>
+                    </View>
+                    <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+                        <Ionicons name="power" size={20} color='red'></Ionicons>
+                            <Text style={styles.infoViewText}>5</Text>
+                            <Text style={styles.infoViewText}>OFF</Text>
+                    </View>
                 </View>
-                <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                    <Ionicons name="power" size={20} color='red'></Ionicons>
-                        <Text style={styles.infoViewText}>5</Text>
-                        <Text style={styles.infoViewText}>OFF</Text>
-                </View>
-            </View>
-        </View>
+            </TouchableOpacity>
+        </Animated.View>
 
         {/* 
             ===== 데몬 View =====
         */}
-        <Animated.View style={[styles.infoView, {
-            transform:[
-                // { perspective: 1000 },
-                // { translateX: position.x},
-                // { rotateY: position.y}
-            ]
-        }]}>
+        <Animated.View style={[styles.infoView, infoAnimationStyle(1)]}>
             <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {
-                Animated.timing(position, {
-                    toValue: { x: -200, y: 200 },
-                    friction: 1,
-                    tension: 150,
-                    useNativeDriver: true
-                }).start()
-            }}>
+            onPress={() => {pressInfo(1)}}>
                 <Text style={{fontWeight:'bold', marginBottom:'5%'}}>데몬 연결</Text>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                     <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
@@ -233,57 +358,50 @@ const Home = () => {
             ===== 온,습도 View =====
             Swiper로 스크롤링 구현
         */}
-        <Swiper containerStyle={styles.swiper} loop={false}
-        dotStyle={{top: '15%'}}
-        activeDotStyle={{top: '15%', backgroundColor: '#4B4F55'}}>
-            <View style={{margin:'10%'}}>
-                <Text style={{fontWeight:'bold', marginBottom:'5%'}}>온도</Text>
-                    <View style={{alignItems: 'center'}}>
-                    <MaterialCommunityIcons name="thermometer-low" size={20} color='#455053'></MaterialCommunityIcons>
-                            <Text style={[styles.infoViewText, {margin: 0}]}>37.0°C</Text>
-                            <Text style={[styles.infoViewText, {margin: 0}]}>내부 온도</Text>
-                    </View>
-            </View>
-            <View style={{margin:'10%'}}>
-                <Text style={{fontWeight:'bold', marginBottom:'5%'}}>습도</Text>
-                    <View style={{alignItems: 'center'}}>
-                    <MaterialCommunityIcons name="thermometer-lines" size={20} color='#455053'></MaterialCommunityIcons>
-                            <Text style={[styles.infoViewText, {margin: 0}]}>00%</Text>
-                            <Text style={[styles.infoViewText, {margin: 0}]}>외부 습도</Text>
-                    </View>
-            </View>
-        </Swiper>
+        <Animated.View style={[styles.infoView, infoAnimationStyle(2)]}>
+            <TouchableOpacity style={{width: '100%', height: '100%'}}
+            onPress={() => {pressInfo(2)}}>
+            <Swiper containerStyle={[styles.swiper]} loop={false}
+            dotStyle={{top: '25%'}}
+            activeDotStyle={{top: '25%', backgroundColor: '#4B4F55'}}>
+                <View style={{}}>
+                    <Text style={{fontWeight:'bold', marginBottom:'5%'}}>온도</Text>
+                        <View style={{alignItems: 'center'}}>
+                        <MaterialCommunityIcons name="thermometer-low" size={20} color='#455053'></MaterialCommunityIcons>
+                                <Text style={[styles.infoViewText, {margin: 0}]}>37.0°C</Text>
+                                <Text style={[styles.infoViewText, {margin: 0}]}>내부 온도</Text>
+                        </View>
+                </View>
+                <View style={{}}>
+                    <Text style={{fontWeight:'bold', marginBottom:'5%'}}>습도</Text>
+                        <View style={{alignItems: 'center'}}>
+                        <MaterialCommunityIcons name="thermometer-lines" size={20} color='#455053'></MaterialCommunityIcons>
+                                <Text style={[styles.infoViewText, {margin: 0}]}>00%</Text>
+                                <Text style={[styles.infoViewText, {margin: 0}]}>외부 습도</Text>
+                        </View>
+                </View>
+            </Swiper>
+            </TouchableOpacity>
+        </Animated.View>
 
         {/* 
             ===== 전력 View =====
         */}
-        <View style={styles.infoView}>
+        <Animated.View style={[styles.infoView, infoAnimationStyle(3)]}>
+            <TouchableOpacity style={{width: '100%', height: '100%'}}
+            onPress={() => {pressInfo(3)}}>
             <Text style={{fontWeight:'bold', marginBottom:'5%'}}>전력</Text>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                 <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                    {/* <MaterialIcons name="electrical-services" size={20} color='black'></MaterialIcons> */}
                     <WithLocalSvg width={20} height={20} asset={lightningIcon}/>
                         <Text style={[styles.infoViewText, {margin: 0}]}>240W</Text>
                         <Text style={[styles.infoViewText, {margin: 0}]}>소비 전력</Text>
                 </View>
             </View>
-        </View>
+            </TouchableOpacity>
+        </Animated.View>
 
-        {/* {infos.map(item => (
-            <View style={styles.infoView}>
-                <Text style={{fontWeight:'bold', marginBottom:'5%'}}>{item.infoTitle}</Text>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
-                {item.infoContent.map(info => (
-                        <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                            {info.icon}
-                            <Text style={styles.infoViewText}>{info.num}</Text>
-                            <Text style={styles.infoViewText}>{info.text}</Text>
-                        </View>
-                ))}
-                </View>
-            </View>
-        ))} */}
-        </View>
+        
         <View style={[styles.nodeContainer]}>
             <Text style={[styles.infoViewText, {paddingHorizontal:'5%'}]}>서버 노드 리스트</Text>
             <ScrollView style={[styles.nodeScrollView, isMulti && {marginBottom: 0, borderBottomLeftRadius:0, borderBottomRightRadius:0}]}
@@ -320,8 +438,9 @@ const Home = () => {
                         <Text style={[styles.infoViewText, {marginHorizontal: '2%'}]}>전체 선택하기</Text>
                     </View>
                 }
-                {nodes.map(item => (
+                {nodes.map((item, idx) => (
                     <TouchableOpacity 
+                    key={idx}
                     style={[styles.nodeView, {backgroundColor: item.isOn ? '#A2B2FD' : '#EEA4A0'}]}
                     activeOpacity={0.5}
                     onPress={() => {
