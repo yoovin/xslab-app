@@ -10,34 +10,11 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import React, { useState } from "react";
 import styles from "./Styles";
-import {
-    biometricAvailable,
-    createKey,
-    bioLogin,
-} from "./Biometrics";
 
 const Login = ({ navigation }) => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [server, setServer] = useState("");
-
-    const OnBio = async () => {
-        console.log();
-        const keyCreate = await createKey();
-        if (keyCreate?.result) {
-            console.log(keyCreate.key);
-        }
-
-        const isBioAvailable = await biometricAvailable();
-        if (isBioAvailable?.result) {
-            console.log(isBioAvailable);
-        }
-
-        const bioKey = await bioLogin(id, "login");
-        if (bioKey?.result) {
-            console.log(bioKey.key);
-        }
-    };
 
     const OnLogin = () => {
         console.log(` id: ${id}\n password: ${password}\n server: ${server}\n`);
@@ -88,7 +65,6 @@ const Login = ({ navigation }) => {
                 />
                 <TouchableOpacity
                     style={[styles.InputBox, styles.InputButton]}
-                    // onPress={OnLogin}
                     onPress={OnLogin}
                 >
                     <Text style={{ color: "white" }}>로그인</Text>
