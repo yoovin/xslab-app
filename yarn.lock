@@ -6158,6 +6158,11 @@
     "prop-types" "^15.6.2"
     "react-native-iphone-x-helper" "^1.0.3"
 
+"react-native-keychain@^8.1.1":
+  "integrity" "sha512-8fxgeHKwGcL657eAYpdBTkDIxNhbIHI+kyyO0Yac2dgVAN184JoIwQcW2z6snahwDaCObQOu0biLFHnsH+4KSg=="
+  "resolved" "https://registry.npmjs.org/react-native-keychain/-/react-native-keychain-8.1.1.tgz"
+  "version" "8.1.1"
+
 "react-native-responsive-fontsize@0.5.1":
   "integrity" "sha512-G77iPzrf3BHxMxVm6G3Mw3vPImIdq+jLLXhYoOjWei6i9J3/jzUNUhNdRWvp49Csb5prhbVBLPM+pYZz+b3ESQ=="
   "resolved" "https://registry.npmjs.org/react-native-responsive-fontsize/-/react-native-responsive-fontsize-0.5.1.tgz"

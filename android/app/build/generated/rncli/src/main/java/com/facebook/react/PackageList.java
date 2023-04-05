@@ -17,6 +17,10 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
 // react-native-biometrics
 import com.rnbiometrics.ReactNativeBiometricsPackage;
+// react-native-device-info
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+// react-native-keychain
+import com.oblador.keychain.KeychainPackage;
 // react-native-safe-area-context
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 // react-native-screens
@@ -69,6 +73,8 @@ public class PackageList {
       new VectorIconsPackage(),
       new ReactCheckBoxPackage(),
       new ReactNativeBiometricsPackage(),
+      new RNDeviceInfo(),
+      new KeychainPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage()
     ));
