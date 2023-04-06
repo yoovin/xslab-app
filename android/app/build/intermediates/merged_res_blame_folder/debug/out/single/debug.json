@@ -4,12 +4,12 @@
         "source": "com.xslabapp-main-8:/mipmap-mdpi/ic_launcher_round.png"
     },
     {
-        "merged": "com.xslabapp-merged_res-6:/mipmap-xhdpi_ic_launcher_round.png.flat",
-        "source": "com.xslabapp-main-8:/mipmap-xhdpi/ic_launcher_round.png"
-    },
-    {
         "merged": "com.xslabapp-merged_res-6:/mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "com.xslabapp-main-8:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.xslabapp-merged_res-6:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.xslabapp-main-8:/mipmap-xhdpi/ic_launcher_round.png"
     },
     {
         "merged": "com.xslabapp-merged_res-6:/mipmap-hdpi_ic_launcher.png.flat",

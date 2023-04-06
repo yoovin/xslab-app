@@ -16,17 +16,35 @@ const Login = ({ navigation }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [serverAddr, setServerAddr] = useState("");
+    const [disable, setDisable] = useState(false);
 
     // login with states.
-    const tryLogin = () => {
-        return username == "1" && password == "1" && serverAddr == "1";
+    const tryLogin = async () => {
+        // return username == "1" && password == "1" && serverAddr == "1";
+        try {
+            const response = await fetch("http://192.168.0.124/api/login", {
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
+            });
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const OnLogin = async () => {
+        setDisable(true);
         console.log(
             ` username: ${username}\n password: ${password}\n serverAddr: ${serverAddr}\n`
         );
-        if (tryLogin()) {
+        if (await tryLogin()) {
             // login success.
             Alert.alert("로그인 성공", "입력하신 정보는 자동으로 저장됩니다.", [
                 {
@@ -38,14 +56,15 @@ const Login = ({ navigation }) => {
                 JSON.stringify(userInfo),
                 password
             ).then(async () => {
+                // retrieve credentials.
                 try {
-                    // retrieve credentials.
-                    await Keychain.getGenericPassword(); // get login info.
+                    // get login info.
+                    await Keychain.getGenericPassword();
                 } catch (error) {
                     console.log("Keychain couldn't be accessed!", error);
                 }
             });
-            navigation.navigate("Main");
+            // navigation.navigate("Main");
         } else {
             // login fail.
             Alert.alert(
@@ -59,6 +78,7 @@ const Login = ({ navigation }) => {
                 ]
             );
         }
+        setDisable(false);
     };
 
     // check if key exists.
@@ -120,6 +140,7 @@ const Login = ({ navigation }) => {
                 <TouchableOpacity
                     style={[styles.InputBox, styles.InputButton]}
                     onPress={OnLogin}
+                    disabled={disable}
                 >
                     <Text style={{ color: "white" }}>로그인</Text>
                 </TouchableOpacity>

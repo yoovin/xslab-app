@@ -11,7 +11,6 @@ MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.125.0] C:\Users\aiya0\
 MERGED from [:react-native-vector-icons] C:\Develops\xslab-app\node_modules\react-native-vector-icons\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-community_checkbox] C:\Develops\xslab-app\node_modules\@react-native-community\checkbox\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-biometrics] C:\Develops\xslab-app\node_modules\react-native-biometrics\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-12:12
-MERGED from [:react-native-device-info] C:\Develops\xslab-app\node_modules\react-native-device-info\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-keychain] C:\Develops\xslab-app\node_modules\react-native-keychain\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-12:12
 MERGED from [:react-native-safe-area-context] C:\Develops\xslab-app\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-screens] C:\Develops\xslab-app\node_modules\react-native-screens\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
@@ -45,11 +44,6 @@ MERGED from [com.facebook.fresco:middleware:2.6.0] C:\Users\aiya0\.gradle\caches
 MERGED from [com.facebook.fresco:ui-common:2.6.0] C:\Users\aiya0\.gradle\caches\transforms-3\d85baf65d8e804b63b1f40f71e53e2c4\transformed\jetified-ui-common-2.6.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\aiya0\.gradle\caches\transforms-3\c66a0e494ae03615f4f2412eca3a7dd2\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\859aeea425ecb1c9af8d15503a5ef58a\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
-MERGED from [com.google.android.gms:play-services-iid:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\89eb40e51d9a03750fe3a25c96373511\transformed\jetified-play-services-iid-17.0.0\AndroidManifest.xml:17:1-28:12
-MERGED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\37f8ffa3ec488a48f4844b49ea25bc5d\transformed\jetified-play-services-base-17.0.0\AndroidManifest.xml:17:1-29:12
-MERGED from [com.google.android.gms:play-services-stats:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\b4238051cdef5491a766d1f00f673d73\transformed\jetified-play-services-stats-17.0.0\AndroidManifest.xml:2:1-9:12
-MERGED from [com.google.android.gms:play-services-tasks:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\53b5bd42f3e67d38a82c9d9b3bfba244\transformed\jetified-play-services-tasks-17.0.0\AndroidManifest.xml:2:1-9:12
-MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\c0b86808731a4a9f10bb9c1bec75b274\transformed\jetified-play-services-basement-17.0.0\AndroidManifest.xml:17:1-28:12
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\237960ca1607edccd2d98c15f52b2dce\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\aiya0\.gradle\caches\transforms-3\d7aa1f198091ea1cc50dc1c26600633f\transformed\fragment-1.3.6\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.activity:activity:1.2.4] C:\Users\aiya0\.gradle\caches\transforms-3\93b2272f240cad8e035912fc59023723\transformed\jetified-activity-1.2.4\AndroidManifest.xml:17:1-24:12
@@ -86,7 +80,6 @@ MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\aiya0\.gradle\caches\trans
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\806eac4852f109b813bc70ce28c2490e\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\c5631a9198c91087e2781cc099ce3c49\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\0bf5b5943b3bd88b7b8a598e0e83c637\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.installreferrer:installreferrer:1.1.2] C:\Users\aiya0\.gradle\caches\transforms-3\318328e3183509abffbee01fc4efd067\transformed\jetified-installreferrer-1.1.2\AndroidManifest.xml:2:1-13:12
 MERGED from [com.facebook.conceal:conceal:1.1.3] C:\Users\aiya0\.gradle\caches\transforms-3\a7ed0252248adb350e5186cd08ec6491\transformed\jetified-conceal-1.1.3\AndroidManifest.xml:7:1-16:12
 MERGED from [com.facebook.fresco:fbcore:2.6.0] C:\Users\aiya0\.gradle\caches\transforms-3\fe525e62d2b9e85c0d777a0bb14f7298\transformed\jetified-fbcore-2.6.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\aiya0\.gradle\caches\transforms-3\54294f5f857978835a11e24fc1422778\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
@@ -114,8 +107,6 @@ uses-permission#android.permission.INTERNET
 ADDED from C:\Develops\xslab-app\android\app\src\main\AndroidManifest.xml:4:5-67
 MERGED from [com.facebook.flipper:flipper:0.125.0] C:\Users\aiya0\.gradle\caches\transforms-3\03f04a3f11198ce3b7c6cedb9b41266b\transformed\jetified-flipper-0.125.0\AndroidManifest.xml:15:5-67
 MERGED from [com.facebook.flipper:flipper:0.125.0] C:\Users\aiya0\.gradle\caches\transforms-3\03f04a3f11198ce3b7c6cedb9b41266b\transformed\jetified-flipper-0.125.0\AndroidManifest.xml:15:5-67
-MERGED from [com.google.android.gms:play-services-iid:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\89eb40e51d9a03750fe3a25c96373511\transformed\jetified-play-services-iid-17.0.0\AndroidManifest.xml:24:5-67
-MERGED from [com.google.android.gms:play-services-iid:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\89eb40e51d9a03750fe3a25c96373511\transformed\jetified-play-services-iid-17.0.0\AndroidManifest.xml:24:5-67
 	android:name
 		ADDED from C:\Develops\xslab-app\android\app\src\main\AndroidManifest.xml:4:22-64
 uses-permission#android.permission.USE_BIOMETRIC
@@ -148,16 +139,6 @@ MERGED from [com.facebook.soloader:soloader:0.10.4] C:\Users\aiya0\.gradle\cache
 MERGED from [com.facebook.soloader:soloader:0.10.4] C:\Users\aiya0\.gradle\caches\transforms-3\87826452408345e9fcde9828ee0fb34c\transformed\jetified-soloader-0.10.4\AndroidManifest.xml:11:5-20
 MERGED from [com.google.android.material:material:1.1.0] C:\Users\aiya0\.gradle\caches\transforms-3\ff7f9e1ea9c2e709fffb9e018f2252cf\transformed\material-1.1.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.1.0] C:\Users\aiya0\.gradle\caches\transforms-3\ff7f9e1ea9c2e709fffb9e018f2252cf\transformed\material-1.1.0\AndroidManifest.xml:22:5-20
-MERGED from [com.google.android.gms:play-services-iid:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\89eb40e51d9a03750fe3a25c96373511\transformed\jetified-play-services-iid-17.0.0\AndroidManifest.xml:26:5-20
-MERGED from [com.google.android.gms:play-services-iid:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\89eb40e51d9a03750fe3a25c96373511\transformed\jetified-play-services-iid-17.0.0\AndroidManifest.xml:26:5-20
-MERGED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\37f8ffa3ec488a48f4844b49ea25bc5d\transformed\jetified-play-services-base-17.0.0\AndroidManifest.xml:22:5-27:19
-MERGED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\37f8ffa3ec488a48f4844b49ea25bc5d\transformed\jetified-play-services-base-17.0.0\AndroidManifest.xml:22:5-27:19
-MERGED from [com.google.android.gms:play-services-stats:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\b4238051cdef5491a766d1f00f673d73\transformed\jetified-play-services-stats-17.0.0\AndroidManifest.xml:7:5-20
-MERGED from [com.google.android.gms:play-services-stats:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\b4238051cdef5491a766d1f00f673d73\transformed\jetified-play-services-stats-17.0.0\AndroidManifest.xml:7:5-20
-MERGED from [com.google.android.gms:play-services-tasks:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\53b5bd42f3e67d38a82c9d9b3bfba244\transformed\jetified-play-services-tasks-17.0.0\AndroidManifest.xml:7:5-20
-MERGED from [com.google.android.gms:play-services-tasks:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\53b5bd42f3e67d38a82c9d9b3bfba244\transformed\jetified-play-services-tasks-17.0.0\AndroidManifest.xml:7:5-20
-MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\c0b86808731a4a9f10bb9c1bec75b274\transformed\jetified-play-services-basement-17.0.0\AndroidManifest.xml:22:5-26:19
-MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\c0b86808731a4a9f10bb9c1bec75b274\transformed\jetified-play-services-basement-17.0.0\AndroidManifest.xml:22:5-26:19
 MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\b6fe4da57007a43d86a66ba4c66459bd\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:25:5-35:19
 MERGED from [androidx.emoji2:emoji2:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\b6fe4da57007a43d86a66ba4c66459bd\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:25:5-35:19
 MERGED from [androidx.core:core:1.7.0] C:\Users\aiya0\.gradle\caches\transforms-3\63a3df243d2d102452600006144a86df\transformed\core-1.7.0\AndroidManifest.xml:24:5-89
@@ -168,8 +149,6 @@ MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\aiya0\.gradle\
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\aiya0\.gradle\caches\transforms-3\bc74a39e1ea23fea00bfcf2682a93948\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:25:5-35:19
 MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\3e0d478508575b75c79938eb5fb0fb04\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:25:5-31:19
 MERGED from [androidx.startup:startup-runtime:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\3e0d478508575b75c79938eb5fb0fb04\transformed\jetified-startup-runtime-1.0.0\AndroidManifest.xml:25:5-31:19
-MERGED from [com.android.installreferrer:installreferrer:1.1.2] C:\Users\aiya0\.gradle\caches\transforms-3\318328e3183509abffbee01fc4efd067\transformed\jetified-installreferrer-1.1.2\AndroidManifest.xml:11:5-20
-MERGED from [com.android.installreferrer:installreferrer:1.1.2] C:\Users\aiya0\.gradle\caches\transforms-3\318328e3183509abffbee01fc4efd067\transformed\jetified-installreferrer-1.1.2\AndroidManifest.xml:11:5-20
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.7.0] C:\Users\aiya0\.gradle\caches\transforms-3\63a3df243d2d102452600006144a86df\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
 	android:label
@@ -236,8 +215,6 @@ MERGED from [:react-native-community_checkbox] C:\Develops\xslab-app\node_module
 MERGED from [:react-native-community_checkbox] C:\Develops\xslab-app\node_modules\@react-native-community\checkbox\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-biometrics] C:\Develops\xslab-app\node_modules\react-native-biometrics\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-biometrics] C:\Develops\xslab-app\node_modules\react-native-biometrics\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-device-info] C:\Develops\xslab-app\node_modules\react-native-device-info\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-device-info] C:\Develops\xslab-app\node_modules\react-native-device-info\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-keychain] C:\Develops\xslab-app\node_modules\react-native-keychain\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-keychain] C:\Develops\xslab-app\node_modules\react-native-keychain\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-safe-area-context] C:\Develops\xslab-app\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
@@ -304,16 +281,6 @@ MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\aiy
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\aiya0\.gradle\caches\transforms-3\c66a0e494ae03615f4f2412eca3a7dd2\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\859aeea425ecb1c9af8d15503a5ef58a\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\859aeea425ecb1c9af8d15503a5ef58a\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-iid:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\89eb40e51d9a03750fe3a25c96373511\transformed\jetified-play-services-iid-17.0.0\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-iid:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\89eb40e51d9a03750fe3a25c96373511\transformed\jetified-play-services-iid-17.0.0\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\37f8ffa3ec488a48f4844b49ea25bc5d\transformed\jetified-play-services-base-17.0.0\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\37f8ffa3ec488a48f4844b49ea25bc5d\transformed\jetified-play-services-base-17.0.0\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-stats:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\b4238051cdef5491a766d1f00f673d73\transformed\jetified-play-services-stats-17.0.0\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-stats:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\b4238051cdef5491a766d1f00f673d73\transformed\jetified-play-services-stats-17.0.0\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-tasks:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\53b5bd42f3e67d38a82c9d9b3bfba244\transformed\jetified-play-services-tasks-17.0.0\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-tasks:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\53b5bd42f3e67d38a82c9d9b3bfba244\transformed\jetified-play-services-tasks-17.0.0\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\c0b86808731a4a9f10bb9c1bec75b274\transformed\jetified-play-services-basement-17.0.0\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\c0b86808731a4a9f10bb9c1bec75b274\transformed\jetified-play-services-basement-17.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\237960ca1607edccd2d98c15f52b2dce\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\237960ca1607edccd2d98c15f52b2dce\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\aiya0\.gradle\caches\transforms-3\d7aa1f198091ea1cc50dc1c26600633f\transformed\fragment-1.3.6\AndroidManifest.xml:20:5-22:41
@@ -386,8 +353,6 @@ MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\User
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\c5631a9198c91087e2781cc099ce3c49\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\0bf5b5943b3bd88b7b8a598e0e83c637\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\0bf5b5943b3bd88b7b8a598e0e83c637\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [com.android.installreferrer:installreferrer:1.1.2] C:\Users\aiya0\.gradle\caches\transforms-3\318328e3183509abffbee01fc4efd067\transformed\jetified-installreferrer-1.1.2\AndroidManifest.xml:5:5-7:41
-MERGED from [com.android.installreferrer:installreferrer:1.1.2] C:\Users\aiya0\.gradle\caches\transforms-3\318328e3183509abffbee01fc4efd067\transformed\jetified-installreferrer-1.1.2\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.conceal:conceal:1.1.3] C:\Users\aiya0\.gradle\caches\transforms-3\a7ed0252248adb350e5186cd08ec6491\transformed\jetified-conceal-1.1.3\AndroidManifest.xml:12:5-14:41
 MERGED from [com.facebook.conceal:conceal:1.1.3] C:\Users\aiya0\.gradle\caches\transforms-3\a7ed0252248adb350e5186cd08ec6491\transformed\jetified-conceal-1.1.3\AndroidManifest.xml:12:5-14:41
 MERGED from [com.facebook.fresco:fbcore:2.6.0] C:\Users\aiya0\.gradle\caches\transforms-3\fe525e62d2b9e85c0d777a0bb14f7298\transformed\jetified-fbcore-2.6.0\AndroidManifest.xml:5:5-7:41
@@ -416,24 +381,6 @@ uses-permission#android.permission.ACCESS_WIFI_STATE
 ADDED from [com.facebook.flipper:flipper:0.125.0] C:\Users\aiya0\.gradle\caches\transforms-3\03f04a3f11198ce3b7c6cedb9b41266b\transformed\jetified-flipper-0.125.0\AndroidManifest.xml:16:5-76
 	android:name
 		ADDED from [com.facebook.flipper:flipper:0.125.0] C:\Users\aiya0\.gradle\caches\transforms-3\03f04a3f11198ce3b7c6cedb9b41266b\transformed\jetified-flipper-0.125.0\AndroidManifest.xml:16:22-73
-uses-permission#com.google.android.c2dm.permission.RECEIVE
-ADDED from [com.google.android.gms:play-services-iid:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\89eb40e51d9a03750fe3a25c96373511\transformed\jetified-play-services-iid-17.0.0\AndroidManifest.xml:23:5-82
-	android:name
-		ADDED from [com.google.android.gms:play-services-iid:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\89eb40e51d9a03750fe3a25c96373511\transformed\jetified-play-services-iid-17.0.0\AndroidManifest.xml:23:22-79
-activity#com.google.android.gms.common.api.GoogleApiActivity
-ADDED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\37f8ffa3ec488a48f4844b49ea25bc5d\transformed\jetified-play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
-	android:exported
-		ADDED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\37f8ffa3ec488a48f4844b49ea25bc5d\transformed\jetified-play-services-base-17.0.0\AndroidManifest.xml:25:13-37
-	android:theme
-		ADDED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\37f8ffa3ec488a48f4844b49ea25bc5d\transformed\jetified-play-services-base-17.0.0\AndroidManifest.xml:26:13-72
-	android:name
-		ADDED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\37f8ffa3ec488a48f4844b49ea25bc5d\transformed\jetified-play-services-base-17.0.0\AndroidManifest.xml:24:13-79
-meta-data#com.google.android.gms.version
-ADDED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\c0b86808731a4a9f10bb9c1bec75b274\transformed\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
-	android:value
-		ADDED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\c0b86808731a4a9f10bb9c1bec75b274\transformed\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
-	android:name
-		ADDED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\c0b86808731a4a9f10bb9c1bec75b274\transformed\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
 provider#androidx.startup.InitializationProvider
 ADDED from [androidx.emoji2:emoji2:1.0.0] C:\Users\aiya0\.gradle\caches\transforms-3\b6fe4da57007a43d86a66ba4c66459bd\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
 MERGED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\aiya0\.gradle\caches\transforms-3\bc74a39e1ea23fea00bfcf2682a93948\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:26:9-34:20
@@ -460,7 +407,3 @@ ADDED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\aiya0\.gradle\c
 		ADDED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\aiya0\.gradle\caches\transforms-3\bc74a39e1ea23fea00bfcf2682a93948\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
 	android:name
 		ADDED from [androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\aiya0\.gradle\caches\transforms-3\bc74a39e1ea23fea00bfcf2682a93948\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
-uses-permission#com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
-ADDED from [com.android.installreferrer:installreferrer:1.1.2] C:\Users\aiya0\.gradle\caches\transforms-3\318328e3183509abffbee01fc4efd067\transformed\jetified-installreferrer-1.1.2\AndroidManifest.xml:9:5-110
-	android:name
-		ADDED from [com.android.installreferrer:installreferrer:1.1.2] C:\Users\aiya0\.gradle\caches\transforms-3\318328e3183509abffbee01fc4efd067\transformed\jetified-installreferrer-1.1.2\AndroidManifest.xml:9:22-107
