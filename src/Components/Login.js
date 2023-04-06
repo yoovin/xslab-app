@@ -22,7 +22,7 @@ const Login = ({ navigation }) => {
         setDisable(true);
 
         try {
-            await fetch(`${serverAddr}/api/login`, {
+            const response = await fetch(`${serverAddr}/api/login`, {
                 body: JSON.stringify({
                     username: username,
                     password: password,
@@ -32,16 +32,17 @@ const Login = ({ navigation }) => {
                     "Content-Type": "application/json",
                 },
                 method: "POST",
-            })
-                .then((response) => response.json())
-                .then((resopnseJSON) => console.log(resopnseJSON));
+            });
+            const responseJSON = await response.json();
+            console.log(responseJSON);
             // Alert.alert("로그인 성공", "입력하신 정보는 자동으로 저장됩니다.", [
             //     {
             //         text: "확인",
             //     },
             // ]);
+            // const userInfo = { username: username, serverAddr: serverAddr };
             // await Keychain.setGenericPassword(
-            //     username,
+            //     JSON.stringify(userInfo),
             //     password
             // ).then(async () => {
             //     // retrieve credentials.
@@ -52,7 +53,7 @@ const Login = ({ navigation }) => {
             //         console.error("Keychain couldn't be accessed!", error);
             //     }
             // });
-            // // navigation.navigate("Main");
+            // navigation.navigate("Main");
         } catch (error) {
             // login fail.
             console.error(error);
@@ -75,6 +76,10 @@ const Login = ({ navigation }) => {
     const keyCheck = async () => {
         const credentials = await Keychain.getGenericPassword();
         if (credentials) {
+            const userInfo = JSON.parse(credentials.username);
+            setUsername(userInfo.username);
+            setPassword(credentials.password);
+            setServerAddr(userInfo.serverAddr);
             // navigation.navigate("Main");
         }
     };
