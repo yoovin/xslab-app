@@ -17,6 +17,28 @@ const Login = ({ navigation }) => {
     const [password, setPassword] = useState("");
     const [serverAddr, setServerAddr] = useState("http://192.168.0.124"); // temporary variable
     const [disable, setDisable] = useState(false);
+    const [nonCre, setNonCre] = useState(true);
+
+    const saveInfo = async () => {
+        Alert.alert("로그인 성공", "입력하신 정보는 자동으로 저장됩니다.", [
+            {
+                text: "확인",
+                style: "cancel",
+            },
+        ]);
+        const userInfo = { username: username, serverAddr: serverAddr };
+        await Keychain.setGenericPassword(
+            JSON.stringify(userInfo),
+            password
+        ).then(async () => {
+            // retrieve credentials
+            try {
+                await Keychain.getGenericPassword();
+            } catch (error) {
+                console.error("Keychain couldn't be accessed!", error);
+            }
+        });
+    };
 
     const OnLogin = async () => {
         setDisable(true);
@@ -35,27 +57,12 @@ const Login = ({ navigation }) => {
             });
             const responseJSON = await response.json();
             console.log(responseJSON);
-            // Alert.alert("로그인 성공", "입력하신 정보는 자동으로 저장됩니다.", [
-            //     {
-            //         text: "확인",
-            //     },
-            // ]);
-            // const userInfo = { username: username, serverAddr: serverAddr };
-            // await Keychain.setGenericPassword(
-            //     JSON.stringify(userInfo),
-            //     password
-            // ).then(async () => {
-            //     // retrieve credentials.
-            //     try {
-            //         // get login info.
-            //         await Keychain.getGenericPassword();
-            //     } catch (error) {
-            //         console.error("Keychain couldn't be accessed!", error);
-            //     }
-            // });
+            if(nonCre) {
+                saveInfo();
+            }
             // navigation.navigate("Main");
         } catch (error) {
-            // login fail.
+            // login fail
             console.error(error);
             Alert.alert(
                 "로그인 실패",
@@ -72,19 +79,22 @@ const Login = ({ navigation }) => {
         setDisable(false);
     };
 
-    // check if key exists.
+    // check if key exists
     const keyCheck = async () => {
         const credentials = await Keychain.getGenericPassword();
         if (credentials) {
+            setNonCre(false);
             const userInfo = JSON.parse(credentials.username);
             setUsername(userInfo.username);
             setPassword(credentials.password);
             setServerAddr(userInfo.serverAddr);
-            // navigation.navigate("Main");
+            OnLogin();
+        } else {
+            setNonCre(true);
         }
     };
 
-    // on mount.
+    // on mount
     useEffect(() => {
         keyCheck();
     }, []);
