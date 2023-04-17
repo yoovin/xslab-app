@@ -27,17 +27,7 @@ const Login = ({ navigation }) => {
             },
         ]);
         const userInfo = { username: username, serverAddr: serverAddr };
-        await Keychain.setGenericPassword(
-            JSON.stringify(userInfo),
-            password
-        ).then(async () => {
-            // retrieve credentials
-            try {
-                await Keychain.getGenericPassword();
-            } catch (error) {
-                console.error("Keychain couldn't be accessed!", error);
-            }
-        });
+        await Keychain.setGenericPassword(JSON.stringify(userInfo), password);
     };
 
     const OnLogin = async () => {
@@ -57,10 +47,10 @@ const Login = ({ navigation }) => {
             });
             const responseJSON = await response.json();
             console.log(responseJSON);
-            if(nonCre) {
+            if (nonCre) {
                 saveInfo();
             }
-            // navigation.navigate("Main");
+            navigation.navigate("Main");
         } catch (error) {
             // login fail
             console.error(error);
