@@ -61,31 +61,29 @@ export default StyleSheet.create({
     */
 
     infoContainer: {
-        flex:3, 
+        flex:3,
+        // position: 'absolute',
+        // top: '10%',
+
         flexDirection:'row',
         flexWrap:'wrap',
         justifyContent: 'space-around',
         alignItems:'center',
         paddingHorizontal:'5%',
         backgroundColor: '#F6F6F9',
-        
     },
 
     infoView: {
-        width: '43%',
-        height:'40%',
-        padding: '5%',
-        margin: '3%',
+        position: 'absolute',
+        padding: '10%',
         borderRadius:10,
         backgroundColor:"#ffffff"
     },
 
 
     swiper: {
-        // width: '20%',
-        height:'40%',
-        margin: '3%',
-        borderRadius:10,
+        // width: '100%',
+        // height:'100%',
         backgroundColor:"#ffffff"
     },
 
@@ -137,6 +135,15 @@ export default StyleSheet.create({
         backgroundColor:'white'
     },
 
+    fullscreenBackground: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        opacity: 0.5,
+        backgroundColor: 'gray',
+        zIndex: 998
+    },
+
     /*
     ===== SETTING COMPONENT =====
     */
@@ -145,6 +152,11 @@ export default StyleSheet.create({
         marginTop: '5%',
         fontSize: RFPercentage(2.7),
         color: 'white',
+    },
+
+    settingContentText: {
+        marginVertical: 5,
+        fontSize: RFPercentage(1.5),
     },
 
     settingView: {
@@ -174,10 +186,14 @@ export default StyleSheet.create({
     },
 
     tempSliderValueText: {
-        // position:'absolute'
-        bottom: 5,
         color: 'black',
         fontSize:RFPercentage(3),
+    },
+
+    tempSliderGuideText: {
+        bottom: 30,
+        color: '#4E4D4D',
+        fontSize:RFPercentage(1),
     },
 
     confirmButton: {
