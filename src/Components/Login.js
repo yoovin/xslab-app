@@ -30,8 +30,9 @@ const Login = ({ navigation }) => {
         await Keychain.setGenericPassword(JSON.stringify(userInfo), password);
     };
 
-    const OnLogin = async () => {
+    const onLogin = async () => {
         setDisable(true);
+        console.log(username, password, serverAddr);
 
         try {
             const response = await fetch(`${serverAddr}/api/login`, {
@@ -46,11 +47,13 @@ const Login = ({ navigation }) => {
                 method: "POST",
             });
             const responseJSON = await response.json();
-            console.log(responseJSON);
+            if (responseJSON.detail) {
+                throw new Error(responseJSON.detail);
+            }
             if (nonCre) {
                 saveInfo();
             }
-            navigation.navigate("Main");
+            // navigation.navigate("Main");
         } catch (error) {
             // login fail
             console.error(error);
@@ -75,10 +78,15 @@ const Login = ({ navigation }) => {
         if (credentials) {
             setNonCre(false);
             const userInfo = JSON.parse(credentials.username);
+
             setUsername(userInfo.username);
             setPassword(credentials.password);
             setServerAddr(userInfo.serverAddr);
-            OnLogin();
+
+            setTimeout(() => {
+                onLogin();
+            }, 3000);
+            // onLogin();
         } else {
             setNonCre(true);
         }
@@ -130,7 +138,7 @@ const Login = ({ navigation }) => {
                 />
                 <TouchableOpacity
                     style={[styles.InputBox, styles.InputButton]}
-                    onPress={OnLogin}
+                    onPress={onLogin}
                     disabled={disable}
                 >
                     <Text style={{ color: "white" }}>로그인</Text>
