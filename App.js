@@ -19,7 +19,7 @@ const App = () => {
   return (
     <RecoilRoot>
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Main'>
+            <Stack.Navigator initialRouteName='Login'>
             <Stack.Group screenOptions={{headerShown: false}}>
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Main" component={Main}/>
