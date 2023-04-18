@@ -32,11 +32,11 @@ const Login = ({ navigation }) => {
                 },
                 method: "POST",
             });
-            const responseJSON = await response.json();
-            if (responseJSON.detail) {
-                throw new Error(responseJSON.detail);
+            const token = await response.json();
+            if (token.detail) {
+                throw new Error(token.detail);
             }
-            navigation.navigate("Main");
+            navigation.navigate("Main", { token: token });
         } catch (error) {
             // login fail
             Alert.alert(
@@ -54,11 +54,6 @@ const Login = ({ navigation }) => {
         setDisable(false);
     };
 
-    const deleteKey = async () => {
-        console.log(await Keychain.resetGenericPassword());
-    };
-
-    // TouchableOpacity of Image is temporal for purpose of debug
     return (
         <KeyboardAwareScrollView
             style={{ flex: 1 }}
@@ -66,12 +61,10 @@ const Login = ({ navigation }) => {
             onPress={Keyboard.dismiss}
         >
             <View style={styles.loginTitle}>
-                <TouchableOpacity onPress={deleteKey}>
-                    <Image
-                        source={require("../../assets/image/logo.png")}
-                        style={styles.TitleIcon}
-                    />
-                </TouchableOpacity>
+                <Image
+                    source={require("../../assets/image/logo.png")}
+                    style={styles.TitleIcon}
+                />
                 <Text style={styles.TitleText}>XMAS CORE</Text>
             </View>
             <View style={styles.loginInput}>
