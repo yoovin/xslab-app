@@ -8,31 +8,17 @@ import {
     Keyboard,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./Styles";
-import * as Keychain from "react-native-keychain";
 
 const Login = ({ navigation }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [serverAddr, setServerAddr] = useState("http://192.168.0.124"); // temporary variable
     const [disable, setDisable] = useState(false);
-    const [nonCre, setNonCre] = useState(true);
-
-    const saveInfo = async () => {
-        Alert.alert("로그인 성공", "입력하신 정보는 자동으로 저장됩니다.", [
-            {
-                text: "확인",
-                style: "cancel",
-            },
-        ]);
-        const userInfo = { username: username, serverAddr: serverAddr };
-        await Keychain.setGenericPassword(JSON.stringify(userInfo), password);
-    };
 
     const onLogin = async () => {
         setDisable(true);
-        console.log(username, password, serverAddr);
 
         try {
             const response = await fetch(`${serverAddr}/api/login`, {
@@ -50,13 +36,9 @@ const Login = ({ navigation }) => {
             if (responseJSON.detail) {
                 throw new Error(responseJSON.detail);
             }
-            if (nonCre) {
-                saveInfo();
-            }
-            // navigation.navigate("Main");
+            navigation.navigate("Main");
         } catch (error) {
             // login fail
-            console.error(error);
             Alert.alert(
                 "로그인 실패",
                 "입력하신 서버 주소에 로그인 할 수 없습니다.",
@@ -71,31 +53,6 @@ const Login = ({ navigation }) => {
 
         setDisable(false);
     };
-
-    // check if key exists
-    const keyCheck = async () => {
-        const credentials = await Keychain.getGenericPassword();
-        if (credentials) {
-            setNonCre(false);
-            const userInfo = JSON.parse(credentials.username);
-
-            setUsername(userInfo.username);
-            setPassword(credentials.password);
-            setServerAddr(userInfo.serverAddr);
-
-            setTimeout(() => {
-                onLogin();
-            }, 3000);
-            // onLogin();
-        } else {
-            setNonCre(true);
-        }
-    };
-
-    // on mount
-    useEffect(() => {
-        keyCheck();
-    }, []);
 
     const deleteKey = async () => {
         console.log(await Keychain.resetGenericPassword());
