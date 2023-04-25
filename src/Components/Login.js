@@ -10,35 +10,30 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import React, { useState } from "react";
 import styles from "./Styles";
+import axios from "axios";
 
 const Login = ({ navigation }) => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [serverAddr, setServerAddr] = useState("http://192.168.0.124"); // temporary variable
+    const [username, setUsername] = useState("vraptorbmc") // 테스트용
+    const [password, setPassword] = useState("1234") // 테스트용
+    const [serverAddr, setServerAddr] = useState("http://192.168.0.124") // temporary variable
     const [disable, setDisable] = useState(false);
 
     const onLogin = async () => {
         setDisable(true);
-
-        try {
-            const response = await fetch(`${serverAddr}/api/login`, {
-                body: JSON.stringify({
-                    username: username,
-                    password: password,
-                }),
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                method: "POST",
-            });
-            const token = await response.json();
-            if (token.detail) {
-                throw new Error(token.detail);
-            }
-            navigation.navigate("Main", { token: token });
-        } catch (error) {
-            // login fail
+        axios.post(`${serverAddr}/api/login`, {
+            username: username,
+            password: password,
+        })
+        .then(({data}) => {
+            // 로그인 성공 시 엑세스토큰은 헤더로 저장하고 리프레시토큰은 async로 저장합니다.
+            // 서버 주소도 axios에 defaults 값으로 넣어줍니다.
+            console.log(data)
+            axios.defaults.headers.common["Authorization"]  = `Bearer ${data.access_token}`
+            axios.defaults.baseURL = serverAddr
+            navigation.navigate("Main")
+        })
+        .catch(err => {
+            // 로그인 실패
             Alert.alert(
                 "로그인 실패",
                 "입력하신 서버 주소에 로그인 할 수 없습니다.",
@@ -48,17 +43,17 @@ const Login = ({ navigation }) => {
                         style: "cancel",
                     },
                 ]
-            );
-        }
+            )
 
-        setDisable(false);
+            setDisable(false);
+        })
     };
 
     return (
         <KeyboardAwareScrollView
             style={{ flex: 1 }}
             contentContainerStyle={styles.loginScreen}
-            onPress={Keyboard.dismiss}
+            // onPress={() => Keyboard.dismiss()}
         >
             <View style={styles.loginTitle}>
                 <Image
@@ -73,12 +68,15 @@ const Login = ({ navigation }) => {
                     placeholder="아이디"
                     value={username}
                     onChangeText={(text) => setUsername(text)}
+                    autoCapitalize={false}
                 />
                 <TextInput
                     style={styles.InputBox}
                     placeholder="패스워드"
                     value={password}
                     onChangeText={(text) => setPassword(text)}
+                    autoCapitalize={false}
+                    secureTextEntry={true}
                 />
                 <TextInput
                     style={styles.InputBox}
@@ -88,7 +86,7 @@ const Login = ({ navigation }) => {
                 />
                 <TouchableOpacity
                     style={[styles.InputBox, styles.InputButton]}
-                    onPress={onLogin}
+                    onPress={() => onLogin()}
                     disabled={disable}
                 >
                     <Text style={{ color: "white" }}>로그인</Text>

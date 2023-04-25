@@ -14,147 +14,13 @@ import { useSetRecoilState } from 'recoil'
 import styles from './Styles'
 import lightningIcon from '../../assets/image/lightning.svg'
 import checkIcon from '../../assets/image/xmascore.svg'
+import axios from 'axios'
 
 /*
     ===== TODOS =====
+    ㅇ. 나중에 react query로 바꾸기
 */
 
-/*
-    ===== DUMMY DATA =====
-*/
-const infos = [
-    {
-        infoTitle:"부팅",
-        infoContent:[
-            {
-                icon:<Ionicons name="power" size={20} color='blue'></Ionicons>,
-                num: "6",
-                text: "ON",
-            },
-            {
-                icon:<Ionicons name="power" size={20} color='red'></Ionicons>,
-                num: "5",
-                text: "OFF",
-            }
-        ]
-    },
-    {
-        infoTitle:"연결",
-        infoContent:[
-            {
-                icon:<MaterialCommunityIcons name="transit-connection-variant" size={20} color='black'></MaterialCommunityIcons>,
-                num: "5",
-                text: "연결",
-            },
-        ]
-    },
-    {
-        infoTitle:"온습도",
-        infoContent:[
-            {
-                icon:<MaterialCommunityIcons name="thermometer-low" size={20} color='black'></MaterialCommunityIcons>,
-                num: "37.0°C",
-                text: "내부 온도",
-            },
-            {
-                icon:<MaterialCommunityIcons name="thermometer-lines" size={20} color='black'></MaterialCommunityIcons>,
-                num: "0.0°C / 0.0%",
-                text: "외부 온습도",
-            }
-        ]
-    },
-    {
-        infoTitle:"전력",
-        infoContent:[
-            {
-                icon:<MaterialIcons name="electrical-services" size={20} color='black'></MaterialIcons>,
-                num: "240W",
-                text: "소비 전력",
-            },
-        ]
-    },
-]
-
-const nodes = [
-    {
-        nodeNum: 1,
-        temp: 37.0,
-        isOn: false,
-        ref: null,
-    },
-    {
-        nodeNum: 2,
-        temp: 37.0,
-        isOn: true,
-        ref: null,
-    },
-    {
-        nodeNum: 3,
-        temp: 37.0,
-        isOn: true,
-        ref: null,
-    },
-    {
-        nodeNum: 4,
-        temp: 37.0,
-        isOn: true,
-        ref: null,
-    },
-    {
-        nodeNum: 5,
-        temp: 37.0,
-        isOn: true,
-        ref: null,
-    },
-    {
-        nodeNum: 6,
-        temp: 37.0,
-        isOn: false,
-        ref: null,
-    },
-    {
-        nodeNum: 7,
-        temp: 37.0,
-        isOn: false,
-        ref: null,
-    },
-    {
-        nodeNum: 8,
-        temp: 37.0,
-        isOn: false,
-        ref: null,
-    },
-    {
-        nodeNum: 9,
-        temp: 37.0,
-        isOn: false,
-        ref: null,
-    },
-    {
-        nodeNum: 10,
-        temp: 37.0,
-        isOn: true,
-        ref: null,
-    },
-    {
-        nodeNum: 11,
-        temp: 37.0,
-        isOn: true,
-        ref: null,
-    },
-    {
-        nodeNum: 12,
-        temp: 37.0,
-        isOn: false,
-        ref: null,
-    },
-    {
-        nodeNum: 13,
-        temp: 37.0,
-        isOn: false,
-        ref: null,
-    },
-]
 
 const Home = () => {
     const [mounted, setMounted] = useState(false) // 초기 설정을 위한 state
@@ -167,12 +33,22 @@ const Home = () => {
     /* 
     ===== Info =====
     */
+    // 노드 전원 [on, off]
+    const [power, setPower] = useState([0, 0])
+    const [demonConnected, setdemonConnected] = useState(0)
+    const [powerConsumption, setpowerConsumption] = useState(0)
+
+    const [bmcTemperatures, setBmcTemperatures] = useState(0)
+    const [nodeTemperatures, setNodeTemperatures] = useState([])
+
+
     const [isInfoSelected, setIsInfoSelected] = useState(false) // info 블럭이 선택되어 풀스크린 여부
     const [selectedInfo, setSelectedInfo] = useState(null) // 눌린 info 블럭의 index
 
     /* 
     ===== Node =====
     */
+    const [nodes, setNodes] = useState([])
     const [isNodeSelected, setIsNodeSelected] = useState(false)
     const [selectedNode, setSelectedNode] = useState([])
 
@@ -255,6 +131,73 @@ const Home = () => {
     // if(!mounted){
     // }
 
+    /**
+     *  node의 전원값을 가져와서 설정한다.
+     */    
+    const getPower = () => {
+        setPower([0, 0]) // 파워값 초기화
+        setNodes([]) // 노드값 초기화
+        axios.get('/api/power')
+        .then(({data}) => {
+            console.log(data)
+            for(let i = 0; i < data.node.length; i++){
+                // console.log(node)
+                const powerStatus = data.node[i]
+                if(powerStatus > 0){
+                    let node = {
+                        nodeNum: i+1,
+                        temp: 0.0,
+                        ref: null,
+                    }
+                    if(powerStatus == 3){ // 전원 켜져있음
+                        node.isOn = true
+                        setPower(val => {
+                            const newVal = [...val]
+                            newVal[0]++
+                            return newVal
+                        })
+                    }else{ // 전원꺼져있음
+                        node.isOn = false
+                        setPower(val => {
+                            const newVal = [...val]
+                            newVal[1]++
+                            return newVal
+                        })
+                    }
+                    setNodes(val => {
+                        const newVal = [...val]
+                        console.log(newVal)
+                        newVal.push({...node})
+                        return newVal
+                    })
+                }
+            }
+        })
+    }
+
+    /**
+     *  node의 온도값을 가져와서 설정한다.
+     */
+    const getTemperature = () => {
+        console.log('온도 받아옴')
+        axios.get('/api/temperature')
+        .then(({data}) => {
+            setBmcTemperatures(data.bmc.toFixed(1))
+            setNodeTemperatures(data.node)
+        })
+    }
+
+    /**
+     *  노드의 전력값을 가져와서 설정한다.
+     */
+    const getPowerConsumption = () => {
+        console.log('전력 받아옴')
+        axios.get('/api/power/consumption')
+        .then(({data}) => {
+            setpowerConsumption(data.consumption)
+        })
+    }
+
     useEffect(() => {
         setMounted(true)
         // 애니메이션 값들을 넣어줌
@@ -290,12 +233,38 @@ const Home = () => {
                 })],
             }))
         }
+
+
+        // info값 불러오기
+
+        getPower()
+        getPowerConsumption()
+        getTemperature()
+        setInterval(() => {
+            getTemperature()
+            getPowerConsumption()
+        }, 3000) // 3초마다 온도 가져옴
     }, [])
+
+    useEffect(() => {
+        if(nodes.length > 0){
+            console.log('온도 설정')
+            setNodes(val => {
+                const newVal = [...val]
+                newVal.map(item => {
+                    item.temp = nodeTemperatures[item.nodeNum-1].toFixed(1)
+                    return item
+                })
+                return newVal
+            })
+        }
+    }, [nodeTemperatures])
 
     useEffect(() => {
         // 선택된 노드들을 초기화해줌
         setSelectedNode([])
     }, [isMulti])
+
 
     useEffect(() => {
 
@@ -320,17 +289,20 @@ const Home = () => {
         */}
         <Animated.View style={[styles.infoView, infoAnimationStyle(0)]}>
             <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {pressInfo(0)}}>
+            onPress={() => {
+                    // pressInfo(0)
+                    console.log(nodes)
+                }}>
                 <Text style={{fontWeight:'bold', marginBottom:'5%'}}>부팅</Text>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                     <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
                         <Ionicons name="power" size={20} color='blue'></Ionicons>
-                            <Text style={styles.infoViewText}>6</Text>
+                            <Text style={styles.infoViewText}>{power[0]}</Text>
                             <Text style={styles.infoViewText}>ON</Text>
                     </View>
                     <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
                         <Ionicons name="power" size={20} color='red'></Ionicons>
-                            <Text style={styles.infoViewText}>5</Text>
+                            <Text style={styles.infoViewText}>{power[1]}</Text>
                             <Text style={styles.infoViewText}>OFF</Text>
                     </View>
                 </View>
@@ -342,7 +314,10 @@ const Home = () => {
         */}
         <Animated.View style={[styles.infoView, infoAnimationStyle(1)]}>
             <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {pressInfo(1)}}>
+            onPress={() => {
+                    // pressInfo(1)
+                    getTemperature()
+                }}>
                 <Text style={{fontWeight:'bold', marginBottom:'5%'}}>데몬 연결</Text>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                     <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
@@ -368,7 +343,7 @@ const Home = () => {
                     <Text style={{fontWeight:'bold', marginBottom:'5%'}}>온도</Text>
                         <View style={{alignItems: 'center'}}>
                         <MaterialCommunityIcons name="thermometer-low" size={20} color='#455053'></MaterialCommunityIcons>
-                                <Text style={[styles.infoViewText, {margin: 0}]}>37.0°C</Text>
+                                <Text style={[styles.infoViewText, {margin: 0}]}>{bmcTemperatures}°C</Text>
                                 <Text style={[styles.infoViewText, {margin: 0}]}>내부 온도</Text>
                         </View>
                 </View>
@@ -394,7 +369,7 @@ const Home = () => {
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                 <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
                     <WithLocalSvg width={20} height={20} asset={lightningIcon}/>
-                        <Text style={[styles.infoViewText, {margin: 0}]}>240W</Text>
+                        <Text style={[styles.infoViewText, {margin: 0}]}>{powerConsumption}W</Text>
                         <Text style={[styles.infoViewText, {margin: 0}]}>소비 전력</Text>
                 </View>
             </View>

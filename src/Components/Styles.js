@@ -114,18 +114,15 @@ export default StyleSheet.create({
     */
 
     infoContainer: {
-<<<<<<< HEAD
         flex:3,
         // position: 'absolute',
         // top: '10%',
 
         flexDirection:'row',
         flexWrap:'wrap',
-=======
         flex: 3,
         flexDirection: 'row',
         flexWrap: 'wrap',
->>>>>>> login
         justifyContent: 'space-around',
         alignItems: 'center',
         paddingHorizontal: '5%',
@@ -133,19 +130,13 @@ export default StyleSheet.create({
     },
 
     infoView: {
-<<<<<<< HEAD
         position: 'absolute',
-        padding: '10%',
-        borderRadius:10,
-        backgroundColor:"#ffffff"
-=======
         width: '43%',
         height: '40%',
         margin: '3%',
-        padding: '5%',
+        padding: '10%',
         borderRadius: 10,
         backgroundColor: '#ffffff',
->>>>>>> login
     },
 
 
@@ -202,7 +193,6 @@ export default StyleSheet.create({
         fontSize: RFPercentage(1),
         backgroundColor: 'white',
     },
-<<<<<<< HEAD
 
     fullscreenBackground: {
         position: 'absolute',
@@ -315,6 +305,3 @@ export default StyleSheet.create({
         resizeMode: 'contain'
     },
 });
-=======
-});
->>>>>>> login
