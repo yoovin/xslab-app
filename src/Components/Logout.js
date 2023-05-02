@@ -14,8 +14,6 @@ import styles from './Styles'
 
 const Logout = ({ navigation }) => {
     const [isLogoutButtonPress, setIsLogoutButtonPress] = useState(false)
-    const cancelToken = axios.CancelToken
-    const source = cancelToken.source()
 
     const onLogout = async () => {
         axios.post('/api/logout').then(({ data }) => {
