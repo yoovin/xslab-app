@@ -4,8 +4,8 @@ import Dialog from "react-native-dialog"
 import { RadialSlider } from 'react-native-radial-slider'
 
 import styles from './Styles'
-import { swiperScrolling } from './recoil/atom'
-import { useSetRecoilState } from 'recoil'
+import { swiperScrolling, BmcTemperature } from './recoil/atom'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 
 
 const Setting = ({navigation}) => {
@@ -13,6 +13,7 @@ const Setting = ({navigation}) => {
     const [currentGoalTemp, setCurrentGoalTemp] = useState(0)
     const [currentWarningTemp, setCurrentWarningTemp] = useState(0)
     const setScrolling = useSetRecoilState(swiperScrolling)
+    const bmcTemperature = useRecoilValue(BmcTemperature)
 
     const currentGoalTempPrompt = () => {
         Alert.prompt("서버 목표 온도", "", [
@@ -48,7 +49,7 @@ const Setting = ({navigation}) => {
                 <View style={{flex:1}}>
                     <Text style={styles.settingViewTitleText}>서버 목표 온도</Text>
                     <View style={{marginVertical: 30}}>
-                        <Text style={styles.settingContentText}>현재 온도: 00°C</Text>
+                        <Text style={styles.settingContentText}>현재 온도: {bmcTemperature}°C</Text>
                         <Text style={styles.settingContentText}>목표 온도: {currentGoalTemp}°C</Text>
                         {/* <TextInput value={currentGoalTemp} onChange={setCurrentGoalTemp} placeholder=""/> */}
                     </View>

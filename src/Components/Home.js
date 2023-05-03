@@ -8,8 +8,9 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Dialog from "react-native-dialog"
 import Swiper from 'react-native-swiper'
 import { WithLocalSvg } from 'react-native-svg'
-import { swiperScrolling } from './recoil/atom'
-import { useSetRecoilState } from 'recoil'
+import { swiperScrolling, BmcTemperature } from './recoil/atom'
+import { useSetRecoilState, useRecoilState } from 'recoil'
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import styles from './Styles'
 import lightningIcon from '../../assets/image/lightning.svg'
@@ -23,6 +24,7 @@ import axios from 'axios'
 
 
 const Home = () => {
+    const queryClient = useQueryClient()
     const [mounted, setMounted] = useState(false) // 초기 설정을 위한 state
     const [isMulti, setIsMulti] = useState(false)
     /**
@@ -38,7 +40,7 @@ const Home = () => {
     const [demonConnected, setdemonConnected] = useState(0)
     const [powerConsumption, setpowerConsumption] = useState(0)
 
-    const [bmcTemperatures, setBmcTemperatures] = useState(0)
+    const [bmcTemperature, setBmcTemperature] = useRecoilState(BmcTemperature)
     const [nodeTemperatures, setNodeTemperatures] = useState([])
 
 
@@ -70,43 +72,43 @@ const Home = () => {
         rollings:[]
     })
 
-    /**
-     * 
-     * @param {Number} index
-     * index에 맞는 애니메이션을 실행시킴
-     */
-    const animateIn = (index) => {
-        Animated.timing(animations[index], {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: false,
-        }).start()
-    }
+    // /**
+    //  * 
+    //  * @param {Number} index
+    //  * index에 맞는 애니메이션을 실행시킴
+    //  */
+    // const animateIn = (index) => {
+    //     Animated.timing(animations[index], {
+    //         toValue: 1,
+    //         duration: 500,
+    //         useNativeDriver: false,
+    //     }).start()
+    // }
 
-    /**
-     * 
-     * @param {number} index
-     * index에 맞는 실행했던 애니메이션을 되돌림
-     */
-    const animateOut = (index) => {
-        Animated.timing(animations[index], {
-            toValue: 0,
-            duration: 500,
-            useNativeDriver: false,
-        }).start()
-    }
+    // /**
+    //  * 
+    //  * @param {number} index
+    //  * index에 맞는 실행했던 애니메이션을 되돌림
+    //  */
+    // const animateOut = (index) => {
+    //     Animated.timing(animations[index], {
+    //         toValue: 0,
+    //         duration: 500,
+    //         useNativeDriver: false,
+    //     }).start()
+    // }
 
-    /**
-     * 
-     * @param {number} index 
-     * info 블럭이 눌릴 시 index에 해당하는 애니메이션 실행
-     */
-    const pressInfo = (index) => {
-        animateIn(index)
-        setSelectedInfo(index)
-        setIsInfoSelected(true)
-        setScrolling(false)
-    }
+    // /**
+    //  * 
+    //  * @param {number} index 
+    //  * info 블럭이 눌릴 시 index에 해당하는 애니메이션 실행
+    //  */
+    // const pressInfo = (index) => {
+    //     animateIn(index)
+    //     setSelectedInfo(index)
+    //     setIsInfoSelected(true)
+    //     setScrolling(false)
+    // }
 
     /**
      * 
@@ -130,49 +132,46 @@ const Home = () => {
 
     // if(!mounted){
     // }
+    const getPower = async () => {
+        const res = await axios.get('/api/power')
+        console.log('power불러옴')
+        return res.data
+    }
+    
+    const { data, isLoading, isError, error, refetch } = useQuery('nodes', getPower)
+
 
     /**
      *  node의 전원값을 가져와서 설정한다.
      */    
-    const getPower = () => {
+    const setNode = async () => {
         setPower([0, 0]) // 파워값 초기화
         setNodes([]) // 노드값 초기화
-        axios.get('/api/power')
-        .then(({data}) => {
-            console.log(data)
-            for(let i = 0; i < data.node.length; i++){
-                // console.log(node)
-                const powerStatus = data.node[i]
-                if(powerStatus > 0){
-                    let node = {
-                        nodeNum: i+1,
-                        temp: 0.0,
-                        ref: null,
-                    }
-                    if(powerStatus == 3){ // 전원 켜져있음
-                        node.isOn = true
-                        setPower(val => {
-                            const newVal = [...val]
-                            newVal[0]++
-                            return newVal
-                        })
-                    }else{ // 전원꺼져있음
-                        node.isOn = false
-                        setPower(val => {
-                            const newVal = [...val]
-                            newVal[1]++
-                            return newVal
-                        })
-                    }
-                    setNodes(val => {
-                        const newVal = [...val]
-                        console.log(newVal)
-                        newVal.push({...node})
-                        return newVal
-                    })
+        console.log(data)
+        const nodes = [] // 노드 리스트 초기화
+        for(let i = 0; i < data.node.length; i++){
+            // console.log(node)
+            const powerStatus = data.node[i]
+            if(powerStatus > 0){
+                let node = {
+                    nodeNum: i+1,
+                    temp: 0.0,
+                    ref: null,
+                    isOn: powerStatus > 1 // 전원 켜짐 여부
                 }
+                setPower(val => {
+                    const newVal = [...val]
+                    if(powerStatus > 1){
+                        newVal[0]++
+                    }else{
+                        newVal[1]++
+                    }
+                    return newVal
+                })
+                nodes.push(node)
             }
-        })
+        }
+        setNodes(nodes)
     }
 
     /**
@@ -182,7 +181,7 @@ const Home = () => {
         console.log('온도 받아옴')
         axios.get('/api/temperature')
         .then(({data}) => {
-            setBmcTemperatures(data.bmc.toFixed(1))
+            setBmcTemperature(data.bmc.toFixed(1))
             setNodeTemperatures(data.node)
         })
     }
@@ -236,15 +235,18 @@ const Home = () => {
 
 
         // info값 불러오기
-
-        getPower()
         getPowerConsumption()
         getTemperature()
         setInterval(() => {
+            refetch()
             getTemperature()
             getPowerConsumption()
-        }, 3000) // 3초마다 온도 가져옴
+        }, 3000) // 3초마다 정보 가져옴
     }, [])
+
+    useEffect(() => {
+        setNode()
+    }, [data])
 
     useEffect(() => {
         if(nodes.length > 0){
@@ -291,7 +293,7 @@ const Home = () => {
             <TouchableOpacity style={{width: '100%', height: '100%'}}
             onPress={() => {
                     // pressInfo(0)
-                    console.log(nodes)
+                    // console.log(nodes)
                 }}>
                 <Text style={{fontWeight:'bold', marginBottom:'5%'}}>부팅</Text>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
@@ -316,7 +318,7 @@ const Home = () => {
             <TouchableOpacity style={{width: '100%', height: '100%'}}
             onPress={() => {
                     // pressInfo(1)
-                    getTemperature()
+                    // getTemperature()
                 }}>
                 <Text style={{fontWeight:'bold', marginBottom:'5%'}}>데몬 연결</Text>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
@@ -334,29 +336,29 @@ const Home = () => {
             Swiper로 스크롤링 구현
         */}
         <Animated.View style={[styles.infoView, infoAnimationStyle(2)]}>
-            <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {pressInfo(2)}}>
-            <Swiper containerStyle={[styles.swiper]} loop={false}
-            dotStyle={{top: '25%'}}
-            activeDotStyle={{top: '25%', backgroundColor: '#4B4F55'}}>
-                <View style={{}}>
-                    <Text style={{fontWeight:'bold', marginBottom:'5%'}}>온도</Text>
-                        <View style={{alignItems: 'center'}}>
-                        <MaterialCommunityIcons name="thermometer-low" size={20} color='#455053'></MaterialCommunityIcons>
-                                <Text style={[styles.infoViewText, {margin: 0}]}>{bmcTemperatures}°C</Text>
-                                <Text style={[styles.infoViewText, {margin: 0}]}>내부 온도</Text>
-                        </View>
-                </View>
-                <View style={{}}>
-                    <Text style={{fontWeight:'bold', marginBottom:'5%'}}>습도</Text>
-                        <View style={{alignItems: 'center'}}>
-                        <MaterialCommunityIcons name="thermometer-lines" size={20} color='#455053'></MaterialCommunityIcons>
-                                <Text style={[styles.infoViewText, {margin: 0}]}>00%</Text>
-                                <Text style={[styles.infoViewText, {margin: 0}]}>외부 습도</Text>
-                        </View>
-                </View>
-            </Swiper>
-            </TouchableOpacity>
+                {/* <TouchableOpacity style={{width: '100%', height: '100%'}}
+                onPress={() => {}}> */}
+                <Swiper containerStyle={[styles.swiper]} loop={false}
+                dotStyle={{top: '25%'}}
+                activeDotStyle={{top: '25%', backgroundColor: '#4B4F55'}}>
+                    <View style={{}}>
+                        <Text style={{fontWeight:'bold', marginBottom:'5%'}}>온도</Text>
+                            <View style={{alignItems: 'center'}}>
+                            <MaterialCommunityIcons name="thermometer-low" size={20} color='#455053'></MaterialCommunityIcons>
+                                    <Text style={[styles.infoViewText, {margin: 0}]}>{bmcTemperature}°C</Text>
+                                    <Text style={[styles.infoViewText, {margin: 0}]}>내부 온도</Text>
+                            </View>
+                    </View>
+                    <View style={{}}>
+                        <Text style={{fontWeight:'bold', marginBottom:'5%'}}>습도</Text>
+                            <View style={{alignItems: 'center'}}>
+                            <MaterialCommunityIcons name="thermometer-lines" size={20} color='#455053'></MaterialCommunityIcons>
+                                    <Text style={[styles.infoViewText, {margin: 0}]}>00%</Text>
+                                    <Text style={[styles.infoViewText, {margin: 0}]}>외부 습도</Text>
+                            </View>
+                    </View>
+                </Swiper>
+                {/* </TouchableOpacity> */}
         </Animated.View>
 
         {/* 
@@ -364,7 +366,7 @@ const Home = () => {
         */}
         <Animated.View style={[styles.infoView, infoAnimationStyle(3)]}>
             <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {pressInfo(3)}}>
+            onPress={() => {}}>
             <Text style={{fontWeight:'bold', marginBottom:'5%'}}>전력</Text>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                 <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
