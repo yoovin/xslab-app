@@ -16,9 +16,7 @@ const Logout = ({ navigation }) => {
     const [isLogoutButtonPress, setIsLogoutButtonPress] = useState(false)
 
     const onLogout = async () => {
-        axios.post('/api/logout').then(({ data }) => {
-            console.log(data)
-        })
+        axios.post('/api/logout')
     }
 
     useEffect(() => {

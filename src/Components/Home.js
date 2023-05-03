@@ -240,10 +240,11 @@ const Home = () => {
         getPower()
         getPowerConsumption()
         getTemperature()
-        setInterval(() => {
+        const intervalGet = setInterval(() => {
             getTemperature()
             getPowerConsumption()
         }, 3000) // 3초마다 온도 가져옴
+        return () => clearInterval(intervalGet)
     }, [])
 
     useEffect(() => {
