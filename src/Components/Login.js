@@ -6,11 +6,11 @@ import {
     TouchableOpacity,
     Alert,
     Keyboard,
-} from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import React, { useState } from "react";
-import styles from "./Styles";
-import axios from "axios";
+} from "react-native"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import React, { useState } from "react"
+import styles from "./Styles"
+import axios from "axios"
 
 const Login = ({ navigation }) => {
     const [username, setUsername] = useState("vraptorbmc") // 테스트용
@@ -57,7 +57,7 @@ const Login = ({ navigation }) => {
         >
             <View style={styles.loginTitle}>
                 <Image
-                    source={require("../../assets/image/logo.png")}
+                    source={require("../../assets/image/xmascore.png")}
                     style={styles.TitleIcon}
                 />
                 <Text style={styles.TitleText}>XMAS CORE</Text>

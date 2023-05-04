@@ -269,14 +269,13 @@ const Home = () => {
         // info값 불러오기 (이부분 함수 작성하여 간략화 할 필요 있음.)
         getPowerConsumption()
         getTemperature()
-        getFan()
-        setInterval(() => {
+        const intervalGet = setInterval(() => {
             refetch()
             getTemperature()
             getPowerConsumption()
             getFan()
-        }, 3000) // 3초마다 정보 가져옴
-
+        }, 3000) // 3초마다 온도 가져옴
+        return () => clearInterval(intervalGet)
     }, [])
 
     useEffect(() => {
