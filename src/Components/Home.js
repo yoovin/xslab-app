@@ -54,6 +54,8 @@ const Home = () => {
     const [nodes, setNodes] = useState([])
     const [isNodeSelected, setIsNodeSelected] = useState(false)
     const [selectedNode, setSelectedNode] = useState([])
+    // 선택한 노드의 전원 켜짐/꺼짐 여부
+    const [isSelectedNodeOn, setIsSelectedNodeOn] = useState(false)
 
     /*
     ===== Animation value =====
@@ -171,7 +173,7 @@ const Home = () => {
             const powerStatus = data.node[i]
             if(powerStatus > 0){
                 let node = {
-                    nodeNum: i+1,
+                    nodeid: i+1,
                     temp: 0.0,
                     ref: null,
                     isOn: powerStatus > 1 // 전원 켜짐 여부
@@ -222,6 +224,20 @@ const Home = () => {
         })
     }
 
+    const nodePowerMutation = useMutation(
+        option => axios.put(`/api/node/${option.nodeId}`, {power: option.working}),
+            {
+                onSuccess: () => {
+                    // 데이터 업데이트 성공 시 캐시를 갱신합니다.
+                    queryClient.resetQueries("nodes")
+                },
+            }
+        )
+
+    const turnNodePower = (nodeId, working) => {
+        nodePowerMutation.mutate({nodeId, working})
+    }
+
     useEffect(() => {
         setMounted(true)
         // 애니메이션 값들을 넣어줌
@@ -269,6 +285,7 @@ const Home = () => {
         // info값 불러오기 (이부분 함수 작성하여 간략화 할 필요 있음.)
         getPowerConsumption()
         getTemperature()
+        getFan()
         const intervalGet = setInterval(() => {
             refetch()
             getTemperature()
@@ -288,7 +305,7 @@ const Home = () => {
             setNodes(val => {
                 const newVal = [...val]
                 newVal.map(item => {
-                    item.temp = nodeTemperatures[item.nodeNum-1].toFixed(1)
+                    item.temp = nodeTemperatures[item.nodeid-1].toFixed(1)
                     return item
                 })
                 return newVal
@@ -510,12 +527,15 @@ const Home = () => {
                         if(item.ref != null){ // Multi node select 일때 
                             item.ref.onPress()
                         }else{
+                            // 노드 한개 개별 선택
+                            setSelectedNode([item.nodeid])
+                            setIsSelectedNodeOn(item.isOn)
                             setIsNodeSelected(true)
                         }
                         
                     }}
                     onLongPress={() => {setIsMulti(true)}}>
-                        <Text style={styles.nodeText}>노드 #{item.nodeNum}</Text>
+                        <Text style={styles.nodeText}>노드 #{item.nodeid}</Text>
                         <Text style={styles.nodeText}>{item.temp}°C</Text>
                         {isMulti &&
                         <BouncyCheckbox
@@ -527,13 +547,13 @@ const Home = () => {
                         onPress={(isChecked) => {
                             if(isChecked){ // 체크되면
                                 setSelectedNode(state => {
-                                    const selectedNode = state.concat(item.nodeNum)
+                                    const selectedNode = state.concat(item.nodeid)
                                     return selectedNode
                                 })
                             }else{ // 체크 풀리면
                                 setSelectedNode(state => {
                                     const selectedNode = [...state]
-                                    selectedNode.splice(selectedNode.indexOf(item.nodeNum), 1)
+                                    selectedNode.splice(selectedNode.indexOf(item.nodeid), 1)
                                     return selectedNode
                                 })
                             }
@@ -575,10 +595,22 @@ const Home = () => {
         </View>
         <Dialog.Container visible={isNodeSelected} contentStyle={styles.dialog}>
                 <Dialog.Description>
-                    선택한 노드의 전원을 켜시겠습니까?
+                    {isSelectedNodeOn ? '선택한 노드의 전원을 종료하시겠습니까?' : '선택한 노드의 전원을 켜시겠습니까?'}
                 </Dialog.Description>
                 <Dialog.Button label="예" color="black" 
-                onPress={() => {
+                onPress={async () => {
+                    console.log(selectedNode)
+                    if(isSelectedNodeOn){
+                        for(let nodeid of selectedNode){
+                            turnNodePower(nodeid, 0)
+                        }
+                    }else{
+                        // 전원 온
+                        for(let nodeid of selectedNode){
+                            turnNodePower(nodeid, 1)
+                        }
+                    }
+
                     setIsMulti(false)
                     setIsNodeSelected(false)
                 }}></Dialog.Button>
