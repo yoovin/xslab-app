@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, ScrollView, useWindowDimensions, Animated} from 'react-native'
+import { View, Text, TouchableOpacity, Image, ScrollView, useWindowDimensions, Animated, Easing} from 'react-native'
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import BouncyCheckbox from "react-native-bouncy-checkbox"
 import Navi from './Navi'
@@ -10,7 +10,7 @@ import Swiper from 'react-native-swiper'
 import { WithLocalSvg } from 'react-native-svg'
 import { swiperScrolling, BmcTemperature } from './recoil/atom'
 import { useSetRecoilState, useRecoilState } from 'recoil'
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import styles from './Styles'
 import lightningIcon from '../../assets/image/lightning.svg'
@@ -42,6 +42,7 @@ const Home = () => {
 
     const [bmcTemperature, setBmcTemperature] = useRecoilState(BmcTemperature)
     const [nodeTemperatures, setNodeTemperatures] = useState([])
+    const [fanRpms, setFanRpms] = useState([])
 
 
     const [isInfoSelected, setIsInfoSelected] = useState(false) // info 블럭이 선택되어 풀스크린 여부
@@ -58,11 +59,27 @@ const Home = () => {
     ===== Animation value =====
     */
     const animations = [
-        useState(new Animated.Value(0))[0],
-        useState(new Animated.Value(0))[0],
-        useState(new Animated.Value(0))[0],
-        useState(new Animated.Value(0))[0],
+        useRef(new Animated.Value(0)).current,
+        useRef(new Animated.Value(0)).current,
+        useRef(new Animated.Value(0)).current,
+        useRef(new Animated.Value(0)).current
     ]
+
+    // Fan 개수는 4개로 고정해두었습니다.
+    // 추후 서버 Fan 개수 수정 가능 시 변동적이게 만들어야함.
+    const fanAnimations = [
+        useRef(new Animated.Value(0)).current,
+        useRef(new Animated.Value(0)).current,
+        useRef(new Animated.Value(0)).current,
+        useRef(new Animated.Value(0)).current
+    ]
+
+    /**
+     *  Fan 애니메이션이 실행중인지 여부 확인
+     */
+    const [fanAniWorks, setFanAniWorks] = useState([
+        false, false, false, false
+    ])
 
     const [animationValues, setAnimationValues] = useState({
         tops: [],
@@ -71,6 +88,8 @@ const Home = () => {
         heights: [],
         rollings:[]
     })
+
+    const [animationRotate, setAnimationRotate] = useState([])
 
     // /**
     //  * 
@@ -130,8 +149,6 @@ const Home = () => {
         <Image source={require("../../assets/image/title.png")} style={{width: 130, height: 17, resizeMode: 'contain'}}/>
     </TouchableOpacity>
 
-    // if(!mounted){
-    // }
     const getPower = async () => {
         const res = await axios.get('/api/power')
         console.log('power불러옴')
@@ -197,6 +214,14 @@ const Home = () => {
         })
     }
 
+    const getFan = () => {
+        console.log('팬 rpm 받아옴')
+        axios.get('/api/fan')
+        .then(({data}) => {
+            setFanRpms(data.rpm)
+        })
+    }
+
     useEffect(() => {
         setMounted(true)
         // 애니메이션 값들을 넣어줌
@@ -233,15 +258,25 @@ const Home = () => {
             }))
         }
 
+        // Fan 애니메이션 각도 지정
+        for(let i = 0; i < 4; i++){
+            setAnimationRotate(val => ([...val, fanAnimations[i].interpolate({
+                inputRange: [0, 1],
+                outputRange: ['0deg', '360deg']
+            })]))
+        }
 
-        // info값 불러오기
+        // info값 불러오기 (이부분 함수 작성하여 간략화 할 필요 있음.)
         getPowerConsumption()
         getTemperature()
+        getFan()
         setInterval(() => {
             refetch()
             getTemperature()
             getPowerConsumption()
+            getFan()
         }, 3000) // 3초마다 정보 가져옴
+
     }, [])
 
     useEffect(() => {
@@ -269,14 +304,42 @@ const Home = () => {
 
 
     useEffect(() => {
-
-    }, [selectedInfo])
+        for(let i = 0; i < fanRpms.length; i++){
+            if(fanRpms[i] > 480){
+                if(!fanAniWorks[i]){
+                    Animated.loop(
+                        Animated.timing(fanAnimations[i], {
+                            toValue: 1,
+                            duration: 2000,
+                            useNativeDriver: true,
+                            easing: Easing.linear
+                        })
+                    ).start()
+                    // 애니메이션 실행중인것으로 체크
+                    setFanAniWorks(val => {
+                        const newVal = [...val]
+                        newVal[i] = true
+                        return newVal
+                    })
+                }
+            }else{
+                // 팬이 돌고있지않으면 애니메이션 정지
+                fanAnimations[i].stopAnimation()
+                // 애니메이션 정지중인것으로 체크
+                setFanAniWorks(val => {
+                    const newVal = [...val]
+                    newVal[i] = false
+                    return newVal
+                })
+            }
+        }
+    }, [fanRpms])
 
     return (
         <View style={{flex:10}}>
         <Navi title={title}/>
-        <View style={{flex: 3}}></View>
-        {isInfoSelected && <TouchableOpacity style={styles.fullscreenBackground}
+        <View style={{flex: 7}}></View>
+        {/* {isInfoSelected && <TouchableOpacity style={styles.fullscreenBackground}
         onPress={() => {
             animateOut(selectedInfo)
             setIsInfoSelected(false)
@@ -284,7 +347,7 @@ const Home = () => {
             setScrolling(true)
         }}
         activeOpacity={0}
-        ></TouchableOpacity>}
+        ></TouchableOpacity>} */}
 
         {/* 
             ===== 부팅 View =====
@@ -373,6 +436,30 @@ const Home = () => {
                     <WithLocalSvg width={20} height={20} asset={lightningIcon}/>
                         <Text style={[styles.infoViewText, {margin: 0}]}>{powerConsumption}W</Text>
                         <Text style={[styles.infoViewText, {margin: 0}]}>소비 전력</Text>
+                </View>
+            </View>
+            </TouchableOpacity>
+        </Animated.View>
+
+        {/* 
+            ===== Fan View =====
+        */}
+        <Animated.View style={[styles.infoView, {top: '44%', left:'8%', width: '84%', height: '17%', padding:'5%', }]}>
+            <TouchableOpacity style={{width: '100%', height: '100%'}}
+            onPress={() => {}}>
+            <Text style={{fontWeight:'bold'}}>현재 팬 속도</Text>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                    {fanRpms.map((item, idx) => (
+                        <View style={{justifyContent:'center', alignItems:'center'}}>
+                            <Text style={[styles.infoViewText, {marginBottom: 5}]}>{idx+1}번 팬</Text>
+                            <Animated.View style={{transform:[{rotate: animationRotate[idx]}]}}>
+                                <MaterialCommunityIcons name="fan" size={30} color={fanAniWorks[idx] && '#5d66a4'}></MaterialCommunityIcons>
+                            </Animated.View>
+                            {/* Fan RPM 480이면 멈춰있는상태같음 */}
+                            <Text style={[styles.infoViewText, {marginTop: 5}, fanAniWorks[idx] && {color: '#5d66a4'}]}>{item > 480 ? item : '-'}</Text>
+                        </View>
+                    ))}
                 </View>
             </View>
             </TouchableOpacity>
