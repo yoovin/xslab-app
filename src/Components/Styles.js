@@ -131,13 +131,19 @@ export default StyleSheet.create({
 
     infoView: {
         position: 'absolute',
-        width: '43%',
-        height: '40%',
-        margin: '3%',
         padding: '10%',
-        borderRadius: 10,
-        backgroundColor: '#ffffff',
+        borderRadius:10,
+        backgroundColor:"#ffffff"
     },
+
+    // infoView: {
+    //     width: '43%',
+    //     height:'40%',
+    //     padding: '5%',
+    //     margin: '3%',
+    //     borderRadius:10,
+    //     backgroundColor:"#ffffff"
+    // },
 
 
     swiper: {
