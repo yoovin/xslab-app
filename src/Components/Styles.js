@@ -222,6 +222,7 @@ export default StyleSheet.create({
     settingContentText: {
         marginVertical: 5,
         fontSize: RFPercentage(1.5),
+        color:'white'
     },
 
     settingView: {
@@ -287,6 +288,33 @@ export default StyleSheet.create({
         height: '71%', 
         resizeMode: 'contain', 
         opacity: 0.5
+    },
+
+    settingList: {
+        backgroundColor: '#3D4460',
+        width: '80%',
+        alignItems: 'center',
+        borderRadius: 10,
+        marginTop: '5%',
+    },
+
+    settingMenu: {
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        flexDirection: 'row',
+        paddingTop:'5%',
+    },
+
+    settingInnerMenu: {
+        width: '80%',
+        height: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomWidth: 2,
+        borderColor: '#92A2D9',
+        paddingBottom:'5%'
     },
 
     /*
