@@ -30,7 +30,7 @@ const Login = ({ navigation }) => {
             console.log(data)
             axios.defaults.headers.common["Authorization"]  = `Bearer ${data.access_token}`
             axios.defaults.baseURL = serverAddr
-            navigation.navigate("Main")
+            navigation.reset({routes: [{name: 'Main'}]})
         })
         .catch(err => {
             // 로그인 실패
