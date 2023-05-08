@@ -5,7 +5,7 @@ import Swiper from 'react-native-swiper'
 import styles from './Styles'
 import BottomNavi from './BottomNavi'
 import Home from './Home';
-import Setting from './Setting'
+import SettingMenu from './SettingMenu'
 
 import { swiperScrolling} from './recoil/atom'
 import { useRecoilValue } from 'recoil'
@@ -21,7 +21,7 @@ const Main = ({navigation}) => {
             // bounces={true}
             onIndexChanged={(idx) => setCurrentScreenIndex(idx)}>
                 <Home/>
-                <Setting navigation = {navigation}/>
+                <SettingMenu navigation = {navigation}/>
             </Swiper>
             <BottomNavi setCurrentScreenIndex={setCurrentScreenIndex}/>
         </View>
