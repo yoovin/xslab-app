@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 import styles from './Styles'
 
-const SettingProd = () => {
+const SettingProd = ({ navigation }) => {
     const [name, setName] = useState('-')
     const [version, setVersion] = useState('-')
     const [serial, setSerial] = useState('-')
@@ -20,8 +20,8 @@ const SettingProd = () => {
     const [dns, setDns] = useState('-')
     const [isFolder, setIsFolder] = useState(true)
 
-    useEffect(async () => {
-        await axios
+    useEffect(() => {
+        axios
             .get('/api/product')
             .then(({ data }) => {
                 setName(data.productName)
@@ -70,6 +70,7 @@ const SettingProd = () => {
                             width: 50,
                             height: 50,
                         }}
+                        onPress={() => {navigation.pop()}}
                     >
                         <Icon
                             name='chevron-back-outline'
