@@ -303,18 +303,18 @@ export default StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         flexDirection: 'row',
-        paddingTop:'5%',
+        // paddingVertical:'2%',
     },
 
     settingInnerMenu: {
-        width: '80%',
+        width: '100%',
         height: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderBottomWidth: 2,
+        padding: '3%',
+        borderBottomWidth: 1,
         borderColor: '#92A2D9',
-        paddingBottom:'5%'
     },
 
     /*
@@ -338,4 +338,35 @@ export default StyleSheet.create({
         height: '30%', 
         resizeMode: 'contain'
     },
-});
+
+    /*
+    ===== Font =====
+    */
+    textXs: {
+        fontSize: RFPercentage(1)
+    },
+
+    textSm: {
+        fontSize: RFPercentage(1.5)
+    },
+
+    textBase: {
+        fontSize: RFPercentage(2)
+    },
+
+    textLg: {
+        fontSize: RFPercentage(2.5)
+    },
+
+    textXl: {
+        fontSize: RFPercentage(3)
+    },
+
+    text2xl: {
+        fontSize: RFPercentage(4)
+    },
+
+    fontBold: {
+        fontWeight: 'bold'
+    }
+})

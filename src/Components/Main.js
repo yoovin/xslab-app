@@ -5,7 +5,7 @@ import Swiper from 'react-native-swiper'
 import styles from './Styles'
 import BottomNavi from './BottomNavi'
 import Home from './Home';
-import SettingMenu from './SettingMenu'
+import SettingMenu from './Setting/SettingMenu'
 
 import { swiperScrolling} from './recoil/atom'
 import { useRecoilValue } from 'recoil'

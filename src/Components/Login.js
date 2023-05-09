@@ -34,6 +34,7 @@ const Login = ({ navigation }) => {
         })
         .catch(err => {
             // 로그인 실패
+            console.error(err)
             Alert.alert(
                 "로그인 실패",
                 "입력하신 서버 주소에 로그인 할 수 없습니다.",

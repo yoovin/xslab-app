@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import Dialog from "react-native-dialog"
 import { RadialSlider } from 'react-native-radial-slider'
 
-import styles from './Styles'
-import { swiperScrolling, BmcTemperature } from './recoil/atom'
+import styles from '../Styles'
+import { swiperScrolling, BmcTemperature } from '../recoil/atom'
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
