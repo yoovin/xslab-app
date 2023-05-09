@@ -8,50 +8,35 @@ import Dialog from 'react-native-dialog'
 import styles from '../Styles'
 
 const SettingFan = ({ navigation }) => {
-    const [minimum, setMinimum] = useState(0)
-    const [maximum, setMaximum] = useState(0)
-    const [current, setCurrent] = useState(0)
-    const [fahrenheit, setFahrenheit] = useState(false)
-    const [tempValue, setTempValue] = useState(0)
-    const [isAuto, setIsAuto] = useState(false)
-
     const [fanData, setFanData] = useState({})
-
     const [isLoad, setIsLoad] = useState(false)
-
     const [isConfiguring, setIsConfiguring] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
-
     const isInterval = useRef(true)
 
     useEffect(() => {
         axios
             .get('/api/fan')
             .then(({ data }) => {
-                setMinimum(data.speed.minimum)
-                setMaximum(data.speed.maximum)
-                setIsAuto(data.auto)
-                setFahrenheit(data.temperature.fahrenheit)
-                setTempValue(data.temperature.value)
-                setCurrent(data.speed.current)
+                setFanData(data)
             })
             .then(() => setIsLoad(true))
-            .then(console.log('FAN: 설정값 불러오기'))
+            .then(console.log('FAN: 초기 설정값 불러오기'))
 
         const intervalGet = setInterval(() => {
             if (isInterval.current) {
                 axios
                     .get('/api/fan')
                     .then(({ data }) => {
-                        setCurrent(data.speed.current)
+                        setFanData(data)
                     })
-                    .then(console.log('FAN: 팬 속도 수정'))
+                    .then(console.log('FAN: 설정값 불러오기'))
             }
         }, 3000)
 
         return () => {
             clearInterval(intervalGet)
-            console.log('FAN: 팬 정보 불러오기 종료')
+            console.log('FAN: 불러오기 종료')
         }
     }, [])
 
@@ -119,39 +104,38 @@ const SettingFan = ({ navigation }) => {
                             }}
                             onPress={() => (isConfiguring ? setIsConfiguring(false) : setIsConfiguring(true))}
                         >
-                            <Text style={{ color: '#92A2D9' }}>수정</Text>
+                            <Text style={{ color: '#92A2D9' }}>{isConfiguring ? '취소' : '수정'}</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={{ flex: 7, marginTop: '5%' }}>
                         <View style={[styles.settingList, { width: '100%' }]}>
-                            <TouchableOpacity
-                                style={styles.settingMenu}
-                                disabled={!isConfiguring}
-                                onPress={() => settingPrompt(minimum, setMinimum())}
-                            >
+                            <TouchableOpacity style={styles.settingMenu} disabled={!isConfiguring}>
                                 <View style={styles.settingInnerMenu}>
                                     <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>최소 속도</Text>
-                                    <Text style={{ color: 'white', marginRight: '5%' }}>{isLoad ? minimum : '-'}</Text>
+                                    <Text style={{ color: 'white', marginRight: '5%' }}>{isLoad ? fanData.speed.minimum : '-'}</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.settingMenu} disabled={!isConfiguring}>
                                 <View style={styles.settingInnerMenu}>
                                     <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>최고 속도</Text>
-                                    <Text style={{ color: 'white', marginRight: '5%' }}>{isLoad ? maximum : '-'}</Text>
+                                    <Text style={{ color: 'white', marginRight: '5%' }}>{isLoad ? fanData.speed.maximum : '-'}</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.settingMenu} disabled={!isConfiguring}>
                                 <View style={styles.settingInnerMenu}>
                                     <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>현재 속도</Text>
-                                    <Text style={{ color: 'white', marginRight: '5%' }}>{isLoad ? current : '-'}</Text>
+                                    <Text style={{ color: 'white', marginRight: '5%' }}>{isLoad ? fanData.speed.current : '-'}</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.settingMenu}
                                 disabled={!isConfiguring}
                                 onPress={() => {
-                                    isAuto ? setIsAuto(false) : setIsAuto(true)
+                                    setFanData((prevData) => ({
+                                        ...prevData,
+                                        auto: prevData.auto ? false : true,
+                                    }))
                                 }}
                             >
                                 <View style={[styles.settingInnerMenu, { borderBottomWidth: 0 }]}>
@@ -162,7 +146,7 @@ const SettingFan = ({ navigation }) => {
                                             marginRight: '5%',
                                         }}
                                     >
-                                        {isLoad ? (isAuto ? '켜기' : '끄기') : '-'}
+                                        {isLoad ? (fanData.auto ? '켜기' : '끄기') : '-'}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
@@ -192,16 +176,9 @@ const SettingFan = ({ navigation }) => {
                         onPress={() => {
                             axios
                                 .put('/api/fan', {
-                                    auto: isAuto,
-                                    speed: {
-                                        minimum: minimum,
-                                        maximum: maximum,
-                                        current: current,
-                                    },
-                                    temperature: {
-                                        fahrenheit: fahrenheit,
-                                        value: tempValue,
-                                    },
+                                    auto: fanData.auto,
+                                    speed: fanData.speed,
+                                    temperature: fanData.temperature,
                                 })
                                 .then(() => {
                                     setIsConfiguring(false)
