@@ -24,7 +24,7 @@ const Login = ({ navigation }) => {
             username: username,
             password: password,
         })
-        .then(({data}) => {ㄴ
+        .then(({data}) => {
             // 로그인 성공 시 엑세스토큰은 헤더로 저장하고 리프레시토큰은 async로 저장합니다.
             // 서버 주소도 axios에 defaults 값으로 넣어줍니다.
             console.log(data)
@@ -34,6 +34,7 @@ const Login = ({ navigation }) => {
         })
         .catch(err => {
             // 로그인 실패
+            console.error(err)
             Alert.alert(
                 "로그인 실패",
                 "입력하신 서버 주소에 로그인 할 수 없습니다.",

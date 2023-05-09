@@ -1,11 +1,11 @@
-import { TouchableOpacity, View, Text, Image } from 'react-native'
+import { TouchableOpacity, View, Text, Image, SafeAreaView } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import styles from './Styles'
+import styles from '../Styles'
 
 const SettingMenu = ({ navigation }) => {
     return (
-        <View
+        <SafeAreaView
             style={{
                 flex: 1,
                 alignItems: 'center',
@@ -21,7 +21,7 @@ const SettingMenu = ({ navigation }) => {
                     onPress={() => navigation.navigate('Setting')}
                 >
                     <Image
-                        source={require('../../assets/image/icon_none.png')}
+                        source={require('../../../assets/image/icon_none.png')}
                         style={{ marginLeft: '3%', marginBottom: '5%' }}
                     />
                     <View style={styles.settingInnerMenu}>
@@ -44,7 +44,7 @@ const SettingMenu = ({ navigation }) => {
                     onPress={() => navigation.navigate('SettingFan')}
                 >
                     <Image
-                        source={require('../../assets/image/icon_fan.png')}
+                        source={require('../../../assets/image/icon_fan.png')}
                         style={{ marginLeft: '3%', marginBottom: '5%' }}
                     />
                     <View style={styles.settingInnerMenu}>
@@ -67,7 +67,7 @@ const SettingMenu = ({ navigation }) => {
                     onPress={() => navigation.navigate('SettingTemp')}
                 >
                     <Image
-                        source={require('../../assets/image/icon_temp.png')}
+                        source={require('../../../assets/image/icon_temp.png')}
                         style={{ marginLeft: '3%', marginBottom: '5%' }}
                     />
                     <View style={styles.settingInnerMenu}>
@@ -90,7 +90,7 @@ const SettingMenu = ({ navigation }) => {
                     onPress={() => navigation.navigate('SettingProd')}
                 >
                     <Image
-                        source={require('../../assets/image/icon_prod.png')}
+                        source={require('../../../assets/image/icon_prod.png')}
                         style={{ marginLeft: '3%', marginBottom: '5%' }}
                     />
                     <View
@@ -114,7 +114,7 @@ const SettingMenu = ({ navigation }) => {
                     </View>
                 </TouchableOpacity>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 

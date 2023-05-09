@@ -338,4 +338,35 @@ export default StyleSheet.create({
         height: '30%', 
         resizeMode: 'contain'
     },
-});
+
+    /*
+    ===== Font =====
+    */
+    textXs: {
+        fontSize: RFPercentage(1)
+    },
+
+    textSm: {
+        fontSize: RFPercentage(1.5)
+    },
+
+    textBase: {
+        fontSize: RFPercentage(2)
+    },
+
+    textLg: {
+        fontSize: RFPercentage(2.5)
+    },
+
+    textXl: {
+        fontSize: RFPercentage(3)
+    },
+
+    text2xl: {
+        fontSize: RFPercentage(4)
+    },
+
+    fontBold: {
+        fontWeight: 'bold'
+    }
+})

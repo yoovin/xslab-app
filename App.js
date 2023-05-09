@@ -12,10 +12,10 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import Login from './src/Components/Login'
 import Main from './src/Components/Main'
 import Logout from './src/Components/Logout'
-import Setting from './src/Components/Setting'
-import SettingTemp from './src/Components/SettingTemp'
-import SettingFan from './src/Components/SettingFan'
-import SettingProd from './src/Components/SettingProd'
+// import Setting from './src/Components/Setting'
+import SettingTemp from './src/Components/Setting/SettingTemp'
+import SettingFan from './src/Components/Setting/SettingFan'
+import SettingProd from './src/Components/Setting/SettingProd'
 
 
 const Stack = createNativeStackNavigator()
@@ -30,7 +30,7 @@ const App = () => {
                 <Stack.Group screenOptions={{headerShown: false}}>
                     <Stack.Screen name="Login" component={Login}/>
                     <Stack.Screen name="Main" component={Main}/>
-                    <Stack.Screen name="Setting" component={Setting}/>
+                    {/* <Stack.Screen name="Setting" component={Setting}/> */}
                     <Stack.Screen name="SettingTemp" component={SettingTemp}/>
                     <Stack.Screen name="SettingFan" component={SettingFan}/>
                     <Stack.Screen name="SettingProd" component={SettingProd}/>

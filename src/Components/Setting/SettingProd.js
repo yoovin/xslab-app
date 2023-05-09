@@ -1,9 +1,10 @@
-import { View, Image, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Image, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import styles from './Styles'
+import styles from '../Styles'
+import TopNavi from './TopNavi'
 
 const SettingProd = ({ navigation }) => {
     const [name, setName] = useState('-')
@@ -41,50 +42,12 @@ const SettingProd = ({ navigation }) => {
     }, [])
 
     return (
-        <ScrollView style={{ flex: 1 }}>
-            <View
-                style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    backgroundColor: '#363D58',
-                    width: '100%',
-                    paddingTop: '5%',
-                    paddingBottom: '20%',
-                }}
-            >
-                <View
-                    style={{
-                        flex: 1,
-                        width: '90%',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <TouchableOpacity
-                        style={{
-                            position: 'absolute',
-                            left: 0,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            width: 50,
-                            height: 50,
-                        }}
-                        onPress={() => {navigation.pop()}}
-                    >
-                        <Icon
-                            name='chevron-back-outline'
-                            style={{ color: '#92A2D9', fontSize: 20 }}
-                        />
-                        <Text style={{ color: '#92A2D9' }}>설정</Text>
-                    </TouchableOpacity>
-                    <Text style={{ fontSize: 18, color: 'white' }}>
-                        제품 정보
-                    </Text>
-                </View>
-
+        <>
+        <SafeAreaView style={{width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center'}}>
+            <TopNavi navigation={navigation} title="제품 정보"/>
+            <ScrollView style={{ flex: 1 }}>
                 <Image
-                    source={require('../../assets/image/product.png')}
+                    source={require('../../../assets/image/product.png')}
                     style={{
                         flex: 1,
                         resizeMode: 'contain',
@@ -93,14 +56,15 @@ const SettingProd = ({ navigation }) => {
                     }}
                 />
 
-                <View style={{ flex: 5, marginTop: '5%' }}>
+                <View style={{}}>
                     <View style={[styles.settingList, { width: '100%' }]}>
                         <View style={styles.settingMenu}>
                             <View style={styles.settingInnerMenu}>
                                 <Text
                                     style={[
                                         styles.settingContentText,
-                                        { fontSize: 15, marginLeft: '5%' },
+                                        styles.textBase
+                                        
                                     ]}
                                 >
                                     제품명
@@ -396,8 +360,9 @@ const SettingProd = ({ navigation }) => {
                         )}
                     </View>
                 </View>
-            </View>
         </ScrollView>
+        </SafeAreaView>
+        </>
     )
 }
 
