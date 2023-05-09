@@ -26,7 +26,6 @@ const SettingProd = ({ navigation }) => {
     }, [])
 
     return (
-        <>
         <SafeAreaView style={{width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center'}}>
             <TopNavi navigation={navigation} title="제품 정보"/>
             <ScrollView style={{ flex: 1 }}
@@ -338,7 +337,6 @@ const SettingProd = ({ navigation }) => {
                 </View>
         </ScrollView>
         </SafeAreaView>
-        </>
     )
 }
 
