@@ -542,8 +542,6 @@ const Home = () => {
                         size={10}
                         innerIconStyle={{size: 30}}
                         fillColor="rgba(0,0,0,0)"
-                        // unfillColor="#FFFFFF" 
-                        // innerIconStyle={{borderRadius: 5, borderWidth: 0}}
                         onPress={(isChecked) => {
                             if(isChecked){ // 체크되면
                                 setSelectedNode(state => {
@@ -559,45 +557,62 @@ const Home = () => {
                             }
                         }}
                         ref={ref => item.ref = ref}
-                        // ImageComponent={<WithLocalSvg width={30} height={30} asset={checkIcon}/>}
-                        // IconComponent={<Image source={require("../../assets/image/xmascore.png")} style={{width: 50, height: 50}}/>}
                         checkIconImageSource={require("../../assets/image/xmascore.png")}
-
                         />}
                     </TouchableOpacity>
                 ))}
             </ScrollView>
             {isMulti && 
             [
-            ,<TouchableOpacity style={[styles.nodeScrollView, {
-                // justifyContent: 'center',
+            ,<View style={[styles.nodeScrollView, {
+                flexDirection: 'row',
                 alignItems:'center',
-                height:'11%',
-                // paddingTop: 10,
+                height:'15%',
                 marginTop:0,
                 borderTopWidth:1,
                 borderTopColor:'#D9D9D9',
                 borderTopLeftRadius: 0,
                 borderTopRightRadius: 0,
-            }]}
-            onPress={() => {
-                if(selectedNode.length > 0){
-                    console.log(selectedNode)
-                    setIsNodeSelected(true)
-                }else{
-                    setIsMulti(false)
-                }
-            }}
-            activeOpacity={0.5}>
-                <Text style={[styles.nodeText, {marginVertical: 0, color: 'black'}]}>완료</Text>
-            </TouchableOpacity>
+                padding: '2%'
+            }]}>
+                <TouchableOpacity
+                style={styles.onOffButton}
+                onPress={() => {
+                    if(selectedNode.length > 0){
+                        console.log(selectedNode)
+                        setIsNodeSelected(true)
+                        setIsSelectedNodeOn(false)
+                    }else{
+                        setIsMulti(false)
+                    }
+                }}
+                activeOpacity={0.5}>
+                    <Text style={[{}]}>켜기</Text>
+                </TouchableOpacity>
+                <View style={{width: 1, height: '150%', backgroundColor: '#D9D9D9'}}></View>
+                <TouchableOpacity
+                style={styles.onOffButton}
+                onPress={() => {
+                    if(selectedNode.length > 0){
+                        console.log(selectedNode)
+                        setIsNodeSelected(true)
+                        setIsSelectedNodeOn(true)
+                    }else{
+                        setIsMulti(false)
+                    }
+                }}
+                activeOpacity={0.5}>
+                    <Text style={[{}]}>끄기</Text>
+                </TouchableOpacity>
+                
+            </View>
         ]}
         </View>
         <Dialog.Container visible={isNodeSelected} contentStyle={styles.dialog}>
                 <Dialog.Description>
                     {isSelectedNodeOn ? '선택한 노드의 전원을 종료하시겠습니까?' : '선택한 노드의 전원을 켜시겠습니까?'}
                 </Dialog.Description>
-                <Dialog.Button label="예" color="black" 
+                <Dialog.Button label="예" color="black"
                 onPress={async () => {
                     console.log(selectedNode)
                     if(isSelectedNodeOn){
