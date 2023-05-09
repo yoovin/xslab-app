@@ -24,7 +24,7 @@ const SettingMenu = ({ navigation }) => {
                         source={require('../../../assets/image/icon_none.png')}
                         style={{ marginLeft: '3%', marginBottom: '5%' }}
                     />
-                    <View style={styles.settingInnerMenu}>
+                    <View style={[styles.settingInnerMenu, {width: '80%'}]}>
                         <Text
                             style={[
                                 styles.settingContentText,
@@ -47,7 +47,7 @@ const SettingMenu = ({ navigation }) => {
                         source={require('../../../assets/image/icon_fan.png')}
                         style={{ marginLeft: '3%', marginBottom: '5%' }}
                     />
-                    <View style={styles.settingInnerMenu}>
+                    <View style={[styles.settingInnerMenu, {width: '80%'}]}>
                         <Text
                             style={[
                                 styles.settingContentText,
@@ -70,7 +70,7 @@ const SettingMenu = ({ navigation }) => {
                         source={require('../../../assets/image/icon_temp.png')}
                         style={{ marginLeft: '3%', marginBottom: '5%' }}
                     />
-                    <View style={styles.settingInnerMenu}>
+                    <View style={[styles.settingInnerMenu, {width: '80%'}]}>
                         <Text
                             style={[
                                 styles.settingContentText,
@@ -96,7 +96,7 @@ const SettingMenu = ({ navigation }) => {
                     <View
                         style={[
                             styles.settingInnerMenu,
-                            { borderBottomWidth: 0 },
+                            { width:'80%', borderBottomWidth: 0 },
                         ]}
                     >
                         <Text

@@ -303,18 +303,18 @@ export default StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         flexDirection: 'row',
-        paddingTop:'5%',
+        // paddingVertical:'2%',
     },
 
     settingInnerMenu: {
-        width: '80%',
+        width: '100%',
         height: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderBottomWidth: 2,
+        padding: '3%',
+        borderBottomWidth: 1,
         borderColor: '#92A2D9',
-        paddingBottom:'5%'
     },
 
     /*

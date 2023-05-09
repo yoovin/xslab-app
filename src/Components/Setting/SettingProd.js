@@ -6,37 +6,21 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../Styles'
 import TopNavi from './TopNavi'
 
+/**
+ * ===== Todo =====
+ * 불러오는게 오래걸리는데 불러오는동안 로딩창 혹은 스켈레톤 띄우기
+ * 반복되는 구문 줄이기
+ */
+
 const SettingProd = ({ navigation }) => {
-    const [name, setName] = useState('-')
-    const [version, setVersion] = useState('-')
-    const [serial, setSerial] = useState('-')
-    const [info, setInfo] = useState('-')
-    const [location, setLocation] = useState('-')
-    const [email, setEmail] = useState('-')
-    const [hostname, setHostname] = useState('-')
-    const [dhcp, setDhcp] = useState(false)
-    const [address, setAddress] = useState('-')
-    const [netmask, setNetmask] = useState('-')
-    const [gateway, setGateway] = useState('-')
-    const [dns, setDns] = useState('-')
     const [isFolder, setIsFolder] = useState(true)
+    const [productData, setProductData] = useState({})
 
     useEffect(() => {
         axios
             .get('/api/product')
             .then(({ data }) => {
-                setName(data.productName)
-                setVersion(data.version)
-                setSerial(data.serial)
-                setInfo(data.information)
-                setLocation(data.location)
-                setEmail(data.email)
-                setHostname(data.hostname)
-                setDhcp(data.network.dchp)
-                setAddress(data.network.address)
-                setNetmask(data.network.netmask)
-                setGateway(data.network.gateway)
-                setDns(data.network.dns)
+                setProductData(data)
             })
             .catch((err) => console.error(err))
     }, [])
@@ -45,26 +29,27 @@ const SettingProd = ({ navigation }) => {
         <>
         <SafeAreaView style={{width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center'}}>
             <TopNavi navigation={navigation} title="제품 정보"/>
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }}
+            contentContainerStyle={{alignItems: 'center'}}>
                 <Image
                     source={require('../../../assets/image/product.png')}
                     style={{
                         flex: 1,
                         resizeMode: 'contain',
                         width: '70%',
-                        marginTop: '10%',
                     }}
                 />
 
-                <View style={{}}>
-                    <View style={[styles.settingList, { width: '100%' }]}>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                    <View style={[styles.settingList, {width: '90%'}]}>
                         <View style={styles.settingMenu}>
-                            <View style={styles.settingInnerMenu}>
+                            <View style={[styles.settingInnerMenu]}>
                                 <Text
                                     style={[
                                         styles.settingContentText,
-                                        styles.textBase
-                                        
+                                        styles.textBase,
+                                        styles.fontBold,
+                                        {marginLeft: '5%', marginVertical: 0}
                                     ]}
                                 >
                                     제품명
@@ -75,7 +60,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {name}
+                                    {productData.productName}
                                 </Text>
                             </View>
                         </View>
@@ -84,7 +69,8 @@ const SettingProd = ({ navigation }) => {
                                 <Text
                                     style={[
                                         styles.settingContentText,
-                                        { fontSize: 15, marginLeft: '5%' },
+                                        styles.textBase,
+                                        {marginLeft: '5%'}
                                     ]}
                                 >
                                     Version
@@ -95,7 +81,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {version}
+                                    {productData.version}
                                 </Text>
                             </View>
                         </View>
@@ -104,7 +90,8 @@ const SettingProd = ({ navigation }) => {
                                 <Text
                                     style={[
                                         styles.settingContentText,
-                                        { fontSize: 15, marginLeft: '5%' },
+                                        styles.textBase,
+                                        {marginLeft: '5%'}
                                     ]}
                                 >
                                     Serial
@@ -115,7 +102,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {serial}
+                                    {productData.serial}
                                 </Text>
                             </View>
                         </View>
@@ -124,7 +111,8 @@ const SettingProd = ({ navigation }) => {
                                 <Text
                                     style={[
                                         styles.settingContentText,
-                                        { fontSize: 15, marginLeft: '5%' },
+                                        styles.textBase,
+                                        {marginLeft: '5%'}
                                     ]}
                                 >
                                     information
@@ -135,7 +123,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {info}
+                                    {productData.information}
                                 </Text>
                             </View>
                         </View>
@@ -155,7 +143,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {location}
+                                    {productData.location}
                                 </Text>
                             </View>
                         </View>
@@ -175,7 +163,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {email}
+                                    {productData.email}
                                 </Text>
                             </View>
                         </View>
@@ -195,7 +183,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {hostname}
+                                    {productData.hostname}
                                 </Text>
                             </View>
                         </View>
@@ -246,26 +234,14 @@ const SettingProd = ({ navigation }) => {
                                         >
                                             DHCP
                                         </Text>
-                                        {dhcp && (
                                             <Text
                                                 style={{
                                                     color: 'white',
                                                     marginRight: '5%',
                                                 }}
                                             >
-                                                true
+                                                {productData.network.dhcp ? 'true' : 'false'}
                                             </Text>
-                                        )}
-                                        {!dhcp && (
-                                            <Text
-                                                style={{
-                                                    color: 'white',
-                                                    marginRight: '5%',
-                                                }}
-                                            >
-                                                false
-                                            </Text>
-                                        )}
                                     </View>
                                 </View>
                                 <View style={styles.settingMenu}>
@@ -287,7 +263,7 @@ const SettingProd = ({ navigation }) => {
                                                 marginRight: '5%',
                                             }}
                                         >
-                                            {address}
+                                            {productData.network.address}
                                         </Text>
                                     </View>
                                 </View>
@@ -310,7 +286,7 @@ const SettingProd = ({ navigation }) => {
                                                 marginRight: '5%',
                                             }}
                                         >
-                                            {gateway}
+                                            {productData.network.gateway}
                                         </Text>
                                     </View>
                                 </View>
@@ -338,7 +314,7 @@ const SettingProd = ({ navigation }) => {
                                                 marginRight: '5%',
                                             }}
                                         >
-                                            {dns}
+                                            {productData.network.dns}
                                         </Text>
                                     </View>
                                 </View>
