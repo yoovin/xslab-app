@@ -214,16 +214,12 @@ export default StyleSheet.create({
 
     settingView: {
         flexDirection:'row',
-        width: '80%',
+        width: '90%',
         height: '25%',
         margin: '5%',
         padding: 20,
         borderRadius: 15,
-        backgroundColor: '#F7F8F9'
-    },
-
-    settingViewTitleText: {
-        fontSize: RFPercentage(2),
+        backgroundColor: '#3D4460'
     },
 
     settingViewContentText: {
@@ -269,12 +265,11 @@ export default StyleSheet.create({
 
     voraBackground: {
         position: 'absolute',
-        top:'80%',
-        left:'14%',
-        width: '90%', 
-        height: '71%', 
-        resizeMode: 'contain', 
-        opacity: 0.5
+        top:'82%',
+        left:'22%',
+        width: '75%', 
+        height: '53%', 
+        resizeMode: 'contain',
     },
 
     settingList: {

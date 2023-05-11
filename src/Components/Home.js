@@ -16,6 +16,7 @@ import styles from './Styles'
 import lightningIcon from '../../assets/image/lightning.svg'
 import checkIcon from '../../assets/image/xmascore.svg'
 import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 /*
     ===== TODOS =====
@@ -24,6 +25,17 @@ import axios from 'axios'
 
 
 const Home = () => {
+    const checkLogin = async () => {
+        console.log('Async에')
+        const keys = await AsyncStorage.getAllKeys()
+        console.log(keys)
+        for(let key of keys){
+            const item = await AsyncStorage.getItem(key) 
+            console.log(`"${key}": "${item}"`)
+            // console.log()
+        }
+    }
+
     const queryClient = useQueryClient()
     const [mounted, setMounted] = useState(false) // 초기 설정을 위한 state
     const [isMulti, setIsMulti] = useState(false)
@@ -398,6 +410,7 @@ const Home = () => {
             onPress={() => {
                     // pressInfo(1)
                     // getTemperature()
+                    checkLogin()
                 }}>
                 <Text style={{fontWeight:'bold', marginBottom:'5%'}}>데몬 연결</Text>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
@@ -445,7 +458,7 @@ const Home = () => {
         */}
         <Animated.View style={[styles.infoView, infoAnimationStyle(3)]}>
             <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {}}>
+            onPress={() => {AsyncStorage.clear()}}>
             <Text style={{fontWeight:'bold', marginBottom:'5%'}}>전력</Text>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                 <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
@@ -514,7 +527,6 @@ const Home = () => {
                             }
                         }}
                         />
-                        {/* <Text>  </Text> */}
                         <Text style={[styles.infoViewText, {marginHorizontal: '2%'}]}>전체 선택하기</Text>
                     </View>
                 }

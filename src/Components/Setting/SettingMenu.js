@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, Text, Image, SafeAreaView } from 'react-native'
+import { TouchableOpacity, View, Text, Image, SafeAreaView, ImageBackground } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import styles from '../Styles'
@@ -114,6 +114,7 @@ const SettingMenu = ({ navigation }) => {
                     </View>
                 </TouchableOpacity>
             </View>
+            <ImageBackground source={require("../../../assets/image/vora.png")} style={styles.voraBackground}/>
         </SafeAreaView>
     )
 }
