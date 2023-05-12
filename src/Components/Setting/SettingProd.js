@@ -1,24 +1,33 @@
-import { View, Image, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native'
+import { View, Image, Text, TouchableOpacity, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import styles from '../Styles'
 import TopNavi from './TopNavi'
+import { useQuery } from 'react-query'
 
 /**
  * ===== Todo =====
  * 불러오는게 오래걸리는데 불러오는동안 로딩창 혹은 스켈레톤 띄우기
  * 반복되는 구문 줄이기
+ * 데이터 캐싱
  */
 
 const SettingProd = ({ navigation }) => {
     const [isFolder, setIsFolder] = useState(true)
-    const [productData, setProductData] = useState({})
+    const [productData, setProductData] = useState(null)
+
+
+    // const getProduct = async () => {
+    //     const res = await axios.get('/api/product')
+    //     console.log('product 불러옴')
+    //     return res.data
+    // }
+    // const { data, isLoading, isError, error, refetch } = useQuery('nodes', getProduct)
 
     useEffect(() => {
-        axios
-            .get('/api/product')
+        axios.get('/api/product')
             .then(({ data }) => {
                 setProductData(data)
             })
@@ -51,7 +60,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {productData.productName}
+                                    {productData ? productData.productName : <ActivityIndicator/>}
                                 </Text>
                             </View>
                         </View>
@@ -64,7 +73,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {productData.version}
+                                    {productData ? productData.version: <ActivityIndicator/>}
                                 </Text>
                             </View>
                         </View>
@@ -77,7 +86,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {productData.serial}
+                                    {productData ? productData.serial: <ActivityIndicator/>}
                                 </Text>
                             </View>
                         </View>
@@ -90,7 +99,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {productData.information}
+                                    {productData ? productData.information: <ActivityIndicator/>}
                                 </Text>
                             </View>
                         </View>
@@ -103,7 +112,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {productData.location}
+                                    {productData ? productData.location: <ActivityIndicator/>}
                                 </Text>
                             </View>
                         </View>
@@ -116,7 +125,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {productData.email}
+                                    {productData ? productData.email: <ActivityIndicator/>}
                                 </Text>
                             </View>
                         </View>
@@ -129,7 +138,7 @@ const SettingProd = ({ navigation }) => {
                                         marginRight: '5%',
                                     }}
                                 >
-                                    {productData.hostname}
+                                    {productData ? productData.hostname: <ActivityIndicator/>}
                                 </Text>
                             </View>
                         </View>
@@ -171,7 +180,7 @@ const SettingProd = ({ navigation }) => {
                                                 marginRight: '5%',
                                             }}
                                         >
-                                            {productData.network.dhcp ? 'true' : 'false'}
+                                            {productData ? productData.network.dhcp ? 'true' : 'false' : <ActivityIndicator/>}
                                         </Text>
                                     </View>
                                 </View>
@@ -194,7 +203,7 @@ const SettingProd = ({ navigation }) => {
                                                 marginRight: '5%',
                                             }}
                                         >
-                                            {productData.network.address}
+                                            {productData ? productData.network.address: <ActivityIndicator/>}
                                         </Text>
                                     </View>
                                 </View>
@@ -217,7 +226,7 @@ const SettingProd = ({ navigation }) => {
                                                 marginRight: '5%',
                                             }}
                                         >
-                                            {productData.network.gateway}
+                                            {productData ? productData.network.gateway: <ActivityIndicator/>}
                                         </Text>
                                     </View>
                                 </View>
@@ -240,7 +249,7 @@ const SettingProd = ({ navigation }) => {
                                                 marginRight: '5%',
                                             }}
                                         >
-                                            {productData.network.dns}
+                                            {productData ? productData.network.dns: <ActivityIndicator/>}
                                         </Text>
                                     </View>
                                 </View>
