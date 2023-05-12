@@ -132,7 +132,7 @@ const SettingFan = ({ navigation }) => {
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
                                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                                     {fanData.rpm && fanData.rpm.map((item, idx) => (
-                                        <View style={{ justifyContent: 'center', alignItems: 'center' }} key={item}>
+                                        <View style={{ justifyContent: 'center', alignItems: 'center' }} key={idx}>
                                             <Text style={[styles.infoViewText, { marginBottom: 5, color: 'white' }]}>{idx + 1}번 팬</Text>
                                             {animationRotate[idx] && <Animated.View style={{ transform: [{ rotate: animationRotate[idx] }] }}>
                                                 <MaterialCommunityIcons

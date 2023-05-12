@@ -62,7 +62,7 @@ const SettingTemp = ({navigation}) => {
     }, [alertTemp.data])
 
     return (
-        <SafeAreaView style={{width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center'}}>
+        <SafeAreaView style={{width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center', paddingTop: '5%'}}>
             <TopNavi navigation={navigation} title="온도"/>
             {/* <View style={{width: '80%', alignItems:'flex-start'}}>
                 <Text style={styles.settingTitleText}>설정</Text>
