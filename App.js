@@ -50,6 +50,8 @@ axios.interceptors.response.use(
                     await AsyncStorage.setItem('refresh_token', res.data.refresh_token)
                     axios.defaults.headers.common.Authorization = `Bearer ${res.data.access_token}`
                     originalRequest.headers.Authorization = `Bearer ${res.data.access_token}`
+
+                    // 토큰교체 실패시(리프레시토큰 만료) 강제 로그아웃 시켜야함
                 })
                 // isTokenRefreshing = false
                 return axios(originalRequest)

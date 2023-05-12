@@ -241,7 +241,7 @@ export default StyleSheet.create({
 
     tempSliderGuideText: {
         bottom: 30,
-        color: '#4E4D4D',
+        color: 'white',
         fontSize:RFPercentage(1),
     },
 
