@@ -8,7 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Dialog from "react-native-dialog"
 import Swiper from 'react-native-swiper'
 import { WithLocalSvg } from 'react-native-svg'
-import { swiperScrolling, BmcTemperature } from './recoil/atom'
+import { swiperScrolling, BmcTemperature, FanData } from './recoil/atom'
 import { useSetRecoilState, useRecoilState } from 'recoil'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
@@ -54,7 +54,7 @@ const Home = () => {
 
     const [bmcTemperature, setBmcTemperature] = useRecoilState(BmcTemperature)
     const [nodeTemperatures, setNodeTemperatures] = useState([])
-    const [fanRpms, setFanRpms] = useState([])
+    const [fanData, setFanData] = useRecoilState(FanData)
 
 
     const [isInfoSelected, setIsInfoSelected] = useState(false) // info 블럭이 선택되어 풀스크린 여부
@@ -228,11 +228,14 @@ const Home = () => {
         })
     }
 
+    /**
+     *  팬 데이터를 가져와서 설정한다.
+     */
     const getFan = () => {
         console.log('팬 rpm 받아옴')
         axios.get('/api/fan')
         .then(({data}) => {
-            setFanRpms(data.rpm)
+            setFanData(data)
         })
     }
 
@@ -332,36 +335,38 @@ const Home = () => {
 
 
     useEffect(() => {
-        for(let i = 0; i < fanRpms.length; i++){
-            if(fanRpms[i] > 480){
-                if(!fanAniWorks[i]){
-                    Animated.loop(
-                        Animated.timing(fanAnimations[i], {
-                            toValue: 1,
-                            duration: 2000,
-                            useNativeDriver: true,
-                            easing: Easing.linear
+        if(fanData.rpm){
+            for(let i = 0; i < fanData.rpm.length; i++){
+                if(fanData.rpm[i] > 480){
+                    if(!fanAniWorks[i]){
+                        Animated.loop(
+                            Animated.timing(fanAnimations[i], {
+                                toValue: 1,
+                                duration: 2000,
+                                useNativeDriver: true,
+                                easing: Easing.linear
+                            })
+                        ).start()
+                        // 애니메이션 실행중인것으로 체크
+                        setFanAniWorks(val => {
+                            const newVal = [...val]
+                            newVal[i] = true
+                            return newVal
                         })
-                    ).start()
-                    // 애니메이션 실행중인것으로 체크
+                    }
+                }else{
+                    // 팬이 돌고있지않으면 애니메이션 정지
+                    fanAnimations[i].stopAnimation()
+                    // 애니메이션 정지중인것으로 체크
                     setFanAniWorks(val => {
                         const newVal = [...val]
-                        newVal[i] = true
+                        newVal[i] = false
                         return newVal
                     })
                 }
-            }else{
-                // 팬이 돌고있지않으면 애니메이션 정지
-                fanAnimations[i].stopAnimation()
-                // 애니메이션 정지중인것으로 체크
-                setFanAniWorks(val => {
-                    const newVal = [...val]
-                    newVal[i] = false
-                    return newVal
-                })
             }
         }
-    }, [fanRpms])
+    }, [fanData])
 
     return (
         <View style={{flex:10}}>
@@ -479,7 +484,7 @@ const Home = () => {
             <Text style={{fontWeight:'bold'}}>현재 팬 속도</Text>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
-                    {fanRpms.map((item, idx) => (
+                    {fanData.rpm && fanData.rpm.map((item, idx) => (
                         <View style={{justifyContent:'center', alignItems:'center'}}>
                             <Text style={[styles.infoViewText, {marginBottom: 5}]}>{idx+1}번 팬</Text>
                             <Animated.View style={{transform:[{rotate: animationRotate[idx]}]}}>

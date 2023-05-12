@@ -5,13 +5,21 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Dialog from 'react-native-dialog'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-
+import { FanData } from '../recoil/atom'
+import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil'
 import styles from '../Styles'
 import TopNavi from './TopNavi'
 
 const SettingFan = ({ navigation }) => {
-    const [fanData, setFanData] = useState({})
-    const [isLoad, setIsLoad] = useState(false)
+    
+    // {
+    //     "auto": true, 
+    //     "rpm": [480, 620, 3413, 628], 
+    //     "speed": {"current": 50, "maximum": 50, "minimum": 20}, 
+    //     "temperature": {"fahrenheit": false, "value": 30}
+    // }
+    
+    const [fanData, setFanData] = useRecoilState(FanData)
     const [isUpdate, setIsUpdate] = useState(false)
     const [isAuto, setIsAuto] = useState(false)
     const [inputVar, setInputVar] = useState('')
@@ -28,76 +36,53 @@ const SettingFan = ({ navigation }) => {
         useRef(new Animated.Value(0)).current,
     ]
 
+
     useEffect(() => {
-        for (let i = 0; i < fanRpms.length; i++) {
-            if (fanRpms[i] > 480) {
-                if (!fanAniWorks[i]) {
-                    Animated.loop(
-                        Animated.timing(fanAnimations[i], {
-                            toValue: 1,
-                            duration: 2000,
-                            useNativeDriver: true,
-                            easing: Easing.linear,
+        if(fanData.rpm){
+            for(let i = 0; i < fanData.rpm.length; i++){
+                if(fanData.rpm[i] > 480){
+                    if(!fanAniWorks[i]){
+                        Animated.loop(
+                            Animated.timing(fanAnimations[i], {
+                                toValue: 1,
+                                duration: 2000,
+                                useNativeDriver: true,
+                                easing: Easing.linear
+                            })
+                        ).start()
+                        // 애니메이션 실행중인것으로 체크
+                        setFanAniWorks(val => {
+                            const newVal = [...val]
+                            newVal[i] = true
+                            return newVal
                         })
-                    ).start()
-                    // 애니메이션 실행중인것으로 체크
-                    setFanAniWorks((val) => {
+                    }
+                }else{
+                    // 팬이 돌고있지않으면 애니메이션 정지
+                    fanAnimations[i].stopAnimation()
+                    // 애니메이션 정지중인것으로 체크
+                    setFanAniWorks(val => {
                         const newVal = [...val]
-                        newVal[i] = true
+                        newVal[i] = false
                         return newVal
                     })
                 }
-            } else {
-                // 팬이 돌고있지않으면 애니메이션 정지
-                fanAnimations[i].stopAnimation()
-                // 애니메이션 정지중인것으로 체크
-                setFanAniWorks((val) => {
-                    const newVal = [...val]
-                    newVal[i] = false
-                    return newVal
-                })
             }
         }
-    }, [fanRpms])
+
+        // Fan 애니메이션 각도 지정
+        for(let i = 0; i < 4; i++){
+            setAnimationRotate(val => ([...val, fanAnimations[i].interpolate({
+                inputRange: [0, 1],
+                outputRange: ['0deg', '360deg']
+            })]))
+        }
+        setIsUpdate(false)
+    }, [fanData])
 
     useEffect(() => {
-        axios
-            .get('/api/fan')
-            .then(({ data }) => {
-                setFanData(data)
-                setFanRpms(data.rpm)
-                setIsAuto(data.auto)
-                setIsUpdate(false)
-            })
-            .then(() => setIsLoad(true))
-            .then(console.log('FAN: 초기 설정값 불러오기'))
-
-        const intervalGet = setInterval(() => {
-            axios
-                .get('/api/fan')
-                .then(({ data }) => {
-                    setFanData(data)
-                    setFanRpms(data.rpm)
-                    setIsAuto(data.auto)
-                    setIsUpdate(false)
-                })
-                .then(console.log('FAN: 설정값 불러오기'))
-        }, 3000)
-
-        for (let i = 0; i < 4; i++) {
-            setAnimationRotate((val) => [
-                ...val,
-                fanAnimations[i].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['0deg', '360deg'],
-                }),
-            ])
-        }
-
-        return () => {
-            clearInterval(intervalGet)
-            console.log('FAN: 불러오기 종료')
-        }
+        // 사용자경험을 위해 버튼값은 처음에 받아오는 데이터로 지정하고 이후부터는 버튼과 동시상태값은 별개
+        setIsAuto(fanData.auto)
     }, [])
 
     return (
@@ -117,7 +102,7 @@ const SettingFan = ({ navigation }) => {
                             >
                                 <View style={styles.settingInnerMenu}>
                                     <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>최소 속도</Text>
-                                    <Text style={{ color: 'white', marginRight: '5%' }}>{isLoad ? fanData.speed.minimum : '-'}</Text>
+                                    <Text style={{ color: 'white', marginRight: '5%' }}>{fanData ? fanData.speed.minimum : '-'}</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -130,13 +115,13 @@ const SettingFan = ({ navigation }) => {
                             >
                                 <View style={[styles.settingInnerMenu, { borderBottomWidth: 0 }]}>
                                     <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>최고 속도</Text>
-                                    <Text style={{ color: 'white', marginRight: '5%' }}>{isLoad ? fanData.speed.maximum : '-'}</Text>
+                                    <Text style={{ color: 'white', marginRight: '5%' }}>{fanData ? fanData.speed.maximum : '-'}</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
                     </View>
 
-                    <Animated.View
+                    <View
                         style={[
                             styles.infoView,
                             { position: 'relative', width: '90%', height: '40%', padding: '5%', marginTop: '10%', backgroundColor: '#3D4460' },
@@ -146,16 +131,16 @@ const SettingFan = ({ navigation }) => {
                             <Text style={{ fontWeight: 'bold', color: 'white' }}>현재 팬 속도</Text>
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
                                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                                    {fanRpms.map((item, idx) => (
+                                    {fanData.rpm && fanData.rpm.map((item, idx) => (
                                         <View style={{ justifyContent: 'center', alignItems: 'center' }} key={item}>
                                             <Text style={[styles.infoViewText, { marginBottom: 5, color: 'white' }]}>{idx + 1}번 팬</Text>
-                                            <Animated.View style={{ transform: [{ rotate: animationRotate[idx] }] }}>
+                                            {animationRotate[idx] && <Animated.View style={{ transform: [{ rotate: animationRotate[idx] }] }}>
                                                 <MaterialCommunityIcons
                                                     name='fan'
                                                     size={30}
                                                     color={fanAniWorks[idx] && '#5d66a4'}
                                                 ></MaterialCommunityIcons>
-                                            </Animated.View>
+                                            </Animated.View>}
                                             {/* Fan RPM 480이면 멈춰있는상태같음 */}
                                             <Text style={[styles.infoViewText, { marginTop: 5 }, fanAniWorks[idx] && { color: '#5d66a4' }]}>
                                                 {item > 480 ? item : '-'}
@@ -165,19 +150,13 @@ const SettingFan = ({ navigation }) => {
                                 </View>
                             </View>
                         </View>
-                    </Animated.View>
+                    </View>
 
                     <View style={{ width: '100%', alignItems: 'center', marginTop: '10%' }}>
                         <View style={[styles.settingList, { width: '90%' }]}>
                             <View
                                 style={styles.settingMenu}
-                                onPress={() => {
-                                    setFanData((prevData) => ({
-                                        ...prevData,
-                                        auto: prevData.auto ? false : true,
-                                    }))
-                                }}
-                                disabled={isUpdate}
+                                // disabled={isUpdate}
                             >
                                 <View style={[styles.settingInnerMenu, { borderBottomWidth: 0 }]}>
                                     <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>팬 속도 자동 조절</Text>
@@ -193,14 +172,14 @@ const SettingFan = ({ navigation }) => {
                                             thumbColor={fanData.auto ? 'white' : 'white'}
                                             ios_backgroundColor='#3e3e3e'
                                             onValueChange={() => {
-                                                setIsUpdate(true)
+                                                setIsAuto(!isAuto)
                                                 axios
                                                     .put('/api/fan', {
                                                         auto: fanData.auto ? false : true,
                                                         speed: fanData.speed,
                                                         temperature: fanData.temperature,
                                                     })
-                                                    .then(console.log('FAN: 펜 설정 완료'))
+                                                    .then(res => console.log('FAN: 펜 설정 완료'))
                                                     .catch((err) => console.error(err))
                                             }}
                                             value={isAuto}

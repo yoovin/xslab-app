@@ -28,11 +28,6 @@ const Login = ({ navigation }) => {
         .then(async ({data}) => {
             // 로그인 성공 시 엑세스토큰은 헤더로 저장하고 토큰들을 async로 저장합니다.
             // 서버 주소도 axios에 defaults 값으로 넣어줍니다.
-            console.log(data)
-            //만료토큰 테스트
-            // await AsyncStorage.setItem('access_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZyYXB0b3JibWMiLCJleHAiOjE2ODMxNzU2NzQuNzAwOTYxLCJqd2kiOiJmYzgzNjMzMTA3N2Q0MGRlOTJmMjZjZTVlODJlM2M5YiJ9.Yxhy3x9--41E7Ub6VoZf3eD_9Tw-9hSchO15-kavvpQ')
-            // axios.defaults.headers.common["Authorization"]  = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZyYXB0b3JibWMiLCJleHAiOjE2ODMxNzU2NzQuNzAwOTYxLCJqd2kiOiJmYzgzNjMzMTA3N2Q0MGRlOTJmMjZjZTVlODJlM2M5YiJ9.Yxhy3x9--41E7Ub6VoZf3eD_9Tw-9hSchO15-kavvpQ`
-
             await AsyncStorage.setItem('access_token', data.access_token)
             await AsyncStorage.setItem('refresh_token', data.refresh_token)
             await AsyncStorage.setItem('server_address', serverAddr)
