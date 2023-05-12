@@ -26,11 +26,9 @@ const SettingProd = ({ navigation }) => {
     }, [])
 
     return (
-        <>
-        <SafeAreaView style={{width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center'}}>
-            <TopNavi navigation={navigation} title="제품 정보"/>
-            <ScrollView style={{ flex: 1 }}
-            contentContainerStyle={{alignItems: 'center'}}>
+        <SafeAreaView style={{ width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center', paddingTop: '5%' }}>
+            <TopNavi navigation={navigation} title='제품 정보' />
+            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }}>
                 <Image
                     source={require('../../../assets/image/product.png')}
                     style={{
@@ -40,18 +38,11 @@ const SettingProd = ({ navigation }) => {
                     }}
                 />
 
-                <View style={{width: '100%', alignItems: 'center'}}>
-                    <View style={[styles.settingList, {width: '90%'}]}>
+                <View style={{ width: '100%', alignItems: 'center' }}>
+                    <View style={[styles.settingList, { width: '90%' }]}>
                         <View style={styles.settingMenu}>
                             <View style={[styles.settingInnerMenu]}>
-                                <Text
-                                    style={[
-                                        styles.settingContentText,
-                                        styles.textBase,
-                                        styles.fontBold,
-                                        {marginLeft: '5%', marginVertical: 0}
-                                    ]}
-                                >
+                                <Text style={[styles.settingContentText, styles.textBase, styles.fontBold, { marginLeft: '5%', marginVertical: 0 }]}>
                                     제품명
                                 </Text>
                                 <Text
@@ -66,15 +57,7 @@ const SettingProd = ({ navigation }) => {
                         </View>
                         <View style={styles.settingMenu}>
                             <View style={styles.settingInnerMenu}>
-                                <Text
-                                    style={[
-                                        styles.settingContentText,
-                                        styles.textBase,
-                                        {marginLeft: '5%'}
-                                    ]}
-                                >
-                                    Version
-                                </Text>
+                                <Text style={[styles.settingContentText, styles.textBase, { marginLeft: '5%' }]}>Version</Text>
                                 <Text
                                     style={{
                                         color: 'white',
@@ -87,15 +70,7 @@ const SettingProd = ({ navigation }) => {
                         </View>
                         <View style={styles.settingMenu}>
                             <View style={styles.settingInnerMenu}>
-                                <Text
-                                    style={[
-                                        styles.settingContentText,
-                                        styles.textBase,
-                                        {marginLeft: '5%'}
-                                    ]}
-                                >
-                                    Serial
-                                </Text>
+                                <Text style={[styles.settingContentText, styles.textBase, { marginLeft: '5%' }]}>Serial</Text>
                                 <Text
                                     style={{
                                         color: 'white',
@@ -108,15 +83,7 @@ const SettingProd = ({ navigation }) => {
                         </View>
                         <View style={styles.settingMenu}>
                             <View style={styles.settingInnerMenu}>
-                                <Text
-                                    style={[
-                                        styles.settingContentText,
-                                        styles.textBase,
-                                        {marginLeft: '5%'}
-                                    ]}
-                                >
-                                    information
-                                </Text>
+                                <Text style={[styles.settingContentText, styles.textBase, { marginLeft: '5%' }]}>information</Text>
                                 <Text
                                     style={{
                                         color: 'white',
@@ -129,14 +96,7 @@ const SettingProd = ({ navigation }) => {
                         </View>
                         <View style={styles.settingMenu}>
                             <View style={styles.settingInnerMenu}>
-                                <Text
-                                    style={[
-                                        styles.settingContentText,
-                                        { fontSize: 15, marginLeft: '5%' },
-                                    ]}
-                                >
-                                    Location
-                                </Text>
+                                <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>Location</Text>
                                 <Text
                                     style={{
                                         color: 'white',
@@ -149,14 +109,7 @@ const SettingProd = ({ navigation }) => {
                         </View>
                         <View style={styles.settingMenu}>
                             <View style={styles.settingInnerMenu}>
-                                <Text
-                                    style={[
-                                        styles.settingContentText,
-                                        { fontSize: 15, marginLeft: '5%' },
-                                    ]}
-                                >
-                                    Email
-                                </Text>
+                                <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>Email</Text>
                                 <Text
                                     style={{
                                         color: 'white',
@@ -169,14 +122,7 @@ const SettingProd = ({ navigation }) => {
                         </View>
                         <View style={styles.settingMenu}>
                             <View style={[styles.settingInnerMenu]}>
-                                <Text
-                                    style={[
-                                        styles.settingContentText,
-                                        { fontSize: 15, marginLeft: '5%' },
-                                    ]}
-                                >
-                                    Hostname
-                                </Text>
+                                <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>Hostname</Text>
                                 <Text
                                     style={{
                                         color: 'white',
@@ -188,24 +134,9 @@ const SettingProd = ({ navigation }) => {
                             </View>
                         </View>
                         {isFolder && (
-                            <TouchableOpacity
-                                style={styles.settingMenu}
-                                onPress={() => setIsFolder(false)}
-                            >
-                                <View
-                                    style={[
-                                        styles.settingInnerMenu,
-                                        { borderBottomWidth: 0 },
-                                    ]}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.settingContentText,
-                                            { fontSize: 15, marginLeft: '5%' },
-                                        ]}
-                                    >
-                                        Network
-                                    </Text>
+                            <TouchableOpacity style={styles.settingMenu} onPress={() => setIsFolder(false)}>
+                                <View style={[styles.settingInnerMenu, { borderBottomWidth: 0 }]}>
+                                    <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>Network</Text>
                                     <Icon
                                         name='chevron-down-outline'
                                         style={{
@@ -234,14 +165,14 @@ const SettingProd = ({ navigation }) => {
                                         >
                                             DHCP
                                         </Text>
-                                            <Text
-                                                style={{
-                                                    color: 'white',
-                                                    marginRight: '5%',
-                                                }}
-                                            >
-                                                {productData.network.dhcp ? 'true' : 'false'}
-                                            </Text>
+                                        <Text
+                                            style={{
+                                                color: 'white',
+                                                marginRight: '5%',
+                                            }}
+                                        >
+                                            {productData.network.dhcp ? 'true' : 'false'}
+                                        </Text>
                                     </View>
                                 </View>
                                 <View style={styles.settingMenu}>
@@ -291,12 +222,7 @@ const SettingProd = ({ navigation }) => {
                                     </View>
                                 </View>
                                 <View style={styles.settingMenu}>
-                                    <View
-                                        style={[
-                                            styles.settingInnerMenu,
-                                            { borderBottomWidth: 0 },
-                                        ]}
-                                    >
+                                    <View style={[styles.settingInnerMenu, { borderBottomWidth: 0 }]}>
                                         <Text
                                             style={[
                                                 styles.settingContentText,
@@ -336,9 +262,8 @@ const SettingProd = ({ navigation }) => {
                         )}
                     </View>
                 </View>
-        </ScrollView>
+            </ScrollView>
         </SafeAreaView>
-        </>
     )
 }
 
