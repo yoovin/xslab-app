@@ -11,14 +11,13 @@ import styles from '../Styles'
 import TopNavi from './TopNavi'
 
 const SettingFan = ({ navigation }) => {
-    
     // {
-    //     "auto": true, 
-    //     "rpm": [480, 620, 3413, 628], 
-    //     "speed": {"current": 50, "maximum": 50, "minimum": 20}, 
+    //     "auto": true,
+    //     "rpm": [480, 620, 3413, 628],
+    //     "speed": {"current": 50, "maximum": 50, "minimum": 20},
     //     "temperature": {"fahrenheit": false, "value": 30}
     // }
-    
+
     const [fanData, setFanData] = useRecoilState(FanData)
     const [isUpdate, setIsUpdate] = useState(false)
     const [isAuto, setIsAuto] = useState(false)
@@ -36,32 +35,31 @@ const SettingFan = ({ navigation }) => {
         useRef(new Animated.Value(0)).current,
     ]
 
-
     useEffect(() => {
-        if(fanData.rpm){
-            for(let i = 0; i < fanData.rpm.length; i++){
-                if(fanData.rpm[i] > 480){
-                    if(!fanAniWorks[i]){
+        if (fanData.rpm) {
+            for (let i = 0; i < fanData.rpm.length; i++) {
+                if (fanData.rpm[i] > 480) {
+                    if (!fanAniWorks[i]) {
                         Animated.loop(
                             Animated.timing(fanAnimations[i], {
                                 toValue: 1,
                                 duration: 2000,
                                 useNativeDriver: true,
-                                easing: Easing.linear
+                                easing: Easing.linear,
                             })
                         ).start()
                         // 애니메이션 실행중인것으로 체크
-                        setFanAniWorks(val => {
+                        setFanAniWorks((val) => {
                             const newVal = [...val]
                             newVal[i] = true
                             return newVal
                         })
                     }
-                }else{
+                } else {
                     // 팬이 돌고있지않으면 애니메이션 정지
                     fanAnimations[i].stopAnimation()
                     // 애니메이션 정지중인것으로 체크
-                    setFanAniWorks(val => {
+                    setFanAniWorks((val) => {
                         const newVal = [...val]
                         newVal[i] = false
                         return newVal
@@ -71,11 +69,14 @@ const SettingFan = ({ navigation }) => {
         }
 
         // Fan 애니메이션 각도 지정
-        for(let i = 0; i < 4; i++){
-            setAnimationRotate(val => ([...val, fanAnimations[i].interpolate({
-                inputRange: [0, 1],
-                outputRange: ['0deg', '360deg']
-            })]))
+        for (let i = 0; i < 4; i++) {
+            setAnimationRotate((val) => [
+                ...val,
+                fanAnimations[i].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['0deg', '360deg'],
+                }),
+            ])
         }
         setIsUpdate(false)
     }, [fanData])
@@ -86,107 +87,81 @@ const SettingFan = ({ navigation }) => {
     }, [])
 
     return (
-        <SafeAreaView style={{ width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center', paddingTop: '5%' }}>
+        <SafeAreaView style={[styles.screen, styles.screen_setting]}>
             <TopNavi navigation={navigation} title='팬 속도' />
-            <KeyboardAwareScrollView contentContainerStyle={{ alignItems: 'center' }} style={{ flex: 1 }}>
-                <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#363D58', width: '100%', paddingTop: '5%', paddingBottom: '20%' }}>
-                    <View style={{ width: '100%', alignItems: 'center' }}>
-                        <View style={[styles.settingList, { width: '90%' }]}>
-                            <TouchableOpacity
-                                style={styles.settingMenu}
-                                disabled={isUpdate}
-                                onPress={() => {
-                                    setInputVar('min')
-                                    setIsTyping(true)
-                                }}
-                            >
-                                <View style={styles.settingInnerMenu}>
-                                    <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>최소 속도</Text>
-                                    <Text style={{ color: 'white', marginRight: '5%' }}>{fanData ? fanData.speed.minimum : '-'}</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.settingMenu}
-                                disabled={isUpdate}
-                                onPress={() => {
-                                    setInputVar('max')
-                                    setIsTyping(true)
-                                }}
-                            >
-                                <View style={[styles.settingInnerMenu, { borderBottomWidth: 0 }]}>
-                                    <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>최고 속도</Text>
-                                    <Text style={{ color: 'white', marginRight: '5%' }}>{fanData ? fanData.speed.maximum : '-'}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View
-                        style={[
-                            styles.infoView,
-                            { position: 'relative', width: '90%', height: '40%', padding: '5%', marginTop: '10%', backgroundColor: '#3D4460' },
-                        ]}
+            <KeyboardAwareScrollView contentContainerStyle={[styles.scroll_content]} style={[styles.scroll_style]}>
+                <View style={[styles.box, styles.box_setting]}>
+                    <TouchableOpacity
+                        style={[styles.list]}
+                        disabled={isUpdate}
+                        onPress={() => {
+                            setInputVar('min')
+                            setIsTyping(true)
+                        }}
                     >
-                        <View style={{ width: '100%', height: '100%' }} onPress={() => {}}>
-                            <Text style={{ fontWeight: 'bold', color: 'white' }}>현재 팬 속도</Text>
-                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
-                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                                    {fanData.rpm && fanData.rpm.map((item, idx) => (
-                                        <View style={{ justifyContent: 'center', alignItems: 'center' }} key={idx}>
-                                            <Text style={[styles.infoViewText, { marginBottom: 5, color: 'white' }]}>{idx + 1}번 팬</Text>
-                                            {animationRotate[idx] && <Animated.View style={{ transform: [{ rotate: animationRotate[idx] }] }}>
-                                                <MaterialCommunityIcons
-                                                    name='fan'
-                                                    size={30}
-                                                    color={fanAniWorks[idx] && '#5d66a4'}
-                                                ></MaterialCommunityIcons>
-                                            </Animated.View>}
-                                            {/* Fan RPM 480이면 멈춰있는상태같음 */}
-                                            <Text style={[styles.infoViewText, { marginTop: 5 }, fanAniWorks[idx] && { color: '#5d66a4' }]}>
-                                                {item > 480 ? item : '-'}
-                                            </Text>
-                                        </View>
-                                    ))}
-                                </View>
-                            </View>
-                        </View>
-                    </View>
+                        <Text style={[styles.text_name]}>최소 속도</Text>
+                        <Text style={[styles.text_val]}>{fanData ? fanData.speed.minimum : '-'}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.list, styles.list_end]}
+                        disabled={isUpdate}
+                        onPress={() => {
+                            setInputVar('max')
+                            setIsTyping(true)
+                        }}
+                    >
+                        <Text style={[styles.text_name]}>최고 속도</Text>
+                        <Text style={[styles.text_val]}>{fanData ? fanData.speed.maximum : '-'}</Text>
+                    </TouchableOpacity>
+                </View>
 
-                    <View style={{ width: '100%', alignItems: 'center', marginTop: '10%' }}>
-                        <View style={[styles.settingList, { width: '90%' }]}>
-                            <View
-                                style={styles.settingMenu}
-                                // disabled={isUpdate}
-                            >
-                                <View style={[styles.settingInnerMenu, { borderBottomWidth: 0 }]}>
-                                    <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>팬 속도 자동 조절</Text>
-                                    <Text
-                                        style={{
-                                            color: 'white',
-                                            marginRight: '5%',
-                                        }}
-                                    >
-                                        <Switch
-                                            disabled={isUpdate}
-                                            trackColor={{ false: '#B0BEC5', true: '#4CAF50' }}
-                                            thumbColor={fanData.auto ? 'white' : 'white'}
-                                            ios_backgroundColor='#3e3e3e'
-                                            onValueChange={() => {
-                                                setIsAuto(!isAuto)
-                                                axios
-                                                    .put('/api/fan', {
-                                                        auto: fanData.auto ? false : true,
-                                                        speed: fanData.speed,
-                                                        temperature: fanData.temperature,
-                                                    })
-                                                    .then(res => console.log('FAN: 펜 설정 완료'))
-                                                    .catch((err) => console.error(err))
-                                            }}
-                                            value={isAuto}
-                                        ></Switch>
+                <View style={[styles.box, styles.box_setting]}>
+                    <Text style={[styles.text_subtitle]}>현재 팬 속도</Text>
+                    <View style={[styles.list_horizon]}>
+                        {fanData.rpm &&
+                            fanData.rpm.map((item, idx) => (
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }} key={idx}>
+                                    <Text style={[styles.infoViewText, { marginBottom: 5, color: 'white' }]}>{idx + 1}번 팬</Text>
+                                    {animationRotate[idx] && (
+                                        <Animated.View style={{ transform: [{ rotate: animationRotate[idx] }] }}>
+                                            <MaterialCommunityIcons
+                                                name='fan'
+                                                size={30}
+                                                color={fanAniWorks[idx] && '#5d66a4'}
+                                            ></MaterialCommunityIcons>
+                                        </Animated.View>
+                                    )}
+                                    {/* Fan RPM 480이면 멈춰있는상태같음 */}
+                                    <Text style={[styles.infoViewText, { marginTop: 5 }, fanAniWorks[idx] && { color: '#5d66a4' }]}>
+                                        {item > 480 ? item : '-'}
                                     </Text>
                                 </View>
-                            </View>
+                            ))}
+                    </View>
+                </View>
+
+                <View style={[styles.box, styles.box_setting]}>
+                    <View style={[styles.list, styles.list_end]}>
+                        <Text style={[styles.text_name]}>팬 속도 자동 조절</Text>
+                        <View style={[styles.text_val]}>
+                            <Switch
+                                disabled={isUpdate}
+                                trackColor={{ false: '#B0BEC5', true: '#4CAF50' }}
+                                thumbColor={fanData.auto ? 'white' : 'white'}
+                                ios_backgroundColor='#3e3e3e'
+                                onValueChange={() => {
+                                    setIsAuto(!isAuto)
+                                    axios
+                                        .put('/api/fan', {
+                                            auto: fanData.auto ? false : true,
+                                            speed: fanData.speed,
+                                            temperature: fanData.temperature,
+                                        })
+                                        .then((res) => console.log('FAN: 펜 설정 완료'))
+                                        .catch((err) => console.error(err))
+                                }}
+                                value={isAuto}
+                            ></Switch>
                         </View>
                     </View>
                 </View>
@@ -195,6 +170,7 @@ const SettingFan = ({ navigation }) => {
                     <Dialog.Title>{inputVar === 'min' ? '최소 속도' : '최고 속도'}</Dialog.Title>
                     <Dialog.Description>속도 값을 입력해주세요.</Dialog.Description>
                     <Dialog.Input keyboardType='number-pad' inputMode='numeric' onChangeText={(val) => (inputVal.current = val)}></Dialog.Input>
+                    <Dialog.Button label='취소' color='black' onPress={() => setIsTyping(false)}></Dialog.Button>
                     <Dialog.Button
                         label='확인'
                         color='black'
@@ -220,7 +196,6 @@ const SettingFan = ({ navigation }) => {
                             setIsTyping(false)
                         }}
                     ></Dialog.Button>
-                    <Dialog.Button label='취소' color='black' onPress={() => setIsTyping(false)}></Dialog.Button>
                 </Dialog.Container>
             </KeyboardAwareScrollView>
         </SafeAreaView>

@@ -27,7 +27,7 @@ const SettingProd = ({ navigation }) => {
     }, [])
 
     return (
-        <SafeAreaView style={[styles.screen, { paddingBottom: '15%' }]}>
+        <SafeAreaView style={[styles.screen, styles.screen_setting]}>
             <TopNavi navigation={navigation} title='제품 정보' />
             <Image
                 source={require('../../../assets/image/product.png')}
@@ -37,82 +37,79 @@ const SettingProd = ({ navigation }) => {
                     marginVertical: '10%',
                 }}
             />
-            <ScrollView style={[styles.scrollScreen]} contentContainerStyle={[styles.scrollScreenContent, { paddingBottom: '5%' }]}>
-                <View style={[styles.list]}>
-                    <View style={[styles.listContent]}>
-                        <Text style={[styles.listContentName, styles.listContentTitle, styles.fontBold]}>제품명</Text>
-                        <Text style={[styles.listConentVal]}>{productData.productName}</Text>
+            <ScrollView style={[styles.scroll_style]} contentContainerStyle={[styles.scroll_content]}>
+                <View style={[styles.box, styles.box_setting]}>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name, styles.fontBold]}>제품명</Text>
+                        <Text style={[styles.text_val]}>{productData.productName}</Text>
                     </View>
-                    <View style={[styles.listContent]}>
-                        <Text style={[styles.listContentName]}>Version</Text>
-                        <Text style={[styles.listConentVal]}>{productData.version}</Text>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Version</Text>
+                        <Text style={[styles.text_val]}>{productData.version}</Text>
                     </View>
-                    <View style={[styles.listContent]}>
-                        <Text style={[styles.listContentName]}>Serial</Text>
-                        <Text style={[styles.listConentVal]}>{productData.serial}</Text>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Serial</Text>
+                        <Text style={[styles.text_val]}>{productData.serial}</Text>
                     </View>
-                    <View style={[styles.listContent]}>
-                        <Text style={[styles.listContentName]}>Information</Text>
-                        <Text style={[styles.listConentVal]}>{productData.information}</Text>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Information</Text>
+                        <Text style={[styles.text_val]}>{productData.information}</Text>
                     </View>
-                    <View style={[styles.listContent]}>
-                        <Text style={[styles.listContentName]}>Location</Text>
-                        <Text style={[styles.listConentVal]}>{productData.location}</Text>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Location</Text>
+                        <Text style={[styles.text_val]}>{productData.location}</Text>
                     </View>
-                    <View style={[styles.listContent]}>
-                        <Text style={[styles.listContentName]}>Email</Text>
-                        <Text style={[styles.listConentVal]}>{productData.email}</Text>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Email</Text>
+                        <Text style={[styles.text_val]}>{productData.email}</Text>
                     </View>
-                    <View style={[styles.listContent]}>
-                        <Text style={[styles.listContentName]}>Hostname</Text>
-                        <Text style={[styles.listConentVal]}>{productData.hostname}</Text>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Hostname</Text>
+                        <Text style={[styles.text_val]}>{productData.hostname}</Text>
                     </View>
                     {isFolder && (
-                        <TouchableOpacity style={[styles.listContent, styles.listContentEnd]} onPress={() => setIsFolder(false)}>
-                            <Text style={[styles.listContentName]}>Network</Text>
+                        <TouchableOpacity style={[styles.list, styles.list_end]} onPress={() => setIsFolder(false)}>
+                            <Text style={[styles.text_name]}>Network</Text>
                             <Icon
                                 name='chevron-down-outline'
-                                style={{
-                                    color: '#92A2D9',
-                                    fontSize: 20,
-                                    position: 'absolute',
-                                    left: '50%',
-                                    bottom: 0,
-                                }}
+                                style={[
+                                    styles.icon_arrow,
+                                    {
+                                        position: 'absolute',
+                                        left: '45%',
+                                        bottom:0
+                                    },
+                                ]}
                             />
                         </TouchableOpacity>
                     )}
                     {!isFolder && (
                         <>
-                            <View style={[styles.listContent]}>
-                                <Text style={[styles.listContentName]}>DHCP</Text>
-                                <Text style={[styles.listConentVal]}>{productData.network.dhcp ? 'true' : 'false'}</Text>
+                            <View style={[styles.list]}>
+                                <Text style={[styles.text_name]}>DHCP</Text>
+                                <Text style={[styles.text_val]}>
+                                    {productData.network.dhcp ? 'true' : 'false'}
+                                </Text>
                             </View>
-                            <View style={[styles.listContent]}>
-                                <Text style={[styles.listContentName]}>Address</Text>
-                                <Text style={[styles.listConentVal]}>{productData.network.address}</Text>
+                            <View style={[styles.list]}>
+                                <Text style={[styles.text_name]}>Address</Text>
+                                <Text style={[styles.text_val]}>{productData.network.address}</Text>
                             </View>
-                            <View style={[styles.listContent]}>
-                                <Text style={[styles.listContentName]}>Gateway</Text>
-                                <Text style={[styles.listConentVal]}>{productData.network.gateway}</Text>
+                            <View style={[styles.list]}>
+                                <Text style={[styles.text_name]}>Gateway</Text>
+                                <Text style={[styles.text_val]}>{productData.network.gateway}</Text>
                             </View>
-                            <View style={[styles.listContent]}>
-                                <Text style={[styles.listContentName]}>DNS</Text>
-                                <Text style={[styles.listConentVal]}>{productData.network.dns}</Text>
+                            <View style={[styles.list]}>
+                                <Text style={[styles.text_name]}>DNS</Text>
+                                <Text style={[styles.text_val]}>{productData.network.dns}</Text>
                             </View>
                             <TouchableOpacity
-                                style={[styles.listContent, styles.listContentEnd, { justifyContent: 'center' }]}
+                                style={[styles.list, styles.list_end, { justifyContent: 'center' }]}
                                 onPress={() => {
                                     setIsFolder(true)
                                 }}
                             >
-                                <Icon
-                                    name='chevron-up-outline'
-                                    style={{
-                                        color: '#92A2D9',
-                                        fontSize: 20,
-                                    }}
-                                />
+                                <Icon name='chevron-up-outline' style={[styles.icon_arrow]} />
                             </TouchableOpacity>
                         </>
                     )}

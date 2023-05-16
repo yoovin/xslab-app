@@ -352,61 +352,115 @@ export default StyleSheet.create({
     },
 
     // custom layout
+    // screen
     screen: {
         flex: 1,
         alignItems: 'center',
         paddingTop: '5%',
+        paddingBottom: '15%',
+    },
+
+    screen_setting: {
         backgroundColor: '#363D58',
     },
 
-    scrollScreen: {
+    // scroll
+    scroll_style: {
         flex: 1,
-        width: '90%',
+        width: '100%',
     },
 
-    scrollScreenContent: {
+    scroll_content: {
         flexGrow: 1,
         alignItems: 'center',
     },
 
-    list: {
-        width: '100%',
+    // box
+    box: {
+        width: '90%',
         alignItems: 'center',
         borderRadius: 10,
+        marginTop: '5%',
+    },
+
+    box_setting: {
         backgroundColor: '#3D4460',
     },
 
-    listContent: {
+    // list
+    list: {
         flex: 1,
         alignItems: 'center',
         flexDirection: 'row',
+        justifyContent: 'space-between',
         width: '100%',
         height: '12%',
+        paddingVertical: '5%',
         borderBottomWidth: 1,
         borderColor: '#92A2D9',
-        paddingVertical: '5%',
     },
 
-    listContentTitle: {
-        fontSize: RFPercentage(2),
-        marginVertical: 0,
-    },
-
-    listContentEnd: {
+    list_end: {
         borderBottomWidth: 0,
     },
 
-    listContentName: {
+    list_horizon: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+        marginTop: '20%',
+        marginBottom: '10%',
+    },
+
+    // iconList
+    iconList: {
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        flexDirection: 'row',
+    },
+
+    iconList_icon: {
+        marginHorizontal: '4%',
+    },
+
+    iconList_content: {
+        justifyContent: 'space-between',
+        height: '100%',
+        paddingRight: '5%',
+    },
+
+    // icon
+    icon_arrow: {
+        fontSize: RFPercentage(3),
+        color: '#92A2D9',
+    },
+
+    // text
+    text_title: {
+        fontSize: RFPercentage(2.7),
+        color: 'white',
+    },
+
+    text_name: {
         fontSize: RFPercentage(2),
         marginLeft: '7%',
         color: 'white',
     },
 
-    listConentVal: {
+    text_val: {
         fontSize: RFPercentage(2),
         position: 'absolute',
         right: 0,
         marginRight: '4%',
         color: 'white',
+    },
+
+    text_subtitle: {
+        fontWeight: 'bold',
+        color: 'white',
+        position: 'absolute',
+        left: 0,
+        margin: '5%',
     },
 })
