@@ -1,12 +1,11 @@
-import { View, Text, TouchableOpacity, SafeAreaView, Animated, Easing, Switch } from 'react-native'
+import { View, Text, TouchableOpacity, SafeAreaView, Animated, Easing, Switch, Alert } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
-import Icon from 'react-native-vector-icons/Ionicons'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Dialog from 'react-native-dialog'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { FanData } from '../recoil/atom'
-import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import styles from '../Styles'
 import TopNavi from './TopNavi'
 
@@ -78,6 +77,7 @@ const SettingFan = ({ navigation }) => {
                 }),
             ])
         }
+        setIsAuto(fanData.auto)
         setIsUpdate(false)
     }, [fanData])
 
@@ -85,6 +85,56 @@ const SettingFan = ({ navigation }) => {
         // 사용자경험을 위해 버튼값은 처음에 받아오는 데이터로 지정하고 이후부터는 버튼과 동시상태값은 별개
         setIsAuto(fanData.auto)
     }, [])
+
+    const validCheck = () => {
+        if (inputVal.current > 512) {
+            Alert.alert('설정 실패', '속도 값은 0~512범위 내의 값이어야 합니다.', [
+                {
+                    text: '확인',
+                    style: 'cancel',
+                },
+            ])
+        }
+        else if (inputVar === 'min') {
+            if (inputVal.current > fanData.speed.maximum) {
+                Alert.alert('설정 실패', '최고 속도 값보다 낮아야 합니다.', [
+                    {
+                        text: '확인',
+                        style: 'cancel',
+                    },
+                ])
+            } else {
+                setIsUpdate(true)
+                axios
+                    .put('/api/fan', {
+                        auto: fanData.auto,
+                        speed: { ...fanData.speed, minimum: inputVal.current },
+                        temperature: fanData.temperature,
+                    })
+                    .then(() => setIsTyping(false))
+                    // .catch((err) => console.error(err))
+            }
+        } else if (inputVar === 'max') {
+            if (inputVal.current < fanData.speed.minimum) {
+                Alert.alert('설정 실패', '최소 속도 값보다 높아야 합니다.', [
+                    {
+                        text: '확인',
+                        style: 'cancel',
+                    },
+                ])
+            } else {
+                setIsUpdate(true)
+                axios
+                    .put('/api/fan', {
+                        auto: fanData.auto,
+                        speed: { ...fanData.speed, maximum: inputVal.current },
+                        temperature: fanData.temperature,
+                    })
+                    .then(() => setIsTyping(false))
+                    // .catch((err) => console.error(err))
+            }
+        }
+    }
 
     return (
         <SafeAreaView style={[styles.screen, styles.screen_setting]}>
@@ -157,8 +207,8 @@ const SettingFan = ({ navigation }) => {
                                             speed: fanData.speed,
                                             temperature: fanData.temperature,
                                         })
-                                        .then((res) => console.log('FAN: 펜 설정 완료'))
-                                        .catch((err) => console.error(err))
+                                        // .then(() => console.log('FAN: 펜 설정 완료'))
+                                        // .catch((err) => console.error(err))
                                 }}
                                 value={isAuto}
                             ></Switch>
@@ -171,31 +221,7 @@ const SettingFan = ({ navigation }) => {
                     <Dialog.Description>속도 값을 입력해주세요.</Dialog.Description>
                     <Dialog.Input keyboardType='number-pad' inputMode='numeric' onChangeText={(val) => (inputVal.current = val)}></Dialog.Input>
                     <Dialog.Button label='취소' color='black' onPress={() => setIsTyping(false)}></Dialog.Button>
-                    <Dialog.Button
-                        label='확인'
-                        color='black'
-                        onPress={() => {
-                            setIsUpdate(true)
-                            if (inputVar === 'min') {
-                                axios
-                                    .put('/api/fan', {
-                                        auto: fanData.auto,
-                                        speed: { ...fanData.speed, minimum: inputVal.current },
-                                        temperature: fanData.temperature,
-                                    })
-                                    .catch((err) => console.error(err))
-                            } else if (inputVar === 'max') {
-                                axios
-                                    .put('/api/fan', {
-                                        auto: fanData.auto,
-                                        speed: { ...fanData.speed, maximum: inputVal.current },
-                                        temperature: fanData.temperature,
-                                    })
-                                    .catch((err) => console.error(err))
-                            }
-                            setIsTyping(false)
-                        }}
-                    ></Dialog.Button>
+                    <Dialog.Button label='확인' color='black' onPress={() => validCheck()}></Dialog.Button>
                 </Dialog.Container>
             </KeyboardAwareScrollView>
         </SafeAreaView>

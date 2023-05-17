@@ -21,13 +21,12 @@ const SettingProd = ({ navigation }) => {
         axios
             .get('/api/product')
             .then(({ data }) => {
-                console.log(data)
                 setProductData(data)
             })
             .then(() => {
                 setIsLoad(true)
             })
-            .catch((err) => console.error(err))
+            // .catch((err) => console.error(err))
     }, [])
 
     return (
