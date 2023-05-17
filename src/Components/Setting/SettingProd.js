@@ -14,6 +14,7 @@ import TopNavi from './TopNavi'
 
 const SettingProd = ({ navigation }) => {
     const [isFolder, setIsFolder] = useState(true)
+    const [isLoad, setIsLoad] = useState(false)
     const [productData, setProductData] = useState({})
 
     useEffect(() => {
@@ -23,11 +24,15 @@ const SettingProd = ({ navigation }) => {
                 console.log(data)
                 setProductData(data)
             })
+            .then(() => {
+                setIsLoad(true)
+            })
             .catch((err) => console.error(err))
     }, [])
 
     return (
         <SafeAreaView style={[styles.screen, styles.screen_setting]}>
+            {/* <View style={{ backgroundColor: '#000000', opacity: 0.3, position: 'absolute', width: '100%', height: '150%', zIndex: 2 }}></View> */}
             <TopNavi navigation={navigation} title='제품 정보' />
             <Image
                 source={require('../../../assets/image/product.png')}
@@ -41,31 +46,32 @@ const SettingProd = ({ navigation }) => {
                 <View style={[styles.box, styles.box_setting]}>
                     <View style={[styles.list]}>
                         <Text style={[styles.text_name, styles.fontBold]}>제품명</Text>
-                        <Text style={[styles.text_val]}>{productData.productName}</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.productName : '-'}</Text>
+                        {/* <Text style={[styles.text_val]}>{productData.productName}</Text> */}
                     </View>
                     <View style={[styles.list]}>
                         <Text style={[styles.text_name]}>Version</Text>
-                        <Text style={[styles.text_val]}>{productData.version}</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.version : '-'}</Text>
                     </View>
                     <View style={[styles.list]}>
                         <Text style={[styles.text_name]}>Serial</Text>
-                        <Text style={[styles.text_val]}>{productData.serial}</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.serial : '-'}</Text>
                     </View>
                     <View style={[styles.list]}>
                         <Text style={[styles.text_name]}>Information</Text>
-                        <Text style={[styles.text_val]}>{productData.information}</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.information : '-'}</Text>
                     </View>
                     <View style={[styles.list]}>
                         <Text style={[styles.text_name]}>Location</Text>
-                        <Text style={[styles.text_val]}>{productData.location}</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.location : '-'}</Text>
                     </View>
                     <View style={[styles.list]}>
                         <Text style={[styles.text_name]}>Email</Text>
-                        <Text style={[styles.text_val]}>{productData.email}</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.email : '-'}</Text>
                     </View>
                     <View style={[styles.list]}>
                         <Text style={[styles.text_name]}>Hostname</Text>
-                        <Text style={[styles.text_val]}>{productData.hostname}</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.hostname : '-'}</Text>
                     </View>
                     {isFolder && (
                         <TouchableOpacity style={[styles.list, styles.list_end]} onPress={() => setIsFolder(false)}>
@@ -77,7 +83,7 @@ const SettingProd = ({ navigation }) => {
                                     {
                                         position: 'absolute',
                                         left: '45%',
-                                        bottom:0
+                                        bottom: 0,
                                     },
                                 ]}
                             />
@@ -87,21 +93,19 @@ const SettingProd = ({ navigation }) => {
                         <>
                             <View style={[styles.list]}>
                                 <Text style={[styles.text_name]}>DHCP</Text>
-                                <Text style={[styles.text_val]}>
-                                    {productData.network.dhcp ? 'true' : 'false'}
-                                </Text>
+                                <Text style={[styles.text_val]}>{isLoad ? (productData.network.dhcp ? 'true' : 'false') : '-'}</Text>
                             </View>
                             <View style={[styles.list]}>
                                 <Text style={[styles.text_name]}>Address</Text>
-                                <Text style={[styles.text_val]}>{productData.network.address}</Text>
+                                <Text style={[styles.text_val]}>{isLoad ? productData.network.address : '-'}</Text>
                             </View>
                             <View style={[styles.list]}>
                                 <Text style={[styles.text_name]}>Gateway</Text>
-                                <Text style={[styles.text_val]}>{productData.network.gateway}</Text>
+                                <Text style={[styles.text_val]}>{isLoad ? productData.network.gateway : '-'}</Text>
                             </View>
                             <View style={[styles.list]}>
                                 <Text style={[styles.text_name]}>DNS</Text>
-                                <Text style={[styles.text_val]}>{productData.network.dns}</Text>
+                                <Text style={[styles.text_val]}>{isLoad ? productData.network.dns : '-'}</Text>
                             </View>
                             <TouchableOpacity
                                 style={[styles.list, styles.list_end, { justifyContent: 'center' }]}
