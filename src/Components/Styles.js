@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import { StyleSheet } from 'react-native'
+import { RFPercentage } from 'react-native-responsive-fontsize'
 
 // const mainColor = ''
 
@@ -82,7 +82,7 @@ export default StyleSheet.create({
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: '25%'
+        marginBottom: '25%',
     },
 
     InputBox: {
@@ -114,9 +114,9 @@ export default StyleSheet.create({
     */
 
     infoContainer: {
-        flex:3,
-        flexDirection:'row',
-        flexWrap:'wrap',
+        flex: 3,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
         flex: 3,
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -129,13 +129,12 @@ export default StyleSheet.create({
     infoView: {
         position: 'absolute',
         padding: '10%',
-        borderRadius:10,
-        backgroundColor:"#ffffff"
+        borderRadius: 10,
+        backgroundColor: '#ffffff',
     },
 
-
     swiper: {
-        backgroundColor:"#ffffff"
+        backgroundColor: '#ffffff',
     },
 
     infoViewText: {
@@ -188,12 +187,12 @@ export default StyleSheet.create({
         height: '100%',
         opacity: 0.5,
         backgroundColor: 'gray',
-        zIndex: 998
+        zIndex: 998,
     },
 
     onOffButton: {
-        flex: 1, 
-        alignItems: 'center'
+        flex: 1,
+        alignItems: 'center',
     },
 
     /*
@@ -209,17 +208,17 @@ export default StyleSheet.create({
     settingContentText: {
         marginVertical: 5,
         fontSize: RFPercentage(1.5),
-        color:'white'
+        color: 'white',
     },
 
     settingView: {
-        flexDirection:'row',
+        flexDirection: 'row',
         width: '90%',
         height: '25%',
         margin: '5%',
         padding: 20,
         borderRadius: 15,
-        backgroundColor: '#3D4460'
+        backgroundColor: '#3D4460',
     },
 
     settingViewContentText: {
@@ -228,47 +227,47 @@ export default StyleSheet.create({
 
     tempSliderCenter: {
         // position:'absolute',
-        width:'40%',
-        height:'40%',
-        borderRadius:RFPercentage(10),
-        backgroundColor:'#D9D9D9'
+        width: '40%',
+        height: '40%',
+        borderRadius: RFPercentage(10),
+        backgroundColor: '#D9D9D9',
     },
 
     tempSliderValueText: {
         color: 'black',
-        fontSize:RFPercentage(3),
+        fontSize: RFPercentage(3),
     },
 
     tempSliderGuideText: {
         bottom: 30,
-        color: 'white',
-        fontSize:RFPercentage(1),
+        color: '#4E4D4D',
+        fontSize: RFPercentage(1),
     },
 
     confirmButton: {
         justifyContent: 'center',
         alignItems: 'center',
-        width:'45%',
+        width: '45%',
         height: '15%',
         borderRadius: 15,
-        backgroundColor:'#292E41'
+        backgroundColor: '#292E41',
     },
-    
+
     logoutButton: {
         width: '35%',
         height: '5%',
         borderRadius: 15,
-        justifyContent:"center",
-        alignItems:"center",
-        backgroundColor: '#DCDDDD'
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#DCDDDD',
     },
 
     voraBackground: {
         position: 'absolute',
-        top:'82%',
-        left:'22%',
-        width: '75%', 
-        height: '53%', 
+        top: '82%',
+        left: '22%',
+        width: '75%',
+        height: '53%',
         resizeMode: 'contain',
     },
 
@@ -302,53 +301,166 @@ export default StyleSheet.create({
     /*
     ===== LOGOUT COMPONENT =====
     */
-    
+
     logoutVoraBackground: {
         // position: 'absolute',
-        top:'30%',
-        left:'38%',
-        width: '52%', 
-        height: '62%', 
-        resizeMode: 'contain'
+        top: '30%',
+        left: '38%',
+        width: '52%',
+        height: '62%',
+        resizeMode: 'contain',
     },
 
     logoBackground: {
         // position: 'absolute',
-        top:'50%',
-        left:'13%',
-        width: '55%', 
-        height: '30%', 
-        resizeMode: 'contain'
+        top: '50%',
+        left: '13%',
+        width: '55%',
+        height: '30%',
+        resizeMode: 'contain',
     },
 
     /*
     ===== Font =====
     */
     textXs: {
-        fontSize: RFPercentage(1)
+        fontSize: RFPercentage(1),
     },
 
     textSm: {
-        fontSize: RFPercentage(1.5)
+        fontSize: RFPercentage(1.5),
     },
 
     textBase: {
-        fontSize: RFPercentage(2)
+        fontSize: RFPercentage(2),
     },
 
     textLg: {
-        fontSize: RFPercentage(2.5)
+        fontSize: RFPercentage(2.5),
     },
 
     textXl: {
-        fontSize: RFPercentage(3)
+        fontSize: RFPercentage(3),
     },
 
     text2xl: {
-        fontSize: RFPercentage(4)
+        fontSize: RFPercentage(4),
     },
 
     fontBold: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+    },
+
+    // custom layout
+    // screen
+    screen: {
+        flex: 1,
+        alignItems: 'center',
+        paddingTop: '5%',
+        paddingBottom: '15%',
+    },
+
+    screen_setting: {
+        backgroundColor: '#363D58',
+    },
+
+    // scroll
+    scroll_style: {
+        flex: 1,
+        width: '100%',
+    },
+
+    scroll_content: {
+        flexGrow: 1,
+        alignItems: 'center',
+    },
+
+    // box
+    box: {
+        width: '90%',
+        alignItems: 'center',
+        borderRadius: 10,
+        marginTop: '5%',
+    },
+
+    box_setting: {
+        backgroundColor: '#3D4460',
+    },
+
+    // list
+    list: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        height: '12%',
+        paddingVertical: '5%',
+        borderBottomWidth: 1,
+        borderColor: '#92A2D9',
+    },
+
+    list_end: {
+        borderBottomWidth: 0,
+    },
+
+    list_horizon: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+        marginTop: '20%',
+        marginBottom: '10%',
+    },
+
+    // iconList
+    iconList: {
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        flexDirection: 'row',
+    },
+
+    iconList_icon: {
+        marginHorizontal: '4%',
+    },
+
+    iconList_content: {
+        justifyContent: 'space-between',
+        height: '100%',
+        paddingRight: '5%',
+    },
+
+    // icon
+    icon_arrow: {
+        fontSize: RFPercentage(3),
+        color: '#92A2D9',
+    },
+
+    // text
+    text_title: {
+        fontSize: RFPercentage(2.7),
+        color: 'white',
+    },
+
+    text_name: {
+        fontSize: RFPercentage(2),
+        marginLeft: '7%',
+        color: 'white',
+    },
+
+    text_val: {
+        fontSize: RFPercentage(2),
+        position: 'absolute',
+        right: 0,
+        marginRight: '4%',
+        color: 'white',
+    },
+
+    text_subtitle: {
+        fontWeight: 'bold',
+        color: 'white',
+        position: 'absolute',
+        left: 0,
+        margin: '5%',
     },
 })

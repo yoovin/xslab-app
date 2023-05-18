@@ -16,260 +16,106 @@ import { useQuery } from 'react-query'
 
 const SettingProd = ({ navigation }) => {
     const [isFolder, setIsFolder] = useState(true)
-    const [productData, setProductData] = useState(null)
-
-
-    // const getProduct = async () => {
-    //     const res = await axios.get('/api/product')
-    //     console.log('product 불러옴')
-    //     return res.data
-    // }
-    // const { data, isLoading, isError, error, refetch } = useQuery('nodes', getProduct)
+    const [isLoad, setIsLoad] = useState(false)
+    const [productData, setProductData] = useState({})
 
     useEffect(() => {
         axios.get('/api/product')
             .then(({ data }) => {
                 setProductData(data)
             })
-            .catch((err) => console.error(err))
+            .then(() => {
+                setIsLoad(true)
+            })
+            // .catch((err) => console.error(err))
     }, [])
 
     return (
-        <SafeAreaView style={{ width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center', paddingTop: '5%' }}>
+        <SafeAreaView style={[styles.screen, styles.screen_setting]}>
+            {/* <View style={{ backgroundColor: '#000000', opacity: 0.3, position: 'absolute', width: '100%', height: '150%', zIndex: 2 }}></View> */}
             <TopNavi navigation={navigation} title='제품 정보' />
-            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }}>
-                <Image
-                    source={require('../../../assets/image/product.png')}
-                    style={{
-                        flex: 1,
-                        resizeMode: 'contain',
-                        width: '70%',
-                    }}
-                />
-
-                <View style={{ width: '100%', alignItems: 'center' }}>
-                    <View style={[styles.settingList, { width: '90%' }]}>
-                        <View style={styles.settingMenu}>
-                            <View style={[styles.settingInnerMenu]}>
-                                <Text style={[styles.settingContentText, styles.textBase, styles.fontBold, { marginLeft: '5%', marginVertical: 0 }]}>
-                                    제품명
-                                </Text>
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        marginRight: '5%',
-                                    }}
-                                >
-                                    {productData ? productData.productName : <ActivityIndicator/>}
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.settingMenu}>
-                            <View style={styles.settingInnerMenu}>
-                                <Text style={[styles.settingContentText, styles.textBase, { marginLeft: '5%' }]}>Version</Text>
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        marginRight: '5%',
-                                    }}
-                                >
-                                    {productData ? productData.version: <ActivityIndicator/>}
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.settingMenu}>
-                            <View style={styles.settingInnerMenu}>
-                                <Text style={[styles.settingContentText, styles.textBase, { marginLeft: '5%' }]}>Serial</Text>
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        marginRight: '5%',
-                                    }}
-                                >
-                                    {productData ? productData.serial: <ActivityIndicator/>}
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.settingMenu}>
-                            <View style={styles.settingInnerMenu}>
-                                <Text style={[styles.settingContentText, styles.textBase, { marginLeft: '5%' }]}>information</Text>
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        marginRight: '5%',
-                                    }}
-                                >
-                                    {productData ? productData.information: <ActivityIndicator/>}
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.settingMenu}>
-                            <View style={styles.settingInnerMenu}>
-                                <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>Location</Text>
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        marginRight: '5%',
-                                    }}
-                                >
-                                    {productData ? productData.location: <ActivityIndicator/>}
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.settingMenu}>
-                            <View style={styles.settingInnerMenu}>
-                                <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>Email</Text>
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        marginRight: '5%',
-                                    }}
-                                >
-                                    {productData ? productData.email: <ActivityIndicator/>}
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.settingMenu}>
-                            <View style={[styles.settingInnerMenu]}>
-                                <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>Hostname</Text>
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        marginRight: '5%',
-                                    }}
-                                >
-                                    {productData ? productData.hostname: <ActivityIndicator/>}
-                                </Text>
-                            </View>
-                        </View>
-                        {isFolder && (
-                            <TouchableOpacity style={styles.settingMenu} onPress={() => setIsFolder(false)}>
-                                <View style={[styles.settingInnerMenu, { borderBottomWidth: 0 }]}>
-                                    <Text style={[styles.settingContentText, { fontSize: 15, marginLeft: '5%' }]}>Network</Text>
-                                    <Icon
-                                        name='chevron-down-outline'
-                                        style={{
-                                            color: '#92A2D9',
-                                            fontSize: 20,
-                                            position: 'absolute',
-                                            left: '50%',
-                                            bottom: 0,
-                                        }}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                        )}
-                        {!isFolder && (
-                            <View>
-                                <View style={styles.settingMenu}>
-                                    <View style={[styles.settingInnerMenu]}>
-                                        <Text
-                                            style={[
-                                                styles.settingContentText,
-                                                {
-                                                    fontSize: 15,
-                                                    marginLeft: '5%',
-                                                },
-                                            ]}
-                                        >
-                                            DHCP
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                color: 'white',
-                                                marginRight: '5%',
-                                            }}
-                                        >
-                                            {productData ? productData.network.dhcp ? 'true' : 'false' : <ActivityIndicator/>}
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={styles.settingMenu}>
-                                    <View style={[styles.settingInnerMenu]}>
-                                        <Text
-                                            style={[
-                                                styles.settingContentText,
-                                                {
-                                                    fontSize: 15,
-                                                    marginLeft: '5%',
-                                                },
-                                            ]}
-                                        >
-                                            Address
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                color: 'white',
-                                                marginRight: '5%',
-                                            }}
-                                        >
-                                            {productData ? productData.network.address: <ActivityIndicator/>}
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={styles.settingMenu}>
-                                    <View style={[styles.settingInnerMenu]}>
-                                        <Text
-                                            style={[
-                                                styles.settingContentText,
-                                                {
-                                                    fontSize: 15,
-                                                    marginLeft: '5%',
-                                                },
-                                            ]}
-                                        >
-                                            Gateway
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                color: 'white',
-                                                marginRight: '5%',
-                                            }}
-                                        >
-                                            {productData ? productData.network.gateway: <ActivityIndicator/>}
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={styles.settingMenu}>
-                                    <View style={[styles.settingInnerMenu, { borderBottomWidth: 0 }]}>
-                                        <Text
-                                            style={[
-                                                styles.settingContentText,
-                                                {
-                                                    fontSize: 15,
-                                                    marginLeft: '5%',
-                                                },
-                                            ]}
-                                        >
-                                            DNS
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                color: 'white',
-                                                marginRight: '5%',
-                                            }}
-                                        >
-                                            {productData ? productData.network.dns: <ActivityIndicator/>}
-                                        </Text>
-                                    </View>
-                                </View>
-                                <TouchableOpacity
-                                    style={{ alignItems: 'center' }}
-                                    onPress={() => {
-                                        setIsFolder(true)
-                                    }}
-                                >
-                                    <Icon
-                                        name='chevron-up-outline'
-                                        style={{
-                                            color: '#92A2D9',
-                                            fontSize: 20,
-                                        }}
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        )}
+            <Image
+                source={require('../../../assets/image/product.png')}
+                style={{
+                    resizeMode: 'contain',
+                    width: '70%',
+                    marginVertical: '10%',
+                }}
+            />
+            <ScrollView style={[styles.scroll_style]} contentContainerStyle={[styles.scroll_content]}>
+                <View style={[styles.box, styles.box_setting]}>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name, styles.fontBold]}>제품명</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.productName : '-'}</Text>
+                        {/* <Text style={[styles.text_val]}>{productData.productName}</Text> */}
                     </View>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Version</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.version : '-'}</Text>
+                    </View>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Serial</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.serial : '-'}</Text>
+                    </View>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Information</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.information : '-'}</Text>
+                    </View>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Location</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.location : '-'}</Text>
+                    </View>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Email</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.email : '-'}</Text>
+                    </View>
+                    <View style={[styles.list]}>
+                        <Text style={[styles.text_name]}>Hostname</Text>
+                        <Text style={[styles.text_val]}>{isLoad ? productData.hostname : '-'}</Text>
+                    </View>
+                    {isFolder && (
+                        <TouchableOpacity style={[styles.list, styles.list_end]} onPress={() => setIsFolder(false)}>
+                            <Text style={[styles.text_name]}>Network</Text>
+                            <Icon
+                                name='chevron-down-outline'
+                                style={[
+                                    styles.icon_arrow,
+                                    {
+                                        position: 'absolute',
+                                        left: '45%',
+                                        bottom: 0,
+                                    },
+                                ]}
+                            />
+                        </TouchableOpacity>
+                    )}
+                    {!isFolder && (
+                        <>
+                            <View style={[styles.list]}>
+                                <Text style={[styles.text_name]}>DHCP</Text>
+                                <Text style={[styles.text_val]}>{isLoad ? (productData.network.dhcp ? 'true' : 'false') : '-'}</Text>
+                            </View>
+                            <View style={[styles.list]}>
+                                <Text style={[styles.text_name]}>Address</Text>
+                                <Text style={[styles.text_val]}>{isLoad ? productData.network.address : '-'}</Text>
+                            </View>
+                            <View style={[styles.list]}>
+                                <Text style={[styles.text_name]}>Gateway</Text>
+                                <Text style={[styles.text_val]}>{isLoad ? productData.network.gateway : '-'}</Text>
+                            </View>
+                            <View style={[styles.list]}>
+                                <Text style={[styles.text_name]}>DNS</Text>
+                                <Text style={[styles.text_val]}>{isLoad ? productData.network.dns : '-'}</Text>
+
+                            </View>
+                            <TouchableOpacity
+                                style={[styles.list, styles.list_end, { justifyContent: 'center' }]}
+                                onPress={() => {
+                                    setIsFolder(true)
+                                }}
+                            >
+                                <Icon name='chevron-up-outline' style={[styles.icon_arrow]} />
+                            </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>
