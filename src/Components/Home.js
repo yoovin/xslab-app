@@ -8,8 +8,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Dialog from "react-native-dialog"
 import Swiper from 'react-native-swiper'
 import { WithLocalSvg } from 'react-native-svg'
-import { swiperScrolling, BmcTemperature, FanData } from './recoil/atom'
-import { useSetRecoilState, useRecoilState } from 'recoil'
+import { swiperScrolling, BmcTemperature, FanData, Fahrenheit } from './recoil/atom'
+import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import styles from './Styles'
@@ -53,6 +53,7 @@ const Home = () => {
     const [powerConsumption, setpowerConsumption] = useState(0)
 
     const [bmcTemperature, setBmcTemperature] = useRecoilState(BmcTemperature)
+    const [isFahrenheit, setIsFahrenheit] = useRecoilState(Fahrenheit)
     const [nodeTemperatures, setNodeTemperatures] = useState([])
     const [fanData, setFanData] = useRecoilState(FanData)
 
@@ -208,14 +209,24 @@ const Home = () => {
     /**
      *  node의 온도값을 가져와서 설정한다.
      */
-    const getTemperature = () => {
+    const getTemperature = async () => {
         console.log('온도 받아옴')
-        axios.get('/api/temperature')
-        .then(({data}) => {
-            setBmcTemperature(data.bmc.toFixed(1))
-            setNodeTemperatures(data.node)
-        })
+        const res = await axios.get('/api/temperature')
+        return res.data
     }
+
+    const temperatures = useQuery('temperatures', getTemperature)
+    
+    /**
+     *  팬 데이터를 가져와서 설정한다.
+     */
+    const getFan = async () => {
+        console.log('팬 rpm 받아옴')
+        const res = await axios.get('/api/fan')
+        return res.data
+    }
+
+    const fans = useQuery('fans', getFan)
 
     /**
      *  노드의 전력값을 가져와서 설정한다.
@@ -228,16 +239,6 @@ const Home = () => {
         })
     }
 
-    /**
-     *  팬 데이터를 가져와서 설정한다.
-     */
-    const getFan = () => {
-        console.log('팬 rpm 받아옴')
-        axios.get('/api/fan')
-        .then(({data}) => {
-            setFanData(data)
-        })
-    }
 
     const nodePowerMutation = useMutation(
         option => axios.put(`/api/node/${option.nodeId}`, {power: option.working}),
@@ -299,13 +300,11 @@ const Home = () => {
 
         // info값 불러오기 (이부분 함수 작성하여 간략화 할 필요 있음.)
         getPowerConsumption()
-        getTemperature()
-        getFan()
         const intervalGet = setInterval(() => {
             refetch()
-            getTemperature()
+            temperatures.refetch()
+            fans.refetch()
             getPowerConsumption()
-            getFan()
         }, 3000) // 3초마다 온도 가져옴
         return () => clearInterval(intervalGet)
     }, [])
@@ -315,8 +314,23 @@ const Home = () => {
     }, [data])
 
     useEffect(() => {
+        if(temperatures.data){
+            setIsFahrenheit(temperatures.data.fahrenheit)
+            setBmcTemperature(temperatures.data.bmc.toFixed(1))
+            setNodeTemperatures(temperatures.data.node)
+        }
+    }, [temperatures.data])
+
+    useEffect(() => {
+        if(fans.data){
+            setFanData(fans.data)
+        }
+    }, [fans.data])
+
+
+    useEffect(() => {
         if(nodes.length > 0){
-            console.log('온도 설정')
+            console.log('노드 온도 설정')
             setNodes(val => {
                 const newVal = [...val]
                 newVal.map(item => {
@@ -442,7 +456,7 @@ const Home = () => {
                         <Text style={{fontWeight:'bold', marginBottom:'5%'}}>온도</Text>
                             <View style={{alignItems: 'center'}}>
                             <MaterialCommunityIcons name="thermometer-low" size={20} color='#455053'></MaterialCommunityIcons>
-                                    <Text style={[styles.infoViewText, {margin: 0}]}>{bmcTemperature}°C</Text>
+                                    <Text style={[styles.infoViewText, {margin: 0}]}>{bmcTemperature}{isFahrenheit ? '°F' : '°C'}</Text>
                                     <Text style={[styles.infoViewText, {margin: 0}]}>내부 온도</Text>
                             </View>
                     </View>
@@ -553,7 +567,7 @@ const Home = () => {
                     }}
                     onLongPress={() => {setIsMulti(true)}}>
                         <Text style={styles.nodeText}>노드 #{item.nodeid}</Text>
-                        <Text style={styles.nodeText}>{item.temp}°C</Text>
+                        <Text style={styles.nodeText}>{item.temp}{isFahrenheit ? '°F' : '°C'}</Text>
                         {isMulti &&
                         <BouncyCheckbox
                         size={10}

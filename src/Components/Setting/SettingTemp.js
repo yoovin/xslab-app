@@ -6,8 +6,8 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import axios from 'axios'
 
 import styles from '../Styles'
-import { swiperScrolling, BmcTemperature } from '../recoil/atom'
-import { useSetRecoilState, useRecoilValue } from 'recoil'
+import { swiperScrolling, BmcTemperature, Fahrenheit } from '../recoil/atom'
+import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import TopNavi from './TopNavi'
 
@@ -15,10 +15,10 @@ import TopNavi from './TopNavi'
 const SettingTemp = ({navigation}) => {
     const queryClient = useQueryClient()
     const [currentGoalTemp, setCurrentGoalTemp] = useState(0)
-    const [currentWarningTemp, setCurrentWarningTemp] = useState(0)
+    const [alertTemp, setAlertTemp] = useState(0)
     
     // 섭씨, 화씨 여부 참일시 화씨
-    const [isTempUnitFah, setIsTempUnitFah] = useState(false)
+    const [isFahrenheit, setIsFahrenheit] = useRecoilState(Fahrenheit)
     const bmcTemperature = useRecoilValue(BmcTemperature)
 
     const getAlertTemp = async () => {
@@ -27,7 +27,34 @@ const SettingTemp = ({navigation}) => {
         return res.data
     }
 
-    const alertTemp = useQuery('alertTemp', getAlertTemp)
+    const curAlertTemp = useQuery('curAlertTemp', getAlertTemp)
+
+    /**
+     * 
+     */
+    const changeAlertTempMutation = useMutation(
+        option => axios.put('/api/temperature/alert', option),
+            {
+                onSuccess: () => {
+                    // 데이터 업데이트 성공 시 캐시를 갱신합니다.
+                    queryClient.resetQueries("curAlertTemp")
+                },
+            }
+        )
+
+    /**
+     * 섭씨, 화씨 값 변경 뮤테이션
+     */
+    const changeTempUnitMutation = useMutation(
+        fahrenheit => axios.put('/api/temperature/unit', {fahrenheit}),
+            {
+                onSuccess: () => {
+                    // 데이터 업데이트 성공 시 캐시를 갱신합니다.
+                    queryClient.resetQueries("temperatures")
+                    queryClient.resetQueries("curAlertTemp")
+                },
+            }
+        )
 
     const currentGoalTempPrompt = () => {
         Alert.prompt("서버 목표 온도", "", [
@@ -49,30 +76,23 @@ const SettingTemp = ({navigation}) => {
     }
 
     useEffect(() => {
-        // setInterval(() => {
-        //     setCurrentGoalTemp(n => n+1)
-        // }, 1000)
+        if(curAlertTemp.data){
+            setAlertTemp(curAlertTemp.data.value)
+        }
     }, [])
 
     useEffect(() => {
-        if(alertTemp.data){
-            setCurrentWarningTemp(alertTemp.data.value)
-            setIsTempUnitFah(alertTemp.data.fahrenheit)
-        }
-    }, [alertTemp.data])
+    }, [curAlertTemp.data])
 
     return (
         <SafeAreaView style={{width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center', paddingTop: '5%'}}>
             <TopNavi navigation={navigation} title="온도"/>
-            {/* <View style={{width: '80%', alignItems:'flex-start'}}>
-                <Text style={styles.settingTitleText}>설정</Text>
-            </View> */}
             <View style={styles.settingView}>
                 <View style={{flex:1}}>
                     <Text style={[styles.textBase, styles.fontBold, {color: 'white'}]}>서버 목표 온도</Text>
                     <View style={{marginVertical: 30}}>
-                        <Text style={styles.settingContentText}>현재 온도: {bmcTemperature}°C</Text>
-                        <Text style={styles.settingContentText}>목표 온도: {currentGoalTemp}°C</Text>
+                        <Text style={styles.settingContentText}>현재 온도: {bmcTemperature}{isFahrenheit ? '°F' : '°C'}</Text>
+                        <Text style={styles.settingContentText}>목표 온도: {currentGoalTemp}{isFahrenheit ? '°F' : '°C'}</Text>
                         {/* <TextInput value={currentGoalTemp} onChange={setCurrentGoalTemp} placeholder=""/> */}
                     </View>
                 </View>
@@ -101,7 +121,6 @@ const SettingTemp = ({navigation}) => {
                         
                     }}
                     onPress={(num) => {
-                        
                         console.log(num)
                         console.log("눌러짐")
                     }}
@@ -121,7 +140,7 @@ const SettingTemp = ({navigation}) => {
                     <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={currentGoalTempPrompt}>
-                        <Text style={styles.tempSliderGuideText}>직접 입력하려면 클릭하세요</Text>
+                        <Text style={[styles.tempSliderGuideText]}>직접 입력하려면 클릭하세요</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.confirmButton}
                     activeOpacity={0.8}>
@@ -134,11 +153,11 @@ const SettingTemp = ({navigation}) => {
                     <Text style={[styles.textBase, {color: 'white'}]}>온도 경고 표시 기준</Text>
                     <View style={{marginVertical: 20, alignItems:'center'}}>
                         <Text style={styles.settingContentText}>현재 경고 표시 기준</Text>
-                        <Text style={styles.settingContentText}>{alertTemp.data && alertTemp.data.value}°C</Text>
+                        <Text style={styles.settingContentText}>{curAlertTemp.data && curAlertTemp.data.value}{isFahrenheit ? '°F' : '°C'}</Text>
                     </View>
                 </View>
                 <View style={{flex: 1, justifyContent: 'space-around', alignItems:'center'}}>
-                    <RadialSlider value={currentWarningTemp} min={0} max={100}
+                    <RadialSlider value={curAlertTemp.data && curAlertTemp.data.value} min={0} max={100}
                     radius={70}
                     centerContentStyle={styles.tempSliderCenter}
                     valueStyle={styles.tempSliderValueText}
@@ -147,13 +166,12 @@ const SettingTemp = ({navigation}) => {
                     thumbColor='black'
                     thumbBorderWidth={0}
                     linearGradient = {
-                        currentWarningTemp > 50 
+                        alertTemp > 50 
                         ? [ { offset: '0%', color:'#26B8C7' }, { offset: '100%', color: '#D63170' }] 
                         : [ { offset: '0%', color:'#26B8C7' }, { offset: '100%', color: '#9b3a71' }] 
                     }
                     onChange={(num) => {
-                        
-                        setCurrentWarningTemp(num)
+                        setAlertTemp(num)
                     }}
                     onPress={(num) => {
                         console.log(num)
@@ -167,6 +185,9 @@ const SettingTemp = ({navigation}) => {
                     sliderWidth={5}
                     />
                     <TouchableOpacity style={styles.confirmButton}
+                    onPress={() => {
+                        changeAlertTempMutation.mutate({fahrenheit: isFahrenheit, value: alertTemp})
+                    }}
                     activeOpacity={0.8}>
                         <Text style={{color:'white'}}>확인</Text>
                     </TouchableOpacity>
@@ -194,33 +215,16 @@ const SettingTemp = ({navigation}) => {
                 <Dialog.Button label="아니오" color="black" onPress={()=>setIsLogoutButtonPress(false)}></Dialog.Button>
         </Dialog.Container> */}
 
-<View style={{width: '100%', alignItems: 'center'}}>
+                {/* 온도 단위 설정 */}
+                <View style={{width: '90%', justifyContent: 'flex-start'}}>
+                    <Text style={[{color: 'white'}]}>온도 단위</Text>
+                </View>
+                <View style={{width: '100%', alignItems: 'center'}}>
                     <View style={[styles.settingList, {width: '90%'}]}>
-                        {/* <View style={styles.settingMenu}>
-                            <View style={[styles.settingInnerMenu]}>
-                                <Text
-                                    style={[
-                                        styles.settingContentText,
-                                        styles.textBase,
-                                        {marginLeft: '5%', marginVertical: 0}
-                                    ]}
-                                >
-                                    제품명
-                                </Text>
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        marginRight: '5%',
-                                    }}
-                                >
-                                    aa
-                                </Text>
-                            </View>
-                        </View> */}
                         <TouchableOpacity
                             style={styles.settingMenu}
                             onPress={() => {
-
+                                changeTempUnitMutation.mutate(false)
                             }}
                         >
                             <View
@@ -237,13 +241,13 @@ const SettingTemp = ({navigation}) => {
                                 >
                                     섭씨(°C)
                                 </Text>
-                                { !isTempUnitFah && <Icon name='checkmark-sharp' size={25} color='#92A2D9'/>}
+                                {!isFahrenheit && <Icon name='checkmark-sharp' size={25} color='#92A2D9'/>}
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.settingMenu}
                             onPress={() => {
-
+                                changeTempUnitMutation.mutate(true)
                             }}
                         >
                             <View
@@ -260,7 +264,7 @@ const SettingTemp = ({navigation}) => {
                                 >
                                     화씨(°F)
                                 </Text>
-                                {isTempUnitFah && <Icon name='checkmark-sharp' size={25} color='#92A2D9'/>}
+                                {isFahrenheit && <Icon name='checkmark-sharp' size={25} color='#92A2D9'/>}
                             </View>
                         </TouchableOpacity>
                     </View>

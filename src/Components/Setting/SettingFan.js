@@ -24,7 +24,6 @@ const SettingFan = ({ navigation }) => {
     const [isTyping, setIsTyping] = useState(false)
     const inputVal = useRef(0)
 
-    const [fanRpms, setFanRpms] = useState([])
     const [animationRotate, setAnimationRotate] = useState([])
     const [fanAniWorks, setFanAniWorks] = useState([false, false, false, false])
     const fanAnimations = [
