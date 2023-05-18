@@ -176,12 +176,12 @@ const SettingFan = ({ navigation }) => {
                                             <MaterialCommunityIcons
                                                 name='fan'
                                                 size={30}
-                                                color={fanAniWorks[idx] && '#5d66a4'}
+                                                color={fanAniWorks[idx] ? '#B1B9DE' : '#DCDDDD'}
                                             ></MaterialCommunityIcons>
                                         </Animated.View>
                                     )}
                                     {/* Fan RPM 480이면 멈춰있는상태같음 */}
-                                    <Text style={[styles.infoViewText, { marginTop: 5 }, fanAniWorks[idx] && { color: '#5d66a4' }]}>
+                                    <Text style={[styles.infoViewText, { marginTop: 5 }, fanAniWorks[idx] ? { color: '#B1B9DE' } : { color: '#DCDDDD' }]}>
                                         {item > 480 ? item : '-'}
                                     </Text>
                                 </View>

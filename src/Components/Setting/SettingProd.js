@@ -1,17 +1,15 @@
-import { View, Image, Text, TouchableOpacity, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native'
+import { View, Image, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import styles from '../Styles'
 import TopNavi from './TopNavi'
-import { useQuery } from 'react-query'
 
 /**
  * ===== Todo =====
  * 불러오는게 오래걸리는데 불러오는동안 로딩창 혹은 스켈레톤 띄우기
  * 반복되는 구문 줄이기
- * 데이터 캐싱
  */
 
 const SettingProd = ({ navigation }) => {
@@ -20,14 +18,14 @@ const SettingProd = ({ navigation }) => {
     const [productData, setProductData] = useState({})
 
     useEffect(() => {
-        axios.get('/api/product')
+        axios
+            .get('/api/product')
             .then(({ data }) => {
                 setProductData(data)
             })
             .then(() => {
                 setIsLoad(true)
             })
-            // .catch((err) => console.error(err))
     }, [])
 
     return (
@@ -106,7 +104,6 @@ const SettingProd = ({ navigation }) => {
                             <View style={[styles.list]}>
                                 <Text style={[styles.text_name]}>DNS</Text>
                                 <Text style={[styles.text_val]}>{isLoad ? productData.network.dns : '-'}</Text>
-
                             </View>
                             <TouchableOpacity
                                 style={[styles.list, styles.list_end, { justifyContent: 'center' }]}
@@ -116,6 +113,8 @@ const SettingProd = ({ navigation }) => {
                             >
                                 <Icon name='chevron-up-outline' style={[styles.icon_arrow]} />
                             </TouchableOpacity>
+                        </>
+                    )}
                 </View>
             </ScrollView>
         </SafeAreaView>

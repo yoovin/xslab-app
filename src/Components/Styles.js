@@ -114,10 +114,9 @@ export default StyleSheet.create({
     */
 
     infoContainer: {
-        flex: 3,
+        // height: '100%',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        flex: 3,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-around',
@@ -127,8 +126,11 @@ export default StyleSheet.create({
     },
 
     infoView: {
-        position: 'absolute',
-        padding: '10%',
+        // position: 'absolute',
+        width: '43%',
+        height:'20%',
+        margin: '3%',
+        padding: '5%',
         borderRadius: 10,
         backgroundColor: '#ffffff',
     },
@@ -138,14 +140,14 @@ export default StyleSheet.create({
     },
 
     infoViewText: {
-        marginVertical: '1%',
+        marginVertical: '5%',
         fontSize: RFPercentage(1.7),
     },
 
     nodeContainer: {
-        flex: 5,
         flexDirection: 'column',
         flexWrap: 'wrap',
+        // height: '100%',
         alignItems: 'flex-start',
         paddingHorizontal: '5%',
         backgroundColor: '#F6F6F9',
@@ -192,6 +194,8 @@ export default StyleSheet.create({
 
     onOffButton: {
         flex: 1,
+        // width: '100%',
+        // height: '100%',
         alignItems: 'center',
     },
 

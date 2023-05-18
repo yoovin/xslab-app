@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import axios from 'axios'
 
 import styles from '../Styles'
-import { swiperScrolling, BmcTemperature, Fahrenheit } from '../recoil/atom'
+import { BmcTemperature, Fahrenheit, AlertTemperature } from '../recoil/atom'
 import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import TopNavi from './TopNavi'
@@ -14,20 +14,16 @@ import TopNavi from './TopNavi'
 
 const SettingTemp = ({navigation}) => {
     const queryClient = useQueryClient()
-    const [currentGoalTemp, setCurrentGoalTemp] = useState(0)
-    const [alertTemp, setAlertTemp] = useState(0)
+    const [currentGoalTemp, setCurrentGoalTemp] = useState(30)
     
     // 섭씨, 화씨 여부 참일시 화씨
     const [isFahrenheit, setIsFahrenheit] = useRecoilState(Fahrenheit)
     const bmcTemperature = useRecoilValue(BmcTemperature)
+    // 현재 알림설정 온도
+    const alertTemperature = useRecoilValue(AlertTemperature)
+    const [alertTemp, setAlertTemp] = useState(alertTemperature)
 
-    const getAlertTemp = async () => {
-        const res = await axios.get('/api/temperature/alert')
-        console.log('경고온도불러옴')
-        return res.data
-    }
-
-    const curAlertTemp = useQuery('curAlertTemp', getAlertTemp)
+    
 
     /**
      * 
@@ -76,13 +72,9 @@ const SettingTemp = ({navigation}) => {
     }
 
     useEffect(() => {
-        if(curAlertTemp.data){
-            setAlertTemp(curAlertTemp.data.value)
-        }
+        // setAlertTemp(AlertTemperature)
+        console.log(alertTemp)
     }, [])
-
-    useEffect(() => {
-    }, [curAlertTemp.data])
 
     return (
         <SafeAreaView style={{width: '100%', height: '100%', backgroundColor: '#363D58', alignItems: 'center', paddingTop: '5%'}}>
@@ -97,7 +89,7 @@ const SettingTemp = ({navigation}) => {
                     </View>
                 </View>
                 <View style={{flex: 1, justifyContent: 'space-around', alignItems:'center'}}>
-                    <RadialSlider value={currentGoalTemp} min={0} max={100}
+                    {/* <RadialSlider value={currentGoalTemp} min={0} max={100}
                     radius={70}
                     sliderWidth={5}
                     style={{bottom: 10}}
@@ -136,28 +128,10 @@ const SettingTemp = ({navigation}) => {
                     isHideButtons={true}
                     // isHideTailText={true}
                     unit="°"
-                    />
-                    <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={currentGoalTempPrompt}>
-                        <Text style={[styles.tempSliderGuideText]}>직접 입력하려면 클릭하세요</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.confirmButton}
-                    activeOpacity={0.8}>
-                        <Text style={{color:'white'}}>확인</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.settingView}>
-                <View style={{flex:1, marginVertical: 10, alignItems:'center'}}>
-                    <Text style={[styles.textBase, {color: 'white'}]}>온도 경고 표시 기준</Text>
-                    <View style={{marginVertical: 20, alignItems:'center'}}>
-                        <Text style={styles.settingContentText}>현재 경고 표시 기준</Text>
-                        <Text style={styles.settingContentText}>{curAlertTemp.data && curAlertTemp.data.value}{isFahrenheit ? '°F' : '°C'}</Text>
-                    </View>
-                </View>
-                <View style={{flex: 1, justifyContent: 'space-around', alignItems:'center'}}>
-                    <RadialSlider value={curAlertTemp.data && curAlertTemp.data.value} min={0} max={100}
+                    /> */}
+                    <RadialSlider 
+                    value={currentGoalTemp} 
+                    min={0} max={100}
                     radius={70}
                     centerContentStyle={styles.tempSliderCenter}
                     valueStyle={styles.tempSliderValueText}
@@ -171,7 +145,63 @@ const SettingTemp = ({navigation}) => {
                         : [ { offset: '0%', color:'#26B8C7' }, { offset: '100%', color: '#9b3a71' }] 
                     }
                     onChange={(num) => {
+                        setCurrentGoalTemp(num)
+                    }}
+                    onComplete={(num) => {
+                        console.log(num)
+                    }}
+                    onPress={(num) => {
+                        console.log(num)
+                        console.log("눌러짐")
+                    }}
+                    isHideLines={true}
+                    isHideTitle={true}
+                    isHideSubtitle={true}
+                    isHideTailText={true}
+                    unit="°"
+                    sliderWidth={5}
+                    />
+                    {/* <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={currentGoalTempPrompt}>
+                        <Text style={[styles.tempSliderGuideText]}>직접 입력하려면 클릭하세요</Text>
+                    </TouchableOpacity> */}
+                    <TouchableOpacity style={styles.confirmButton}
+                    activeOpacity={0.8}>
+                        <Text style={{color:'white'}}>확인</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.settingView}>
+                <View style={{flex:1, marginVertical: 10, alignItems:'center'}}>
+                    <Text style={[styles.textBase, {color: 'white'}]}>온도 경고 표시 기준</Text>
+                    <View style={{marginVertical: 20, alignItems:'center'}}>
+                        <Text style={styles.settingContentText}>현재 경고 표시 기준</Text>
+                        <Text style={styles.settingContentText}>{alertTemperature}{isFahrenheit ? '°F' : '°C'}</Text>
+                    </View>
+                </View>
+                <View style={{flex: 1, justifyContent: 'space-around', alignItems:'center'}}>
+                    <RadialSlider 
+                    value={alertTemp} 
+                    min={0} max={100}
+                    radius={70}
+                    centerContentStyle={styles.tempSliderCenter}
+                    valueStyle={styles.tempSliderValueText}
+                    unitStyle={styles.tempSliderValueText}
+                    thumbRadius={5}
+                    thumbColor='black'
+                    thumbBorderWidth={0}
+                    linearGradient = {
+                        alertTemp > 50 
+                        ? [ { offset: '0%', color:'#26B8C7' }, { offset: '100%', color: '#D63170' }] 
+                        : [ { offset: '0%', color:'#26B8C7' }, { offset: '100%', color: '#9b3a71' }] 
+                    }
+                    onChange={(num) => {
+                        console.log(num)
                         setAlertTemp(num)
+                    }}
+                    onComplete={(num) => {
+                        console.log(num)
                     }}
                     onPress={(num) => {
                         console.log(num)

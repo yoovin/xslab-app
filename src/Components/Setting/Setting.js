@@ -7,6 +7,8 @@ import styles from '../Styles'
 import { swiperScrolling, BmcTemperature } from '../recoil/atom'
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from 'axios'
 
 
 const Setting = ({navigation}) => {
@@ -178,7 +180,7 @@ const Setting = ({navigation}) => {
                     로그아웃 하시겠습니까?
                 </Dialog.Description>
                 <Dialog.Button label="예" color="black" 
-                onPress={() => {
+                onPress={async () => {
                     setIsLogoutButtonPress(false)
                     navigation.reset({routes: [{name: "Logout"}]})
                 }}></Dialog.Button>

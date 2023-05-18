@@ -20,6 +20,9 @@ import SettingProd from './src/Components/Setting/SettingProd'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
+/**
+ * {"detail": "Authentication failed"}로 에러 받을때 처리 방법도 생각해봐야할듯
+ */
 
 const Stack = createNativeStackNavigator()
 const queryClient = new QueryClient()
@@ -113,7 +116,6 @@ const App = () => {
                     <Stack.Group screenOptions={{headerShown: false}}>
                         <Stack.Screen name="Login" component={Login}/>
                         <Stack.Screen name="Main" component={Main}/>
-                        {/* <Stack.Screen name="Setting" component={Setting}/> */}
                         <Stack.Screen name="SettingTemp" component={SettingTemp}/>
                         <Stack.Screen name="SettingFan" component={SettingFan}/>
                         <Stack.Screen name="SettingProd" component={SettingProd}/>
