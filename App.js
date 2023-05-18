@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { RecoilRoot } from 'recoil'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import jwtDecode from 'jwt-decode'
 // import Toast from 'react-native-toast-message'
 // import SplashScreen from 'react-native-splash-screen'
 // import CodePush from 'react-native-code-push'
@@ -53,6 +54,9 @@ axios.interceptors.response.use(
 
                     // 토큰교체 실패시(리프레시토큰 만료) 강제 로그아웃 시켜야함
                 })
+                .catch(err => {
+                    
+                })
                 // isTokenRefreshing = false
                 return axios(originalRequest)
             }
@@ -72,9 +76,16 @@ const App = () => {
     const checkLogin = async () => {
         console.log('로그인 체크')
         const accessToken = await AsyncStorage.getItem('access_token')
-        console.log(accessToken)
-        if(accessToken && AsyncStorage.getItem('refresh_token') && AsyncStorage.getItem('server_address')){
-            // 인증정보가 모두 있어야 자동로그인 가능하게끔 구현
+        const refreshToken = await AsyncStorage.getItem('refresh_token')
+        console.log(refreshToken)
+        console.log(jwtDecode(refreshToken).exp)
+        console.log(new Date().getTime())
+
+        // 가지고 있는 리프레시 토큰이 만료되었는지 확인
+        const isExfired = jwtDecode(refreshToken).exp < new Date().getTime() / 1000
+        console.log(isExfired)
+        if(!isExfired && accessToken && refreshToken && AsyncStorage.getItem('server_address')){
+            // 리프레시 토큰이 만료되지않고 인증정보가 모두 있어야 자동로그인 가능하게끔 구현
             axios.defaults.headers.common["Authorization"]  = `Bearer ${accessToken}`
             axios.defaults.baseURL = await AsyncStorage.getItem('server_address')
             return true
