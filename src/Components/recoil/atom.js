@@ -10,6 +10,11 @@ export const swiperScrolling = atom({
     default: true
 })
 
+export const FanData = atom({
+    key: 'FanData',
+    default: {}
+})
+
 export const currentGoalTemp = atom({
     key: 'currentGoalTemp',
     default: 0

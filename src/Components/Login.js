@@ -8,9 +8,10 @@ import {
     Keyboard,
 } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import styles from "./Styles"
 import axios from "axios"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const Login = ({ navigation }) => {
     const [username, setUsername] = useState("vraptorbmc") // 테스트용
@@ -24,10 +25,12 @@ const Login = ({ navigation }) => {
             username: username,
             password: password,
         })
-        .then(({data}) => {
-            // 로그인 성공 시 엑세스토큰은 헤더로 저장하고 리프레시토큰은 async로 저장합니다.
+        .then(async ({data}) => {
+            // 로그인 성공 시 엑세스토큰은 헤더로 저장하고 토큰들을 async로 저장합니다.
             // 서버 주소도 axios에 defaults 값으로 넣어줍니다.
-            console.log(data)
+            await AsyncStorage.setItem('access_token', data.access_token)
+            await AsyncStorage.setItem('refresh_token', data.refresh_token)
+            await AsyncStorage.setItem('server_address', serverAddr)
             axios.defaults.headers.common["Authorization"]  = `Bearer ${data.access_token}`
             axios.defaults.baseURL = serverAddr
             navigation.reset({routes: [{name: 'Main'}]})
@@ -48,7 +51,7 @@ const Login = ({ navigation }) => {
 
             setDisable(false);
         })
-    };
+    }
 
     return (
         <KeyboardAwareScrollView

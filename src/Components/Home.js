@@ -8,7 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Dialog from "react-native-dialog"
 import Swiper from 'react-native-swiper'
 import { WithLocalSvg } from 'react-native-svg'
-import { swiperScrolling, BmcTemperature } from './recoil/atom'
+import { swiperScrolling, BmcTemperature, FanData } from './recoil/atom'
 import { useSetRecoilState, useRecoilState } from 'recoil'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
@@ -16,6 +16,7 @@ import styles from './Styles'
 import lightningIcon from '../../assets/image/lightning.svg'
 import checkIcon from '../../assets/image/xmascore.svg'
 import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 /*
     ===== TODOS =====
@@ -24,6 +25,17 @@ import axios from 'axios'
 
 
 const Home = () => {
+    const checkLogin = async () => {
+        console.log('Async에')
+        const keys = await AsyncStorage.getAllKeys()
+        console.log(keys)
+        for(let key of keys){
+            const item = await AsyncStorage.getItem(key) 
+            console.log(`"${key}": "${item}"`)
+            // console.log()
+        }
+    }
+
     const queryClient = useQueryClient()
     const [mounted, setMounted] = useState(false) // 초기 설정을 위한 state
     const [isMulti, setIsMulti] = useState(false)
@@ -42,7 +54,7 @@ const Home = () => {
 
     const [bmcTemperature, setBmcTemperature] = useRecoilState(BmcTemperature)
     const [nodeTemperatures, setNodeTemperatures] = useState([])
-    const [fanRpms, setFanRpms] = useState([])
+    const [fanData, setFanData] = useRecoilState(FanData)
 
 
     const [isInfoSelected, setIsInfoSelected] = useState(false) // info 블럭이 선택되어 풀스크린 여부
@@ -216,11 +228,14 @@ const Home = () => {
         })
     }
 
+    /**
+     *  팬 데이터를 가져와서 설정한다.
+     */
     const getFan = () => {
         console.log('팬 rpm 받아옴')
         axios.get('/api/fan')
         .then(({data}) => {
-            setFanRpms(data.rpm)
+            setFanData(data)
         })
     }
 
@@ -320,36 +335,38 @@ const Home = () => {
 
 
     useEffect(() => {
-        for(let i = 0; i < fanRpms.length; i++){
-            if(fanRpms[i] > 480){
-                if(!fanAniWorks[i]){
-                    Animated.loop(
-                        Animated.timing(fanAnimations[i], {
-                            toValue: 1,
-                            duration: 2000,
-                            useNativeDriver: true,
-                            easing: Easing.linear
+        if(fanData.rpm){
+            for(let i = 0; i < fanData.rpm.length; i++){
+                if(fanData.rpm[i] > 480){
+                    if(!fanAniWorks[i]){
+                        Animated.loop(
+                            Animated.timing(fanAnimations[i], {
+                                toValue: 1,
+                                duration: 2000,
+                                useNativeDriver: true,
+                                easing: Easing.linear
+                            })
+                        ).start()
+                        // 애니메이션 실행중인것으로 체크
+                        setFanAniWorks(val => {
+                            const newVal = [...val]
+                            newVal[i] = true
+                            return newVal
                         })
-                    ).start()
-                    // 애니메이션 실행중인것으로 체크
+                    }
+                }else{
+                    // 팬이 돌고있지않으면 애니메이션 정지
+                    fanAnimations[i].stopAnimation()
+                    // 애니메이션 정지중인것으로 체크
                     setFanAniWorks(val => {
                         const newVal = [...val]
-                        newVal[i] = true
+                        newVal[i] = false
                         return newVal
                     })
                 }
-            }else{
-                // 팬이 돌고있지않으면 애니메이션 정지
-                fanAnimations[i].stopAnimation()
-                // 애니메이션 정지중인것으로 체크
-                setFanAniWorks(val => {
-                    const newVal = [...val]
-                    newVal[i] = false
-                    return newVal
-                })
             }
         }
-    }, [fanRpms])
+    }, [fanData])
 
     return (
         <View style={{flex:10}}>
@@ -398,6 +415,7 @@ const Home = () => {
             onPress={() => {
                     // pressInfo(1)
                     // getTemperature()
+                    checkLogin()
                 }}>
                 <Text style={{fontWeight:'bold', marginBottom:'5%'}}>데몬 연결</Text>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
@@ -445,7 +463,7 @@ const Home = () => {
         */}
         <Animated.View style={[styles.infoView, infoAnimationStyle(3)]}>
             <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {}}>
+            onPress={() => {AsyncStorage.clear()}}>
             <Text style={{fontWeight:'bold', marginBottom:'5%'}}>전력</Text>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                 <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
@@ -466,7 +484,7 @@ const Home = () => {
             <Text style={{fontWeight:'bold'}}>현재 팬 속도</Text>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
-                    {fanRpms.map((item, idx) => (
+                    {fanData.rpm && fanData.rpm.map((item, idx) => (
                         <View style={{justifyContent:'center', alignItems:'center'}}>
                             <Text style={[styles.infoViewText, {marginBottom: 5}]}>{idx+1}번 팬</Text>
                             <Animated.View style={{transform:[{rotate: animationRotate[idx]}]}}>
@@ -514,7 +532,6 @@ const Home = () => {
                             }
                         }}
                         />
-                        {/* <Text>  </Text> */}
                         <Text style={[styles.infoViewText, {marginHorizontal: '2%'}]}>전체 선택하기</Text>
                     </View>
                 }
@@ -542,8 +559,6 @@ const Home = () => {
                         size={10}
                         innerIconStyle={{size: 30}}
                         fillColor="rgba(0,0,0,0)"
-                        // unfillColor="#FFFFFF" 
-                        // innerIconStyle={{borderRadius: 5, borderWidth: 0}}
                         onPress={(isChecked) => {
                             if(isChecked){ // 체크되면
                                 setSelectedNode(state => {
@@ -559,45 +574,62 @@ const Home = () => {
                             }
                         }}
                         ref={ref => item.ref = ref}
-                        // ImageComponent={<WithLocalSvg width={30} height={30} asset={checkIcon}/>}
-                        // IconComponent={<Image source={require("../../assets/image/xmascore.png")} style={{width: 50, height: 50}}/>}
                         checkIconImageSource={require("../../assets/image/xmascore.png")}
-
                         />}
                     </TouchableOpacity>
                 ))}
             </ScrollView>
             {isMulti && 
             [
-            ,<TouchableOpacity style={[styles.nodeScrollView, {
-                // justifyContent: 'center',
+            ,<View style={[styles.nodeScrollView, {
+                flexDirection: 'row',
                 alignItems:'center',
-                height:'11%',
-                // paddingTop: 10,
+                height:'15%',
                 marginTop:0,
                 borderTopWidth:1,
                 borderTopColor:'#D9D9D9',
                 borderTopLeftRadius: 0,
                 borderTopRightRadius: 0,
-            }]}
-            onPress={() => {
-                if(selectedNode.length > 0){
-                    console.log(selectedNode)
-                    setIsNodeSelected(true)
-                }else{
-                    setIsMulti(false)
-                }
-            }}
-            activeOpacity={0.5}>
-                <Text style={[styles.nodeText, {marginVertical: 0, color: 'black'}]}>완료</Text>
-            </TouchableOpacity>
+                padding: '2%'
+            }]}>
+                <TouchableOpacity
+                style={styles.onOffButton}
+                onPress={() => {
+                    if(selectedNode.length > 0){
+                        console.log(selectedNode)
+                        setIsNodeSelected(true)
+                        setIsSelectedNodeOn(false)
+                    }else{
+                        setIsMulti(false)
+                    }
+                }}
+                activeOpacity={0.5}>
+                    <Text style={[{}]}>켜기</Text>
+                </TouchableOpacity>
+                <View style={{width: 1, height: '150%', backgroundColor: '#D9D9D9'}}></View>
+                <TouchableOpacity
+                style={styles.onOffButton}
+                onPress={() => {
+                    if(selectedNode.length > 0){
+                        console.log(selectedNode)
+                        setIsNodeSelected(true)
+                        setIsSelectedNodeOn(true)
+                    }else{
+                        setIsMulti(false)
+                    }
+                }}
+                activeOpacity={0.5}>
+                    <Text style={[{}]}>끄기</Text>
+                </TouchableOpacity>
+                
+            </View>
         ]}
         </View>
         <Dialog.Container visible={isNodeSelected} contentStyle={styles.dialog}>
                 <Dialog.Description>
                     {isSelectedNodeOn ? '선택한 노드의 전원을 종료하시겠습니까?' : '선택한 노드의 전원을 켜시겠습니까?'}
                 </Dialog.Description>
-                <Dialog.Button label="예" color="black" 
+                <Dialog.Button label="예" color="black"
                 onPress={async () => {
                     console.log(selectedNode)
                     if(isSelectedNodeOn){

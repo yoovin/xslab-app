@@ -6,15 +6,15 @@ import Styles from '../Styles'
 const TopNavi = ({navigation, title}) => {
     return (
         <View style={{
-                flex: 0.05,
+                // flex: 0.1,
                 width: '100%',
                 justifyContent: 'center',
                 paddingHorizontal: '3%',
             }}
         >
-            <View style={{flexDirection: 'row', alignItems: 'center',}}>
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <TouchableOpacity 
-                style={{flex:1, flexDirection: 'row', alignItems:'center'}}
+                style={{position:'absolute', left: '0%', flexDirection: 'row', alignItems:'center'}}
                 onPress={() => {navigation.pop()}}>
                     {/* 뒤로가기 버튼 */}
                     <Icon
@@ -24,7 +24,7 @@ const TopNavi = ({navigation, title}) => {
                     />
                     <Text style={{ color: '#92A2D9' }}>설정</Text>
                 </TouchableOpacity>
-                <Text style={[Styles.textLg, {flex:1.5, color: 'white' }]}>
+                <Text style={[Styles.textLg, {color: 'white', justifyContent: 'center'}]}>
                     {/* 타이틀 */}
                     {title}
                 </Text>
