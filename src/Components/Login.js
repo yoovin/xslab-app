@@ -17,7 +17,7 @@ const Login = ({ navigation }) => {
     const [username, setUsername] = useState("vraptorbmc") // 테스트용
     const [password, setPassword] = useState("1234") // 테스트용
     const [serverAddr, setServerAddr] = useState("http://192.168.0.124") // temporary variable
-    const [disable, setDisable] = useState(false);
+    const [disable, setDisable] = useState(false)
 
     const onLogin = async () => {
         setDisable(true);
@@ -49,7 +49,7 @@ const Login = ({ navigation }) => {
                 ]
             )
 
-            setDisable(false);
+            setDisable(false)
         })
     }
 
@@ -57,7 +57,7 @@ const Login = ({ navigation }) => {
         <KeyboardAwareScrollView
             style={{ flex: 1 }}
             contentContainerStyle={styles.loginScreen}
-            // onPress={() => Keyboard.dismiss()}
+            scrollEnabled={false}
         >
             <View style={styles.loginTitle}>
                 <Image
