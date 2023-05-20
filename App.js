@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView } from 'react-native'
+import { View, Text, SafeAreaView, Alert } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { NavigationContainer } from '@react-navigation/native'
@@ -82,12 +82,16 @@ const App = () => {
         const refreshToken = await AsyncStorage.getItem('refresh_token')
         console.log(refreshToken)
         console.log(jwtDecode(refreshToken).exp)
-        console.log(new Date().getTime())
+        console.log(new Date(1846695921).getTime())
 
         // 가지고 있는 리프레시 토큰이 만료되었는지 확인
         const isExfired = jwtDecode(refreshToken).exp < new Date().getTime() / 1000
         console.log(isExfired)
-        if(!isExfired && accessToken && refreshToken && AsyncStorage.getItem('server_address')){
+        if(accessToken && refreshToken && AsyncStorage.getItem('server_address')){
+            if(isExfired){ // 리프레시 토큰 만료
+                Alert.alert("로그아웃 되었습니다.", "다시 로그인 해주세요.")
+                return false
+            }
             // 리프레시 토큰이 만료되지않고 인증정보가 모두 있어야 자동로그인 가능하게끔 구현
             axios.defaults.headers.common["Authorization"]  = `Bearer ${accessToken}`
             axios.defaults.baseURL = await AsyncStorage.getItem('server_address')

@@ -351,7 +351,7 @@ const Home = () => {
                         <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
                             <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
                             <MaterialCommunityIcons name="transit-connection-variant" size={20} color='#455053'></MaterialCommunityIcons>
-                                    <Text style={styles.infoViewText}>5</Text>
+                                    <Text style={styles.infoViewText}>{power[0]}</Text>
                                     <Text style={styles.infoViewText}>연결</Text>
                             </View>
                         </View>
