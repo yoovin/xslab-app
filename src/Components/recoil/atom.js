@@ -25,6 +25,11 @@ export const BmcTemperature = atom({
     default: 0
 })
 
+export const AlertTemperature = atom({
+    key: 'AlertTemperature',
+    default: 0
+})
+
 export const Fahrenheit = atom({
     key: 'Fahrenheit',
     default: false

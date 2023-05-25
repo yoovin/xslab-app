@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, ScrollView, useWindowDimensions, Animated, Easing} from 'react-native'
+import { View, Text, TouchableOpacity, Image, ScrollView, Dimensions, Animated, Easing} from 'react-native'
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import BouncyCheckbox from "react-native-bouncy-checkbox"
 import Navi from './Navi'
@@ -8,7 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Dialog from "react-native-dialog"
 import Swiper from 'react-native-swiper'
 import { WithLocalSvg } from 'react-native-svg'
-import { swiperScrolling, BmcTemperature, FanData, Fahrenheit } from './recoil/atom'
+import { swiperScrolling, BmcTemperature, FanData, Fahrenheit, AlertTemperature } from './recoil/atom'
 import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
@@ -20,25 +20,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 /*
     ===== TODOS =====
-    ㅇ. 나중에 react query로 바꾸기
+    
 */
+
+const { width, height } = Dimensions.get('window')
 
 
 const Home = () => {
-    const checkLogin = async () => {
-        console.log('Async에')
-        const keys = await AsyncStorage.getAllKeys()
-        console.log(keys)
-        for(let key of keys){
-            const item = await AsyncStorage.getItem(key) 
-            console.log(`"${key}": "${item}"`)
-            // console.log()
-        }
-    }
-
     const queryClient = useQueryClient()
     const [mounted, setMounted] = useState(false) // 초기 설정을 위한 state
     const [isMulti, setIsMulti] = useState(false)
+    const [currentPage, setCurrentPage] = useState(0) // Home 화면 위아래 scroll
     /**
      * Home, Setting 사이 스크롤링 가능 여부
      */
@@ -53,13 +45,11 @@ const Home = () => {
     const [powerConsumption, setpowerConsumption] = useState(0)
 
     const [bmcTemperature, setBmcTemperature] = useRecoilState(BmcTemperature)
+    const [bmcHumidity, setBmcHumidity] = useState(0)
     const [isFahrenheit, setIsFahrenheit] = useRecoilState(Fahrenheit)
     const [nodeTemperatures, setNodeTemperatures] = useState([])
     const [fanData, setFanData] = useRecoilState(FanData)
-
-
-    const [isInfoSelected, setIsInfoSelected] = useState(false) // info 블럭이 선택되어 풀스크린 여부
-    const [selectedInfo, setSelectedInfo] = useState(null) // 눌린 info 블럭의 index
+    const [alertTemperature, setAlertTemperature] = useRecoilState(AlertTemperature)
 
     /* 
     ===== Node =====
@@ -69,16 +59,11 @@ const Home = () => {
     const [selectedNode, setSelectedNode] = useState([])
     // 선택한 노드의 전원 켜짐/꺼짐 여부
     const [isSelectedNodeOn, setIsSelectedNodeOn] = useState(false)
+    const [isNodePaging, setIsNodePaging] = useState(false)
 
     /*
     ===== Animation value =====
     */
-    const animations = [
-        useRef(new Animated.Value(0)).current,
-        useRef(new Animated.Value(0)).current,
-        useRef(new Animated.Value(0)).current,
-        useRef(new Animated.Value(0)).current
-    ]
 
     // Fan 개수는 4개로 고정해두었습니다.
     // 추후 서버 Fan 개수 수정 가능 시 변동적이게 만들어야함.
@@ -96,68 +81,7 @@ const Home = () => {
         false, false, false, false
     ])
 
-    const [animationValues, setAnimationValues] = useState({
-        tops: [],
-        lefts: [],
-        widths: [],
-        heights: [],
-        rollings:[]
-    })
-
     const [animationRotate, setAnimationRotate] = useState([])
-
-    // /**
-    //  * 
-    //  * @param {Number} index
-    //  * index에 맞는 애니메이션을 실행시킴
-    //  */
-    // const animateIn = (index) => {
-    //     Animated.timing(animations[index], {
-    //         toValue: 1,
-    //         duration: 500,
-    //         useNativeDriver: false,
-    //     }).start()
-    // }
-
-    // /**
-    //  * 
-    //  * @param {number} index
-    //  * index에 맞는 실행했던 애니메이션을 되돌림
-    //  */
-    // const animateOut = (index) => {
-    //     Animated.timing(animations[index], {
-    //         toValue: 0,
-    //         duration: 500,
-    //         useNativeDriver: false,
-    //     }).start()
-    // }
-
-    // /**
-    //  * 
-    //  * @param {number} index 
-    //  * info 블럭이 눌릴 시 index에 해당하는 애니메이션 실행
-    //  */
-    // const pressInfo = (index) => {
-    //     animateIn(index)
-    //     setSelectedInfo(index)
-    //     setIsInfoSelected(true)
-    //     setScrolling(false)
-    // }
-
-    /**
-     * 
-     * @param {number} index 
-     * @returns info 블럭의 animation 실행을 위한 style을 반환
-     */
-    const infoAnimationStyle = (index) => {
-        return [{
-            top: animationValues.tops[index], 
-            left: animationValues.lefts[index], 
-            width:animationValues.widths[index], 
-            height: animationValues.heights[index],
-            transform: [animationValues.rollings[index] ? {rotateY: animationValues.rollings[index]} : {rotateY: '0deg'}],
-        }, selectedInfo === index && {zIndex: 999}]
-    }
 
     const title = 
     <TouchableOpacity>
@@ -254,42 +178,30 @@ const Home = () => {
         nodePowerMutation.mutate({nodeId, working})
     }
 
+    /**
+     * node의 경고온도를 가져와서 설정한다.
+     */
+    const getAlertTemp = async () => {
+        const res = await axios.get('/api/temperature/alert')
+        console.log('경고온도불러옴')
+        return res.data
+    }
+
+    const alertTemp = useQuery('curAlertTemp', getAlertTemp)
+
+    /**
+     * 스크롤 정도를 확인하고 페이징 합니다.
+     * @param {*} event 
+     */
+    const handleScroll = (event) => {
+        const offsetY = event.nativeEvent.contentOffset.y;
+        const page = Math.floor(offsetY / height)
+        setCurrentPage(page);
+    }
+
     useEffect(() => {
         setMounted(true)
         // 애니메이션 값들을 넣어줌
-        const infoTops = ['12%', '12%', '28%', '28%'] // 디자인에 맞는 값들
-        const infoLefts = ['8%', '52%', '8%', '52%']
-
-        for(let i = 0; i < 4; i++){
-            setAnimationValues(value => ({
-                ...value,
-                tops: [...value.tops, animations[i].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [infoTops[i], '25%']
-                })],
-
-                lefts: [...value.lefts, animations[i].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [infoLefts[i], '8%']
-                })],
-
-                widths: [...value.widths, animations[i].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['40%', '84%']
-                })],
-
-                heights: [...value.heights, animations[i].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['15%', '50%']
-                })],
-
-                rollings: [...value.rollings, animations[i].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['0deg', '360deg']
-                })],
-            }))
-        }
-
         // Fan 애니메이션 각도 지정
         for(let i = 0; i < 4; i++){
             setAnimationRotate(val => ([...val, fanAnimations[i].interpolate({
@@ -305,6 +217,7 @@ const Home = () => {
             temperatures.refetch()
             fans.refetch()
             getPowerConsumption()
+            alertTemp.refetch()
         }, 3000) // 3초마다 온도 가져옴
         return () => clearInterval(intervalGet)
     }, [])
@@ -317,6 +230,7 @@ const Home = () => {
         if(temperatures.data){
             setIsFahrenheit(temperatures.data.fahrenheit)
             setBmcTemperature(temperatures.data.bmc.toFixed(1))
+            setBmcHumidity(Math.round(temperatures.data.external.humidity))
             setNodeTemperatures(temperatures.data.node)
         }
     }, [temperatures.data])
@@ -341,6 +255,12 @@ const Home = () => {
             })
         }
     }, [nodeTemperatures])
+
+    useEffect(() => {
+        if(alertTemp.data){
+            setAlertTemperature(alertTemp.data.value)
+        }
+    }, [alertTemp.data])
 
     useEffect(() => {
         // 선택된 노드들을 초기화해줌
@@ -383,141 +303,136 @@ const Home = () => {
     }, [fanData])
 
     return (
-        <View style={{flex:10}}>
+        <View style={{flex:1}}>
         <Navi title={title}/>
-        <View style={{flex: 7}}></View>
-        {/* {isInfoSelected && <TouchableOpacity style={styles.fullscreenBackground}
-        onPress={() => {
-            animateOut(selectedInfo)
-            setIsInfoSelected(false)
-            setSelectedInfo(null)
-            setScrolling(true)
-        }}
-        activeOpacity={0}
-        ></TouchableOpacity>} */}
+        <ScrollView 
+        contentContainerStyle={{height: (height-(height/10 * 1.6))*2}} 
+        style={{height}}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        pagingEnabled
+        bounces={false}
+        >
+            <View style={[styles.infoContainer, {height: height-(height/10 * 1.6)}]}>
+                {/* 
+                    ===== 부팅 View =====
+                */}
 
-        {/* 
-            ===== 부팅 View =====
-        */}
-        <Animated.View style={[styles.infoView, infoAnimationStyle(0)]}>
-            <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {
-                    // pressInfo(0)
-                    // console.log(nodes)
-                }}>
-                <Text style={{fontWeight:'bold', marginBottom:'5%'}}>부팅</Text>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
-                    <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                        <Ionicons name="power" size={20} color='blue'></Ionicons>
-                            <Text style={styles.infoViewText}>{power[0]}</Text>
-                            <Text style={styles.infoViewText}>ON</Text>
-                    </View>
-                    <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                        <Ionicons name="power" size={20} color='red'></Ionicons>
-                            <Text style={styles.infoViewText}>{power[1]}</Text>
-                            <Text style={styles.infoViewText}>OFF</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-        </Animated.View>
-
-        {/* 
-            ===== 데몬 View =====
-        */}
-        <Animated.View style={[styles.infoView, infoAnimationStyle(1)]}>
-            <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {
-                    // pressInfo(1)
-                    // getTemperature()
-                    checkLogin()
-                }}>
-                <Text style={{fontWeight:'bold', marginBottom:'5%'}}>데몬 연결</Text>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
-                    <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                    <MaterialCommunityIcons name="transit-connection-variant" size={20} color='#455053'></MaterialCommunityIcons>
-                            <Text style={styles.infoViewText}>5</Text>
-                            <Text style={styles.infoViewText}>연결</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-        </Animated.View>
-
-        {/* 
-            ===== 온,습도 View =====
-            Swiper로 스크롤링 구현
-        */}
-        <Animated.View style={[styles.infoView, infoAnimationStyle(2)]}>
-                {/* <TouchableOpacity style={{width: '100%', height: '100%'}}
-                onPress={() => {}}> */}
-                <Swiper containerStyle={[styles.swiper]} loop={false}
-                dotStyle={{top: '25%'}}
-                activeDotStyle={{top: '25%', backgroundColor: '#4B4F55'}}>
-                    <View style={{}}>
-                        <Text style={{fontWeight:'bold', marginBottom:'5%'}}>온도</Text>
-                            <View style={{alignItems: 'center'}}>
-                            <MaterialCommunityIcons name="thermometer-low" size={20} color='#455053'></MaterialCommunityIcons>
-                                    <Text style={[styles.infoViewText, {margin: 0}]}>{bmcTemperature}{isFahrenheit ? '°F' : '°C'}</Text>
-                                    <Text style={[styles.infoViewText, {margin: 0}]}>내부 온도</Text>
+                
+                    <TouchableOpacity style={[styles.infoView]}
+                    onPress={() => {
+                            // pressInfo(0)
+                            // console.log(nodes)
+                        }}
+                        activeOpacity={1}>
+                        <Text style={{fontWeight:'bold', marginBottom:'5%'}}>부팅</Text>
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
+                            <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+                                <Ionicons name="power" size={20} color='blue'></Ionicons>
+                                    <Text style={styles.infoViewText}>{power[0]}</Text>
+                                    <Text style={styles.infoViewText}>ON</Text>
                             </View>
-                    </View>
-                    <View style={{}}>
-                        <Text style={{fontWeight:'bold', marginBottom:'5%'}}>습도</Text>
-                            <View style={{alignItems: 'center'}}>
-                            <MaterialCommunityIcons name="thermometer-lines" size={20} color='#455053'></MaterialCommunityIcons>
-                                    <Text style={[styles.infoViewText, {margin: 0}]}>00%</Text>
-                                    <Text style={[styles.infoViewText, {margin: 0}]}>외부 습도</Text>
+                            <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+                                <Ionicons name="power" size={20} color='red'></Ionicons>
+                                    <Text style={styles.infoViewText}>{power[1]}</Text>
+                                    <Text style={styles.infoViewText}>OFF</Text>
                             </View>
-                    </View>
-                </Swiper>
-                {/* </TouchableOpacity> */}
-        </Animated.View>
+                        </View>
+                    </TouchableOpacity>
 
-        {/* 
-            ===== 전력 View =====
-        */}
-        <Animated.View style={[styles.infoView, infoAnimationStyle(3)]}>
-            <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {AsyncStorage.clear()}}>
-            <Text style={{fontWeight:'bold', marginBottom:'5%'}}>전력</Text>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
-                <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                    <WithLocalSvg width={20} height={20} asset={lightningIcon}/>
-                        <Text style={[styles.infoViewText, {margin: 0}]}>{powerConsumption}W</Text>
-                        <Text style={[styles.infoViewText, {margin: 0}]}>소비 전력</Text>
+                {/* 
+                    ===== 데몬 View =====
+                */}
+                    <TouchableOpacity style={[styles.infoView]}
+                    onPress={() => {
+                        }}
+                        activeOpacity={1}>
+                        <Text style={{fontWeight:'bold', marginBottom:'5%'}}>데몬 연결</Text>
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
+                            <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+                            <MaterialCommunityIcons name="transit-connection-variant" size={20} color='#455053'></MaterialCommunityIcons>
+                                    <Text style={styles.infoViewText}>{power[0]}</Text>
+                                    <Text style={styles.infoViewText}>연결</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+
+                {/* 
+                    ===== 온,습도 View =====
+                    Swiper로 스크롤링 구현
+                */}
+                <View style={[styles.infoView]}>
+                        <Swiper containerStyle={[styles.swiper, {height: 100}]} loop={false}
+                        dotStyle={{top: '25%'}}
+                        activeDotStyle={{top: '25%', backgroundColor: '#4B4F55'}}>
+                            <View style={{}}>
+                                <Text style={{fontWeight:'bold', marginBottom:'5%'}}>온도</Text>
+                                    <View style={{alignItems: 'center'}}>
+                                    <MaterialCommunityIcons name="thermometer-low" size={20} color='#455053'></MaterialCommunityIcons>
+                                            <Text style={[styles.infoViewText, {margin: 0}]}>{bmcTemperature}{isFahrenheit ? '°F' : '°C'}</Text>
+                                            <Text style={[styles.infoViewText, {margin: 0}]}>내부 온도</Text>
+                                    </View>
+                            </View>
+                            <View style={{}}>
+                                <Text style={{fontWeight:'bold', marginBottom:'5%'}}>습도</Text>
+                                    <View style={{alignItems: 'center'}}>
+                                    <MaterialCommunityIcons name="thermometer-lines" size={20} color='#455053'></MaterialCommunityIcons>
+                                            <Text style={[styles.infoViewText, {margin: 0}]}>{bmcHumidity}%</Text>
+                                            <Text style={[styles.infoViewText, {margin: 0}]}>외부 습도</Text>
+                                    </View>
+                            </View>
+                        </Swiper>
                 </View>
-            </View>
-            </TouchableOpacity>
-        </Animated.View>
+
+                {/* 
+                    ===== 전력 View =====
+                */}
+
+                    <TouchableOpacity style={[styles.infoView]}
+                    onPress={() => {}}
+                    activeOpacity={1}>
+                    <Text style={{fontWeight:'bold', marginBottom:'5%'}}>전력</Text>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
+                        <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+                            <WithLocalSvg width={20} height={20} asset={lightningIcon}/>
+                                <Text style={[styles.infoViewText, {margin: 0}]}>{powerConsumption}W</Text>
+                                <Text style={[styles.infoViewText, {margin: 0}]}>소비 전력</Text>
+                        </View>
+                    </View>
+                    </TouchableOpacity>
 
         {/* 
             ===== Fan View =====
         */}
-        <Animated.View style={[styles.infoView, {top: '44%', left:'8%', width: '84%', height: '17%', padding:'5%', }]}>
-            <TouchableOpacity style={{width: '100%', height: '100%'}}
-            onPress={() => {}}>
-            <Text style={{fontWeight:'bold'}}>현재 팬 속도</Text>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
-                    {fanData.rpm && fanData.rpm.map((item, idx) => (
-                        <View style={{justifyContent:'center', alignItems:'center'}}>
-                            <Text style={[styles.infoViewText, {marginBottom: 5}]}>{idx+1}번 팬</Text>
-                            <Animated.View style={{transform:[{rotate: animationRotate[idx]}]}}>
-                                <MaterialCommunityIcons name="fan" size={30} color={fanAniWorks[idx] && '#5d66a4'}></MaterialCommunityIcons>
-                            </Animated.View>
-                            {/* Fan RPM 480이면 멈춰있는상태같음 */}
-                            <Text style={[styles.infoViewText, {marginTop: 5}, fanAniWorks[idx] && {color: '#5d66a4'}]}>{item > 480 ? item : '-'}</Text>
+                    <TouchableOpacity style={[styles.infoView, {width: '92%', height: '20%'}]}
+                    onPress={() => {}}
+                    activeOpacity={1}>
+                    <Text style={{fontWeight:'bold'}}>현재 팬 속도</Text>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', marginTop: 10}}>
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                            {fanData.rpm && fanData.rpm.map((item, idx) => (
+                                <View style={{justifyContent:'center', alignItems:'center'}}>
+                                    <Text style={[styles.infoViewText, {marginBottom: 5}]}>{idx+1}번 팬</Text>
+                                    <Animated.View style={{transform:[{rotate: animationRotate[idx]}]}}>
+                                        <MaterialCommunityIcons name="fan" size={30} color={fanAniWorks[idx] && '#5d66a4'}></MaterialCommunityIcons>
+                                    </Animated.View>
+                                    {/* 480이면 꺼져있는 상태같음. */}
+                                    <Text style={[styles.infoViewText, {marginTop: 5}, fanAniWorks[idx] && {color: '#5d66a4'}]}>{item > 480 ? item : '-'}</Text>
+                                </View>
+                            ))}
                         </View>
-                    ))}
-                </View>
+                    </View>
+                    </TouchableOpacity>
             </View>
-            </TouchableOpacity>
-        </Animated.View>
+
 
         
-        <View style={[styles.nodeContainer]}>
+        <View style={[styles.nodeContainer, {height: height-(height/10 * 1.5)}]}>
             <Text style={[styles.infoViewText, {paddingHorizontal:'5%'}]}>서버 노드 리스트</Text>
-            <ScrollView style={[styles.nodeScrollView, isMulti && {marginBottom: 0, borderBottomLeftRadius:0, borderBottomRightRadius:0}]}
-            contentContainerStyle={{paddingBottom: '10%'}}>
+            <ScrollView style={[styles.nodeScrollView, {marginBottom: '5%'}, isMulti && {marginBottom: 0, borderBottomLeftRadius:0, borderBottomRightRadius:0}]}
+            contentContainerStyle={{paddingBottom: '10%'}}
+            nestedScrollEnabled={true}
+            >
                 {isMulti &&
                     <View style={{flexDirection: 'row-reverse'}}>
                         <BouncyCheckbox
@@ -567,7 +482,7 @@ const Home = () => {
                     }}
                     onLongPress={() => {setIsMulti(true)}}>
                         <Text style={styles.nodeText}>노드 #{item.nodeid}</Text>
-                        <Text style={styles.nodeText}>{item.temp}{isFahrenheit ? '°F' : '°C'}</Text>
+                        <Text style={[styles.nodeText, item.temp > alertTemperature && {color: 'red', fontWeight: 'bold'}]}>{item.temp}{isFahrenheit ? '°F' : '°C'}</Text>
                         {isMulti &&
                         <BouncyCheckbox
                         size={10}
@@ -598,7 +513,7 @@ const Home = () => {
             ,<View style={[styles.nodeScrollView, {
                 flexDirection: 'row',
                 alignItems:'center',
-                height:'15%',
+                height:'8%',
                 marginTop:0,
                 borderTopWidth:1,
                 borderTopColor:'#D9D9D9',
@@ -620,7 +535,7 @@ const Home = () => {
                 activeOpacity={0.5}>
                     <Text style={[{}]}>켜기</Text>
                 </TouchableOpacity>
-                <View style={{width: 1, height: '150%', backgroundColor: '#D9D9D9'}}></View>
+                <View style={{width: 1, height: '140%', backgroundColor: '#D9D9D9'}}></View>
                 <TouchableOpacity
                 style={styles.onOffButton}
                 onPress={() => {
@@ -639,6 +554,7 @@ const Home = () => {
             </View>
         ]}
         </View>
+        </ScrollView>
         <Dialog.Container visible={isNodeSelected} contentStyle={styles.dialog}>
                 <Dialog.Description>
                     {isSelectedNodeOn ? '선택한 노드의 전원을 종료하시겠습니까?' : '선택한 노드의 전원을 켜시겠습니까?'}

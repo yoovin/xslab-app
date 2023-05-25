@@ -3,20 +3,19 @@ import {
     Text,
     SafeAreaView,
     ImageBackground,
-    useWindowDimensions,
-    TouchableOpacity,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import axios from 'axios'
 
 import styles from './Styles'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Logout = ({ navigation }) => {
-    const [isLogoutButtonPress, setIsLogoutButtonPress] = useState(false)
 
     const onLogout = async () => {
-        axios.post('/api/logout')
+        await AsyncStorage.clear()
+        await axios.post('/api/logout')
     }
 
     useEffect(() => {
