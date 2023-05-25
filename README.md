@@ -2,7 +2,7 @@
 ![캡스톤판넬이미지](https://github.com/yoovin/telegram-HYU-noticebot/assets/35561369/5a234e71-f5fa-4a8b-ace5-e189ea57a1dd)
 
 ## 🛠️ 사용기술 및 라이브러리
-- **Framework**: React Native
+- **Framework**: React Native (0.70.6)
 - **Network**: Axios, React-query
 - **State management**: AsyncStorage, Recoil
 - **Other**: React-navigation, jwt-decode
